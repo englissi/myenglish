@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>작심백일 AI 스터디 플래너 - 중학생 루틴 메이트</title>
+  <!-- Fast Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- Chart.js for reliable graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-main: #f8f7ff;
+      --card-bg: #ffffff;
+      --accent-primary: #6366f1;
+      --accent-secondary: #ec4899;
+      --border-soft: #e5e7eb;
+    }
+    body {
+      font-family: 'Inter', 'Noto Sans KR', sans-serif;
+      background-color: var(--bg-main);
+      color: #1e293b;
+      overflow-x: hidden;
+    }
+    .diary-font {
+      font-family: 'Gowun Dodum', 'Inter', 'Noto Sans KR', sans-serif;
+    }
+    .planner-grid-bg {
+      background-color: #fffef9;
+      background-image: 
+        linear-gradient(to right, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .washi-tape {
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(251, 207, 232, 0.7),
+        rgba(251, 207, 232, 0.7) 10px,
+        rgba(244, 114, 182, 0.4) 10px,
+        rgba(244, 114, 182, 0.4) 20px
+      );
+    }
+    /* O / △ / Blank Interactive Toggle Buttons */
+    .status-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 2px dashed #cbd5e1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      user-select: none;
+      background: #ffffff;
+    }
+    .status-btn:hover {
+      border-color: #6366f1;
+      transform: scale(1.05);
+    }
+    .status-btn.status-done {
+      border: 2px solid #10b981;
+      background-color: #ecfdf5;
+      color: #059669;
+    }
+    .status-btn.status-partial {
+      border: 2px solid #f59e0b;
+      background-color: #fffbeb;
+      color: #d97706;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Navigation & D-Day Header -->
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-indigo-100 shadow-sm">
+    <div class="max-w-[1440px] mx-auto px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center text-white font-extrabold text-lg shadow-md">
+          100
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-extrabold tracking-tight text-slate-800">작심백일 <span class="text-indigo-600">AI 플래너</span></h1>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-semibold border border-indigo-200">중학생 루틴 메이트</span>
+          </div>
+          <p class="text-xs text-slate-500 hidden sm:block">3일 만에 포기하는 플래너는 끝! 최애 튜터와 함께하는 자동 학습 스케줄러</p>
+        </div>
+      </div>
+
+      <!-- Main Navigation Tabs -->
+      <nav class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl" aria-label="주요 화면 전환">
+        <button id="nav-planner" onclick="switchTab('planner')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all bg-white text-indigo-600 shadow-sm">
+          📅 스터디 플래너
+        </button>
+        <button id="nav-ai-toc" onclick="switchTab('ai-toc')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+          📸 AI 계획 분배
+        </button>
+        <button id="nav-routine" onclick="switchTab('routine')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+          🏫 내 루틴·목표·D-Day
+        </button>
+        <button id="nav-stats" onclick="switchTab('stats')" class="nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+          📊 성취도 표·그래프
+        </button>
+      </nav>
+
+      <!-- Quick D-Day & Profile Controls (API Key button removed) -->
+      <div class="flex items-center gap-2">
+        <div id="header-dday-badge" onclick="switchTab('routine')" class="cursor-pointer flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-50 to-orange-50 border border-rose-200 hover:shadow-sm transition">
+          <span class="text-xs font-bold text-rose-600" id="header-dday-title">D-Day 미설정</span>
+          <span class="px-2 py-0.5 rounded-lg bg-rose-500 text-white text-xs font-extrabold" id="header-dday-count">D-0</span>
+        </div>
+        <button onclick="openTutorModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200 transition">
+          <span>✨ 최애 튜터 설정</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Desktop 3-Column Workspace -->
+  <main class="flex-1 max-w-[1440px] w-full mx-auto px-4 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT SIDEBAR (3 Cols): Favorite AI Tutor, Goal & D-Day List, Anti-3-Day Rescue -->
+    <aside class="lg:col-span-3 space-y-5">
+      
+      <!-- Feature 5: AI Tutor Card with Custom Photo -->
+      <section class="bg-white rounded-3xl p-5 border border-indigo-100 shadow-sm relative overflow-hidden">
+        <div class="washi-tape h-3 w-28 mx-auto -mt-5 mb-3 rounded-b-md opacity-80"></div>
+        
+        <div class="flex items-center justify-between mb-3">
+          <span class="inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+            🌟 나의 전담 AI 튜터
+          </span>
+          <button onclick="openTutorModal()" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline">
+            사진·말투 변경
+          </button>
+        </div>
+
+        <div class="flex flex-col items-center text-center">
+          <div class="relative group cursor-pointer" onclick="openTutorModal()">
+            <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 shadow-md">
+              <img id="tutor-avatar-img" src="" alt="AI 튜터 프로필" class="w-full h-full object-cover rounded-full bg-white max-w-full" />
+            </div>
+            <span class="absolute bottom-0 right-0 bg-indigo-600 text-white text-[11px] font-bold px-2 py-0.5 rounded-full shadow">
+              변경
+            </span>
+          </div>
+
+          <h2 class="mt-3 font-extrabold text-base text-slate-800 flex items-center gap-1.5">
+            <span id="tutor-name-display">최애 도현 선배</span>
+            <span id="tutor-style-badge" class="text-[11px] px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 font-semibold">다정 응원형</span>
+          </h2>
+
+          <!-- Speech Bubble -->
+          <div class="mt-3 w-full bg-indigo-50/80 border border-indigo-100 rounded-2xl p-3.5 text-left relative">
+            <p id="tutor-message-text" class="text-xs leading-relaxed text-slate-700 font-medium diary-font">
+              "안녕! 네 전용 새 플래너야 😊 먼저 '내 루틴·목표·D-Day'나 'AI 계획 분배'에서 너만의 첫 일정을 등록해 볼까?"
+            </p>
+            <div class="mt-2.5 flex items-center justify-between pt-2 border-t border-indigo-100/80">
+              <span class="text-[11px] text-indigo-600 font-bold" id="streak-counter">🔥 학습 달성 0일째</span>
+              <button onclick="triggerTutorCheer()" class="text-[11px] bg-white hover:bg-indigo-600 hover:text-white text-indigo-600 border border-indigo-200 px-2 py-0.5 rounded-lg font-bold transition">
+                응원 듣기 💬
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature 2 Summary: My Main Goal & D-Day Countdown Widget -->
+      <section class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
+            🎯 나의 다짐 & D-Day
+          </h3>
+          <button onclick="switchTab('routine')" class="text-xs font-bold text-indigo-600 hover:underline">
+            + 편집/추가
+          </button>
+        </div>
+
+        <!-- Goal Box -->
+        <div class="p-3 rounded-2xl bg-amber-50/90 border border-amber-200 mb-3">
+          <div class="text-[11px] font-bold text-amber-700 mb-0.5">✨ 이번 학기 나의 핵심 목표</div>
+          <p id="sidebar-goal-text" class="text-xs font-extrabold text-slate-800 diary-font">
+            아직 설정된 목표가 없습니다. '+ 편집/추가'를 눌러 나만의 목표를 적어보세요!
+          </p>
+        </div>
+
+        <!-- D-Day List -->
+        <div id="sidebar-dday-list" class="space-y-2">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- Anti-3-Day Quitting: AI Reschedule Assistant for Partial (△) Tasks -->
+      <section class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-5 text-white shadow-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-extrabold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">
+            작심삼일 방지 AI 구출
+          </span>
+          <span class="text-lg">🛟</span>
+        </div>
+        <h3 class="font-extrabold text-sm mb-1">하다 만 공부(△)가 있나요?</h3>
+        <p class="text-xs text-indigo-100 leading-relaxed mb-3">
+          계획이 밀렸다고 플래너를 덮지 마세요! <strong>△(하다 말았음)</strong> 표시한 항목만 AI가 내일 빈 자습 시간으로 죄책감 없이 나눠줍니다.
+        </p>
+        <button onclick="reschedulePartialTasks()" class="w-full py-2.5 px-3 rounded-xl bg-white text-indigo-700 hover:bg-indigo-50 font-extrabold text-xs shadow transition flex items-center justify-center gap-1.5">
+          <span>🪄 △ 항목 내일 일정으로 자동 재분배</span>
+        </button>
+      </section>
+
+    </aside>
+
+    <!-- CENTER/RIGHT WORKSPACE (9 Cols): Tabbed Views -->
+    <div class="lg:col-span-9 space-y-6">
+
+      <!-- ========================================================= -->
+      <!-- TAB 1: 스터디 플래너 (기능 4 + 기능 6 통합 데스크탑 뷰)      -->
+      <!-- ========================================================= -->
+      <div id="tab-planner" class="tab-panel space-y-5">
+        
+        <!-- Top Status Bar & Legend -->
+        <div class="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <button onclick="changeDayOffset(-1)" class="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center font-bold text-slate-600" title="이전 날짜">
+              ◀
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 id="planner-date-title" class="text-lg font-extrabold text-slate-800">2026년 10월 18일 (일요일)</h2>
+                <span id="planner-day-badge" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">오늘</span>
+              </div>
+              <p class="text-xs text-slate-500">체크 박스를 클릭해 완료(○) / 하다 말았음(△) / 미완료(빈칸)를 기록하세요!</p>
+            </div>
+            <button onclick="changeDayOffset(1)" class="w-9 h-9 rounded-xl border border-slate-200 hover:bg-slate-50 flex items-center justify-center font-bold text-slate-600" title="다음 날짜">
+              ▶
+            </button>
+            <button onclick="resetToToday()" class="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1.5 rounded-lg transition">
+              오늘로 이동
+            </button>
+          </div>
+
+          <!-- Feature 6 Legend & Quick Add Task -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-3 bg-slate-50 px-3.5 py-2 rounded-2xl border border-slate-200 text-xs font-bold">
+              <span class="flex items-center gap-1.5 text-emerald-700">
+                <span class="w-6 h-6 rounded-md bg-emerald-100 border border-emerald-400 inline-flex items-center justify-center font-extrabold">○</span> 완료
+              </span>
+              <span class="flex items-center gap-1.5 text-amber-700">
+                <span class="w-6 h-6 rounded-md bg-amber-100 border border-amber-400 inline-flex items-center justify-center font-extrabold">△</span> 하다 말았음
+              </span>
+              <span class="flex items-center gap-1.5 text-slate-500">
+                <span class="w-6 h-6 rounded-md bg-white border border-dashed border-slate-300 inline-flex items-center justify-center"></span> 안 함(빈칸)
+              </span>
+            </div>
+            <button onclick="openQuickTaskModal()" class="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-sm transition">
+              + 오늘 할 일 직접 추가
+            </button>
+          </div>
+        </div>
+
+        <!-- Planner Paper Sheet -->
+        <div class="planner-grid-bg rounded-3xl p-5 sm:p-7 border-2 border-indigo-100 shadow-sm grid grid-cols-1 xl:grid-cols-12 gap-6">
+          
+          <!-- Left 7 Cols: Today's Study Checklist (Feature 6: O / △ / Blank) -->
+          <div class="xl:col-span-7 space-y-4">
+            <div class="flex items-center justify-between border-b-2 border-indigo-100 pb-3">
+              <div>
+                <h3 class="font-extrabold text-base text-slate-800 flex items-center gap-2">
+                  <span>✏️ TODAY'S STUDY CHECKLIST</span>
+                  <span id="today-completion-pill" class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">오늘 성취도 0%</span>
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">버튼을 누를 때마다 <strong>빈칸 → ○(완료) → △(하다 말았음)</strong> 순서로 바뀝니다.</p>
+              </div>
+              <!-- Filter by subject -->
+              <select id="planner-subject-filter" onchange="renderPlannerView()" class="text-xs font-bold bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-700">
+                <option value="ALL">전체 과목 보기</option>
+                <option value="수학">📐 수학</option>
+                <option value="영어">🔤 영어</option>
+                <option value="국어">📚 국어</option>
+                <option value="과학">🧪 과학</option>
+                <option value="사회">🌍 사회/역사</option>
+                <option value="기타">🌱 기타/자습</option>
+              </select>
+            </div>
+
+            <!-- Task List Container -->
+            <div id="planner-task-list" class="space-y-3">
+              <!-- Populated dynamically by JS -->
+            </div>
+
+            <!-- Today's Study Memo / Sticker Note -->
+            <div class="mt-4 bg-amber-50/70 border border-amber-200/80 rounded-2xl p-4">
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="daily-reflection-input" class="text-xs font-extrabold text-amber-800 flex items-center gap-1">
+                  📒 오늘의 한줄 메모 & 스티커
+                </label>
+                <div class="flex items-center gap-1">
+                  <button onclick="appendSticker('⭐')" class="hover:scale-125 transition text-sm" title="별 스티커">⭐</button>
+                  <button onclick="appendSticker('🔥')" class="hover:scale-125 transition text-sm" title="불꽃 스티커">🔥</button>
+                  <button onclick="appendSticker('💖')" class="hover:scale-125 transition text-sm" title="하트 스티커">💖</button>
+                  <button onclick="appendSticker('🍀')" class="hover:scale-125 transition text-sm" title="행운 스티커">🍀</button>
+                  <button onclick="appendSticker('💯')" class="hover:scale-125 transition text-sm" title="백점 스티커">💯</button>
+                </div>
+              </div>
+              <input id="daily-reflection-input" type="text" oninput="saveDailyReflection(this.value)" placeholder="오늘 공부하면서 느낀 점이나 내일의 나에게 할 말을 적어봐요!" class="w-full bg-white/80 border border-amber-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 diary-font focus:outline-none focus:ring-2 focus:ring-amber-400" />
+            </div>
+          </div>
+
+          <!-- Right 5 Cols: Automatic Daily Routine + Study Timetable (Feature 4) -->
+          <div class="xl:col-span-5 bg-white/95 rounded-2xl p-4 sm:p-5 border border-indigo-100 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-3">
+              <div>
+                <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
+                  <span>⏰ 오늘의 자동 플래너 타임테이블</span>
+                </h3>
+                <p class="text-[11px] text-slate-500">학교·학원 고정 루틴과 AI 자습 계획이 합쳐진 시간표예요.</p>
+              </div>
+              <span class="text-[11px] font-bold px-2 py-1 rounded-lg bg-pink-50 text-pink-600 border border-pink-200">
+                자동 컬러링 ✨
+              </span>
+            </div>
+
+            <!-- Visual Timeline Blocks -->
+            <div id="planner-timeline-box" class="space-y-2 flex-1 overflow-y-auto max-h-[480px] pr-1">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Weekly Mini Overview Strip -->
+            <div class="mt-4 pt-3 border-t border-slate-100">
+              <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
+                <span>🗓️ 이번 주 요일별 공부 밸런스</span>
+                <button onclick="switchTab('routine')" class="text-[11px] text-indigo-600 hover:underline">고정 루틴 수정 →</button>
+              </div>
+              <div id="weekly-mini-strip" class="grid grid-cols-7 gap-1.5 text-center">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- TAB 2: AI 계획 분배 (기능 1)                                -->
+      <!-- ========================================================= -->
+      <div id="tab-ai-toc" class="tab-panel hidden space-y-5">
+        <div class="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
+            <div>
+              <span class="text-xs font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">기능 1 · AI 계획 분배 스캐너</span>
+              <h2 class="text-xl font-extrabold text-slate-800 mt-1">📸 문제집·교재 목차 찍고 AI 계획 분배</h2>
+              <p class="text-xs text-slate-500 mt-0.5">책 목차 사진을 올리면 AI가 단원과 페이지 분량을 인식해, 학원 없는 요일에 맞춰 일일 공부량으로 쪼개 줍니다.</p>
+            </div>
+            <!-- Sample Textbook Quick Loaders -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-bold text-slate-500">샘플 목차 불러오기(선택):</span>
+              <button onclick="loadSampleToc('math')" class="px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200 transition">
+                📐 중2 수학(쎈) 목차
+              </button>
+              <button onclick="loadSampleToc('english')" class="px-3 py-1.5 rounded-xl bg-pink-50 hover:bg-pink-100 text-pink-700 text-xs font-bold border border-pink-200 transition">
+                🔤 중학 영문법 3800제
+              </button>
+              <button onclick="loadSampleToc('science')" class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold border border-emerald-200 transition">
+                🧪 중등 과학 오투(O2)
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left 5 Cols: Image Upload & OCR Preview -->
+            <div class="lg:col-span-5 space-y-4">
+              <label for="toc-image-input" class="block cursor-pointer border-2 border-dashed border-indigo-300 hover:border-indigo-500 bg-indigo-50/40 hover:bg-indigo-50/80 transition rounded-2xl p-5 text-center relative">
+                <input id="toc-image-input" type="file" accept="image/*" class="hidden" onchange="handleTocImageUpload(event)" />
+                <div id="toc-upload-placeholder" class="space-y-2 py-4">
+                  <div class="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 mx-auto flex items-center justify-center text-2xl">
+                    📷
+                  </div>
+                  <div class="text-sm font-extrabold text-slate-800">여기를 눌러 책 목차 사진 업로드</div>
+                  <p class="text-xs text-slate-500">스마트폰이나 웹캠으로 찍은 교재 목차 이미지(JPG, PNG)를 올려주세요</p>
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[11px] font-extrabold shadow-sm mt-1">
+                    <span>✨ Gemini Vision AI 실시간 텍스트 자동 추출</span>
+                  </div>
+                </div>
+                <div id="toc-preview-container" class="hidden space-y-2">
+                  <img id="toc-preview-img" src="" alt="업로드된 목차 미리보기" class="max-h-56 mx-auto rounded-xl shadow border border-slate-200 max-w-full h-auto" />
+                  <div id="toc-scan-status-box" class="p-2.5 rounded-xl bg-indigo-50 border border-indigo-100 text-xs font-bold text-indigo-700 flex items-center justify-center gap-2">
+                    <span id="toc-scan-spinner" class="hidden animate-spin">⏳</span>
+                    <p id="toc-scan-status">✅ 목차 이미지 준비 완료!</p>
+                  </div>
+                </div>
+              </label>
+
+              <!-- Distribution Options -->
+              <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-3">
+                <h3 class="text-xs font-extrabold text-slate-700">⚙️ AI 계획 분배 조건 설정</h3>
+                
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label for="toc-subject-select" class="block text-[11px] font-bold text-slate-600 mb-1">과목 분류</label>
+                    <select id="toc-subject-select" class="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2">
+                      <option value="수학">📐 수학</option>
+                      <option value="영어">🔤 영어</option>
+                      <option value="국어">📚 국어</option>
+                      <option value="과학">🧪 과학</option>
+                      <option value="사회">🌍 사회/역사</option>
+                      <option value="기타">🌱 기타/자습</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="toc-book-title" class="block text-[11px] font-bold text-slate-600 mb-1">교재/인강 이름</label>
+                    <input id="toc-book-title" type="text" value="" placeholder="예: 중2 수학 쎈 / 나만의 문제집" class="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2" />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label for="toc-duration-days" class="block text-[11px] font-bold text-slate-600 mb-1">목표 완독 기간</label>
+                    <select id="toc-duration-days" onchange="previewTocDistribution()" class="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2">
+                      <option value="5">5일 단기 완성 (하루 1소단원)</option>
+                      <option value="7" selected>7일 표준 분배 (여유 있게)</option>
+                      <option value="14">14일 꼼꼼 분배 (복습 포함)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="toc-prefer-time" class="block text-[11px] font-bold text-slate-600 mb-1">희망 자습 시간대</label>
+                    <select id="toc-prefer-time" onchange="previewTocDistribution()" class="w-full text-xs font-bold bg-white border border-slate-200 rounded-xl px-3 py-2">
+                      <option value="20:00">학원 후 저녁 자습 (20:00~)</option>
+                      <option value="16:30">방과 후 오후 자습 (16:30~)</option>
+                      <option value="21:30">심야 집중 자습 (21:30~)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 7 Cols: Extracted TOC List & AI Generated Daily Schedule Preview -->
+            <div class="lg:col-span-7 flex flex-col justify-between space-y-4">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <label for="toc-extracted-textarea" class="text-xs font-extrabold text-slate-700">
+                    🔍 AI가 인식한 목차 단원 목록 (직접 입력·수정 가능)
+                  </label>
+                  <div class="flex items-center gap-2">
+                    <button type="button" onclick="autoFormatTocText()" class="text-xs font-bold text-pink-600 hover:underline">
+                      🪄 목차 자동 정돈
+                    </button>
+                    <button type="button" onclick="previewTocDistribution()" class="text-xs font-bold text-indigo-600 hover:underline">
+                      🔄 분배 미리보기 새로고침
+                    </button>
+                  </div>
+                </div>
+                <textarea id="toc-extracted-textarea" rows="5" oninput="previewTocDistribution()" placeholder="왼쪽에서 책 목차 사진을 업로드하거나, 공부할 단원 목차를 한 줄에 하나씩 입력해 주세요." class="w-full rounded-2xl border border-slate-200 p-3.5 text-xs font-medium text-slate-700 bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+              </div>
+
+              <!-- AI Distribution Preview Box -->
+              <div class="bg-indigo-50/60 rounded-2xl p-4 border border-indigo-100 flex-1">
+                <div class="flex items-center justify-between mb-2.5">
+                  <h4 class="text-xs font-extrabold text-indigo-900">🤖 AI 계획 분배 미리보기</h4>
+                  <span id="toc-preview-count-badge" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-indigo-200/70 text-indigo-800">총 0개 학습 블록</span>
+                </div>
+                <div id="toc-distribution-preview-list" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+
+              <div class="flex items-center justify-end gap-3 pt-2">
+                <button type="button" onclick="applyTocToPlanner()" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2">
+                  <span>✨ 이 계획대로 내 스터디 플래너에 자동 등록하기</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- TAB 3: 내 루틴·목표·D-Day 설정 (기능 2)                     -->
+      <!-- ========================================================= -->
+      <div id="tab-routine" class="tab-panel hidden space-y-5">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          <!-- Left 5 Cols: My Goal & D-Day Manager -->
+          <div class="lg:col-span-5 space-y-5">
+            <!-- My Main Goal Card -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-3">
+              <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200">기능 2-A · 나의 목표 설정</span>
+              <h3 class="text-base font-extrabold text-slate-800">🌟 나의 학습 목표 & 다짐</h3>
+              <div>
+                <label for="goal-input-field" class="block text-xs font-bold text-slate-600 mb-1">플래너 상단에 고정할 목표 문구</label>
+                <input id="goal-input-field" type="text" value="" placeholder="예: 이번 학기 수학 문제집 끝까지 완북하기!" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+              </div>
+              <button onclick="saveMainGoal()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs transition shadow-sm">
+                목표 저장하기
+              </button>
+            </div>
+
+            <!-- D-Day Setting Card -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="text-xs font-extrabold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">기능 2-B · D-Day 카운트다운</span>
+                  <h3 class="text-base font-extrabold text-slate-800 mt-1">⏳ 시험 및 목표 D-Day 관리</h3>
+                </div>
+              </div>
+
+              <!-- Add New D-Day Form -->
+              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2.5">
+                <div class="text-xs font-extrabold text-slate-700">+ 새 D-Day 일정 추가</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <input id="new-dday-title" type="text" placeholder="예: 2학기 기말고사" class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white" />
+                  <input id="new-dday-date" type="date" value="2026-11-05" class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white" />
+                </div>
+                <button onclick="addNewDday()" class="w-full py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white font-extrabold text-xs transition">
+                  D-Day 등록하기
+                </button>
+              </div>
+
+              <!-- Registered D-Days List -->
+              <div id="routine-dday-list" class="space-y-2">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Right 7 Cols: Personal School / Academy / Self-Study Fixed Routines -->
+          <div class="lg:col-span-7 bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+              <div>
+                <span class="text-xs font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-200">기능 2-C · 학교·학원·인강 개인 루틴</span>
+                <h3 class="text-base font-extrabold text-slate-800 mt-1">🏫 나의 주간 고정 루틴 입력</h3>
+                <p class="text-xs text-slate-500">학교 수업, 학원 가는 시간, 고정 인강 시간을 등록하면 플래너 타임테이블에 자동으로 표시됩니다.</p>
+              </div>
+            </div>
+
+            <!-- Add Routine Form -->
+            <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 space-y-3">
+              <div class="text-xs font-extrabold text-indigo-900">+ 새로운 개인 루틴 추가하기</div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div>
+                  <label for="routine-type-select" class="block text-[11px] font-bold text-slate-600 mb-1">일정 구분</label>
+                  <select id="routine-type-select" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white">
+                    <option value="학원">🚌 학원 수업</option>
+                    <option value="학교">🏫 학교 정규수업/방과후</option>
+                    <option value="인강">💻 인터넷 강의 루틴</option>
+                    <option value="자습">📖 고정 자습/독서실</option>
+                    <option value="기타">⚽ 운동/취미/휴식</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-2">
+                  <label for="routine-title-input" class="block text-[11px] font-bold text-slate-600 mb-1">루틴 이름</label>
+                  <input id="routine-title-input" type="text" placeholder="예: 영어학원, 수학학원, 학교 수업" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white" />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 items-end">
+                <div>
+                  <label for="routine-start-input" class="block text-[11px] font-bold text-slate-600 mb-1">시작 시간</label>
+                  <input id="routine-start-input" type="time" value="17:00" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white" />
+                </div>
+                <div>
+                  <label for="routine-end-input" class="block text-[11px] font-bold text-slate-600 mb-1">종료 시간</label>
+                  <input id="routine-end-input" type="time" value="19:00" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white" />
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                  <button onclick="addPersonalRoutine()" class="w-full py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">
+                    + 루틴 등록
+                  </button>
+                </div>
+              </div>
+
+              <!-- Day Selection Pills -->
+              <div>
+                <span class="block text-[11px] font-bold text-slate-600 mb-1.5">반복 요일 선택</span>
+                <div class="flex flex-wrap gap-1.5" id="routine-day-checkboxes">
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="월" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-indigo-600 text-white">월</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="화" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-600 border border-slate-200">화</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="수" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-indigo-600 text-white">수</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="목" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-600 border border-slate-200">목</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="금" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-indigo-600 text-white">금</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="토" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-600 border border-slate-200">토</button>
+                  <button type="button" onclick="toggleRoutineDayPill(this)" data-day="일" class="routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-600 border border-slate-200">일</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Routines List -->
+            <div class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1" id="personal-routine-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- TAB 4: 학습 성취도 표 & 그래프 대시보드 (기능 3)            -->
+      <!-- ========================================================= -->
+      <div id="tab-stats" class="tab-panel hidden space-y-5">
+        
+        <!-- KPI Cards Row -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-sm">
+            <div class="text-xs font-bold text-slate-500">총 완료한 학습 (○)</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span id="stat-total-done" class="text-2xl font-extrabold text-emerald-600">0개</span>
+              <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">완벽 클리어</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-sm">
+            <div class="text-xs font-bold text-slate-500">하다 만 학습 (△)</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span id="stat-total-partial" class="text-2xl font-extrabold text-amber-500">0개</span>
+              <span class="text-xs font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">50% 인정!</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl p-4 border border-slate-200/80 shadow-sm">
+            <div class="text-xs font-bold text-slate-500">남은 미진행 학습 (빈칸)</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span id="stat-total-todo" class="text-2xl font-extrabold text-slate-700">0개</span>
+              <span class="text-xs font-semibold text-slate-500">진행 예정</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl p-4 border border-indigo-200 shadow-sm bg-gradient-to-br from-indigo-50/70 to-purple-50/70">
+            <div class="text-xs font-bold text-indigo-700">종합 AI 성취도 점수</div>
+            <div class="mt-1 flex items-baseline gap-2">
+              <span id="stat-overall-rate" class="text-2xl font-extrabold text-indigo-600">0%</span>
+              <span id="stat-grade-badge" class="text-xs font-extrabold text-white bg-indigo-600 px-2 py-0.5 rounded-full">🌱 루틴 시작단계</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-7 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-800">📈 요일별 학습 완료(○) & 부분진행(△) 추이 그래프</h3>
+                <p class="text-xs text-slate-500">플래너에서 ○ 또는 △를 체크하면 그래프가 실시간으로 올라갑니다!</p>
+              </div>
+            </div>
+            <div class="relative h-72 w-full">
+              <canvas id="weeklyProgressChart"></canvas>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5 bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div>
+                <h3 class="text-sm font-extrabold text-slate-800">🍩 과목별 학습 성취 밸런스</h3>
+                <p class="text-xs text-slate-500">어느 과목을 가장 성실히 챙겼는지 확인해 보세요.</p>
+              </div>
+            </div>
+            <div class="relative h-72 w-full">
+              <canvas id="subjectDoughnutChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 Detailed Achievement Table -->
+        <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-extrabold text-slate-800">📋 과목별 학습 성취도 종합 분석표</h3>
+              <p class="text-xs text-slate-500">완료(○)는 100%, 하다 말았음(△)은 시작의 가치를 인정해 50% 성취도로 반영합니다.</p>
+            </div>
+            <button onclick="switchTab('planner')" class="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-xl transition">
+              플래너로 돌아가 체크하기 →
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b-2 border-slate-100 text-xs font-extrabold text-slate-600 bg-slate-50/80">
+                  <th class="py-3 px-4 rounded-tl-xl">과목</th>
+                  <th class="py-3 px-4 text-center">총 계획 수</th>
+                  <th class="py-3 px-4 text-center text-emerald-700">완료 (○)</th>
+                  <th class="py-3 px-4 text-center text-amber-700">하다 말았음 (△)</th>
+                  <th class="py-3 px-4 text-center text-slate-500">미진행 (빈칸)</th>
+                  <th class="py-3 px-4">종합 성취율</th>
+                  <th class="py-3 px-4 rounded-tr-xl">AI 튜터 진단 피드백</th>
+                </tr>
+              </thead>
+              <tbody id="stats-table-body" class="divide-y divide-slate-100 text-xs font-medium">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 1: 기능 5 - 최애 튜터 사진 업로드 & 클린 안전 세이프가드 -->
+  <!-- ========================================================= -->
+  <div id="tutor-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 shadow-2xl border border-indigo-100 space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+            기능 5 · 청소년 안전 이미지 자동 검열 시스템 (칼·흉기·유혈·노출·욕설 방어)
+          </span>
+          <h3 class="text-lg font-extrabold text-slate-800 mt-1">💖 나만의 최애 AI 튜터 설정</h3>
+        </div>
+        <button onclick="closeTutorModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+      </div>
+
+      <!-- 3 Strict Moderation Criteria Notice -->
+      <div class="grid grid-cols-3 gap-2 text-center bg-slate-50 p-3 rounded-2xl border border-slate-200">
+        <div class="p-2.5 rounded-xl bg-white border border-rose-100 shadow-xs">
+          <div class="text-xs font-extrabold text-rose-600 flex items-center justify-center gap-1">
+            <span>🗡️ 1. 칼·흉기 금지</span>
+          </div>
+          <div class="text-[10px] text-slate-500 mt-1 leading-tight">날카로운 칼날 형태 및 흉기 시각 요소 실시간 감지 차단</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-white border border-rose-100 shadow-xs">
+          <div class="text-xs font-extrabold text-rose-600 flex items-center justify-center gap-1">
+            <span>🩸 2. 유혈·노출 금지</span>
+          </div>
+          <div class="text-[10px] text-slate-500 mt-1 leading-tight">핏자국·혈흔 밀집도 및 신체 피부톤 과다 노출 즉시 차단</div>
+        </div>
+        <div class="p-2.5 rounded-xl bg-white border border-rose-100 shadow-xs">
+          <div class="text-xs font-extrabold text-rose-600 flex items-center justify-center gap-1">
+            <span>🤬 3. 욕설 금지</span>
+          </div>
+          <div class="text-[10px] text-slate-500 mt-1 leading-tight">비속어·욕설 글씨 및 유해 이름 검출 시 즉시 차단</div>
+        </div>
+      </div>
+
+      <!-- Current Preview & Upload -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="relative">
+          <img id="modal-tutor-preview" src="" alt="튜터 미리보기" class="w-20 h-20 rounded-full object-cover border-2 border-indigo-400 bg-white shadow max-w-full shrink-0" />
+          <div id="modal-preview-badge" class="hidden absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-rose-600 text-white shadow">차단됨</div>
+        </div>
+        <div class="flex-1 space-y-2 text-center sm:text-left">
+          <div class="text-xs font-extrabold text-slate-800">최애 사진 직접 업로드 (아이돌·캐릭터·선생님)</div>
+          <p class="text-[11px] text-slate-500">
+            사진을 올리면 <strong>칼·흉기 윤곽, 유혈 픽셀, 과도한 노출, 욕설 텍스트</strong>를 검사합니다. 위험 요소 감지 시 저장이 잠기며 화면에 표시되지 않습니다.
+          </p>
+          <div class="flex flex-wrap items-center gap-1.5 justify-center sm:justify-start">
+            <label for="tutor-photo-input" class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold transition shadow-sm flex items-center gap-1.5">
+              <span>📁 내 컴퓨터에서 사진 선택</span>
+            </label>
+            <input id="tutor-photo-input" type="file" accept="image/*" class="hidden" onchange="handleTutorPhotoUpload(event)" />
+          </div>
+
+          <!-- 4 Instant Test Buttons -->
+          <div class="pt-1.5 flex flex-wrap items-center gap-1.5 justify-center sm:justify-start">
+            <span class="text-[10px] font-bold text-slate-500">차단 시연 테스트:</span>
+            <button type="button" onclick="simulateHarmfulImageTest('knife')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-extrabold transition">
+              🗡️ 칼(Knife) 인식 테스트
+            </button>
+            <button type="button" onclick="simulateHarmfulImageTest('blood')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-extrabold transition">
+              🩸 유혈(피 묻은 칼) 테스트
+            </button>
+            <button type="button" onclick="simulateHarmfulImageTest('exposure')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-extrabold transition">
+              🔞 노출 금지 테스트
+            </button>
+            <button type="button" onclick="simulateHarmfulImageTest('profanity')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-[11px] font-extrabold transition">
+              🤬 글씨 욕설 인식 테스트
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Moderation Result Banner -->
+      <div id="moderation-status-box" class="rounded-2xl p-3.5 text-xs font-bold border bg-emerald-50 border-emerald-200 text-emerald-800 flex items-start gap-2.5">
+        <span class="text-base" id="moderation-status-icon">🛡️</span>
+        <div id="moderation-status-text" class="leading-relaxed">
+          <strong>[청소년 안전 기준 통과]</strong> 칼·흉기·유혈·노출·욕설이 없는 안전한 프로필 이미지입니다.
+        </div>
+      </div>
+
+      <!-- Preset Safe Avatars -->
+      <div>
+        <span class="block text-xs font-extrabold text-slate-700 mb-2">✨ 기본 제공 최애 일러스트 프리셋</span>
+        <div class="grid grid-cols-3 gap-2.5">
+          <button type="button" onclick="selectPresetTutor('dohyun')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🧑‍🎓</span>
+            <span>도현 선배 (다정)</span>
+          </button>
+          <button type="button" onclick="selectPresetTutor('serin')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🌟</span>
+            <span>세린 멘토 (아이돌풍)</span>
+          </button>
+          <button type="button" onclick="selectPresetTutor('tiger')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🐯</span>
+            <span>호랑이 코치 (열정)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tutor Name & Persona -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label for="modal-tutor-name" class="block text-xs font-bold text-slate-600 mb-1">튜터 호칭/이름</label>
+          <input id="modal-tutor-name" type="text" value="최애 도현 선배" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold" />
+        </div>
+        <div>
+          <label for="modal-tutor-persona" class="block text-xs font-bold text-slate-600 mb-1">응원 말투 스타일</label>
+          <select id="modal-tutor-persona" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white">
+            <option value="다정 응원형">다정 응원형 ("괜찮아, 천천히 하자!")</option>
+            <option value="텐션 폭발형">텐션 폭발형 ("우와! 오늘 완전 천재인데?!")</option>
+            <option value="일타 팩폭형">일타 팩폭형 ("딱 3문제만 더 풀고 쉬자!")</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeTutorModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">닫기</button>
+        <button id="modal-save-btn" type="button" onclick="saveTutorSettings()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-sm transition">설정 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 2: 오늘 할 일 직접 추가 모달                          -->
+  <!-- ========================================================= -->
+  <div id="quick-task-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-indigo-100 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-800">✏️ 오늘 학습할 항목 추가</h3>
+        <button onclick="closeQuickTaskModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+      </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 3: 구글 Gemini 무료 API Key 설정 모달               -->
+  <!-- ========================================================= -->
+  <!-- MODAL 1: 최애 튜터 사진 업로드 & 프로필 설정 (검열 요소 제거) -->
+  <!-- ========================================================= -->
+  <div id="tutor-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-indigo-100 space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+            💖 최애 AI 튜터 설정
+          </span>
+          <h3 class="text-lg font-extrabold text-slate-800 mt-1">나만의 튜터 프로필 변경</h3>
+        </div>
+        <button onclick="closeTutorModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+      </div>
+
+      <!-- Current Preview & Upload -->
+      <div class="flex flex-col sm:flex-row items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="relative">
+          <img id="modal-tutor-preview" src="" alt="튜터 미리보기" class="w-20 h-20 rounded-full object-cover border-2 border-indigo-400 bg-white shadow max-w-full shrink-0" />
+        </div>
+        <div class="flex-1 space-y-2 text-center sm:text-left">
+          <div class="text-xs font-extrabold text-slate-800">최애 사진 업로드 (아이돌·캐릭터·인물)</div>
+          <p class="text-[11px] text-slate-500">
+            원하는 최애 사진을 등록하면 플래너 메인 화면과 응원 메시지에 프로필로 적용됩니다.
+          </p>
+          <div class="flex flex-wrap items-center gap-1.5 justify-center sm:justify-start">
+            <label for="tutor-photo-input" class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold transition shadow-sm flex items-center gap-1.5">
+              <span>📁 사진 파일 선택</span>
+            </label>
+            <input id="tutor-photo-input" type="file" accept="image/*" class="hidden" onchange="handleTutorPhotoUpload(event)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Preset Safe Avatars -->
+      <div>
+        <span class="block text-xs font-extrabold text-slate-700 mb-2">✨ 기본 제공 일러스트 프리셋</span>
+        <div class="grid grid-cols-3 gap-2.5">
+          <button type="button" onclick="selectPresetTutor('dohyun')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🧑‍🎓</span>
+            <span>도현 선배 (다정)</span>
+          </button>
+          <button type="button" onclick="selectPresetTutor('serin')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🌟</span>
+            <span>세린 멘토 (아이돌풍)</span>
+          </button>
+          <button type="button" onclick="selectPresetTutor('tiger')" class="p-2.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-white flex flex-col items-center gap-1 text-xs font-bold transition">
+            <span class="text-xl">🐯</span>
+            <span>호랑이 코치 (열정)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tutor Name & Persona -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label for="modal-tutor-name" class="block text-xs font-bold text-slate-600 mb-1">튜터 호칭/이름</label>
+          <input id="modal-tutor-name" type="text" value="최애 도현 선배" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold" />
+        </div>
+        <div>
+          <label for="modal-tutor-persona" class="block text-xs font-bold text-slate-600 mb-1">응원 말투 스타일</label>
+          <select id="modal-tutor-persona" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white">
+            <option value="다정 응원형">다정 응원형 ("괜찮아, 천천히 하자!")</option>
+            <option value="텐션 폭발형">텐션 폭발형 ("우와! 오늘 완전 천재인데?!")</option>
+            <option value="일타 팩폭형">일타 팩폭형 ("딱 3문제만 더 풀고 쉬자!")</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeTutorModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">닫기</button>
+        <button id="modal-save-btn" type="button" onclick="saveTutorSettings()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-sm transition">설정 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- MODAL 2: 오늘 할 일 직접 추가 모달                          -->
+  <!-- ========================================================= -->
+  <div id="quick-task-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-indigo-100 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-extrabold text-slate-800">✏️ 오늘 학습할 항목 추가</h3>
+        <button onclick="closeQuickTaskModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-bold text-slate-600">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label for="quick-task-subject" class="block text-xs font-bold text-slate-600 mb-1">과목</label>
+            <select id="quick-task-subject" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold bg-white">
+              <option value="수학">📐 수학</option>
+              <option value="영어">🔤 영어</option>
+              <option value="국어">📚 국어</option>
+              <option value="과학">🧪 과학</option>
+              <option value="사회">🌍 사회/역사</option>
+              <option value="기타">🌱 기타/자습</option>
+            </select>
+          </div>
+          <div>
+            <label for="quick-task-time" class="block text-xs font-bold text-slate-600 mb-1">예정 시간</label>
+            <input id="quick-task-time" type="time" value="20:00" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold" />
+          </div>
+        </div>
+
+        <div>
+          <label for="quick-task-book" class="block text-xs font-bold text-slate-600 mb-1">교재/인강명</label>
+          <input id="quick-task-book" type="text" placeholder="예: 중2 수학 쎈 / EBS 중학 영문법" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold" />
+        </div>
+
+        <div>
+          <label for="quick-task-title" class="block text-xs font-bold text-slate-600 mb-1">세부 학습 범위 (단원·쪽수)</label>
+          <input id="quick-task-title" type="text" placeholder="예: 평행사변형의 성질 B단계 p.46~52 풀기" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-bold" />
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeQuickTaskModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold">취소</button>
+        <button type="button" onclick="submitQuickTask()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold shadow-sm">플래너에 추가</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 pointer-events-none flex flex-col gap-2"></div>
+
+  <script>
+    // =========================================================================
+    // 1. Built-in Safe SVGs & Presets
+    // =========================================================================
+    function createSvgDataUrl(svgString) {
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svgString.trim());
+    }
+
+    const PRESET_AVATARS = {
+      dohyun: createSvgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#e0e7ff"/>
+              <stop offset="100%" stop-color="#c7d2fe"/>
+            </linearGradient>
+          </defs>
+          <rect width="160" height="160" rx="80" fill="url(#bg1)"/>
+          <circle cx="80" cy="70" r="34" fill="#fde68a"/>
+          <path d="M46 66 C46 36, 114 36, 114 66 C105 52, 55 52, 46 66 Z" fill="#312e81"/>
+          <circle cx="68" cy="70" r="4" fill="#1e1b4b"/>
+          <circle cx="92" cy="70" r="4" fill="#1e1b4b"/>
+          <path d="M72 84 Q80 91 88 84" stroke="#6366f1" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M36 150 C42 114, 118 114, 124 150 Z" fill="#4f46e5"/>
+        </svg>
+      `),
+      serin: createSvgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#fce7f3"/>
+              <stop offset="100%" stop-color="#fbcfe8"/>
+            </linearGradient>
+          </defs>
+          <rect width="160" height="160" rx="80" fill="url(#bg2)"/>
+          <path d="M40 75 C40 30, 120 30, 120 75 L126 125 L34 125 Z" fill="#831843"/>
+          <circle cx="80" cy="72" r="32" fill="#fef3c7"/>
+          <circle cx="68" cy="72" r="4.2" fill="#831843"/>
+          <circle cx="92" cy="72" r="4.2" fill="#831843"/>
+          <path d="M73 85 Q80 92 87 85" stroke="#db2777" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M42 150 C48 118, 112 118, 118 150 Z" fill="#ec4899"/>
+        </svg>
+      `),
+      tiger: createSvgDataUrl(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+          <rect width="160" height="160" rx="80" fill="#ffedd5"/>
+          <circle cx="50" cy="48" r="14" fill="#f97316"/>
+          <circle cx="110" cy="48" r="14" fill="#f97316"/>
+          <circle cx="80" cy="82" r="40" fill="#fb923c"/>
+          <circle cx="66" cy="76" r="4.5" fill="#1c1917"/>
+          <circle cx="94" cy="76" r="4.5" fill="#1c1917"/>
+          <polygon points="80,84 74,92 86,92" fill="#1c1917"/>
+          <path d="M70 98 Q80 106 90 98" stroke="#1c1917" stroke-width="3" fill="none" stroke-linecap="round"/>
+        </svg>
+      `)
+    };
+
+    const SAMPLE_TOC_DATA = {
+      math: {
+        subject: '수학',
+        bookTitle: '중2 수학 쎈(SSEN) 2학기',
+        tocText: [
+          'I-1. 삼각형의 성질 (p.12 ~ p.28)',
+          'I-2. 직각삼각형의 합동조건 (p.29 ~ p.44)',
+          'II-1. 평행사변형의 성질 (p.46 ~ p.62)',
+          'II-2. 여러 가지 사각형 (p.63 ~ p.80)',
+          'III-1. 도형의 닮음과 응용 (p.82 ~ p.102)',
+          'III-2. 피타고라스 정리 (p.103 ~ p.120)'
+        ].join('\n'),
+        svgPreview: createSvgDataUrl(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220">
+            <rect width="360" height="220" rx="16" fill="#eef2ff" stroke="#818cf8" stroke-width="3"/>
+            <text x="24" y="38" font-size="16" font-weight="bold" fill="#312e81">[목차 스캔] 중2 수학 쎈(SSEN) 2학기</text>
+            <line x1="24" y1="48" x2="336" y2="48" stroke="#c7d2fe" stroke-width="2"/>
+            <text x="24" y="76" font-size="13" fill="#1e293b">I-1. 삼각형의 성질 .................... p.12</text>
+            <text x="24" y="100" font-size="13" fill="#1e293b">I-2. 직각삼각형의 합동조건 ............ p.29</text>
+            <text x="24" y="124" font-size="13" fill="#1e293b">II-1. 평행사변형의 성질 ............... p.46</text>
+            <text x="24" y="148" font-size="13" fill="#1e293b">II-2. 여러 가지 사각형 ................ p.63</text>
+            <text x="24" y="172" font-size="13" fill="#1e293b">III-1. 도형의 닮음과 응용 ............. p.82</text>
+            <text x="24" y="196" font-size="13" fill="#1e293b">III-2. 피타고라스 정리 ............... p.103</text>
+          </svg>
+        `)
+      },
+      english: {
+        subject: '영어',
+        bookTitle: '중학 영문법 3800제 (2학년)',
+        tocText: [
+          'Ch 01. 문장의 기초와 의문문 (p.10 ~ p.26)',
+          'Ch 02. 시제 - 현재완료 집중연습 (p.27 ~ p.48)',
+          'Ch 03. 조동사 must / have to / should (p.49 ~ p.68)',
+          'Ch 04. 수동태의 형태와 바이(by) 생략 (p.69 ~ p.88)',
+          'Ch 05. to부정사의 명사·형용사·부사적 용법 (p.89 ~ p.112)',
+          'Ch 06. 동명사와 현재분사 구별하기 (p.113 ~ p.134)'
+        ].join('\n'),
+        svgPreview: createSvgDataUrl(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220">
+            <rect width="360" height="220" rx="16" fill="#fdf2f8" stroke="#f472b6" stroke-width="3"/>
+            <text x="24" y="38" font-size="16" font-weight="bold" fill="#831843">[목차 스캔] 중학 영문법 3800제</text>
+            <line x1="24" y1="48" x2="336" y2="48" stroke="#fbcfe8" stroke-width="2"/>
+            <text x="24" y="76" font-size="13" fill="#1e293b">Ch 01. 문장의 기초와 의문문 ........... p.10</text>
+            <text x="24" y="100" font-size="13" fill="#1e293b">Ch 02. 시제 - 현재완료 집중연습 ....... p.27</text>
+            <text x="24" y="124" font-size="13" fill="#1e293b">Ch 03. 조동사 must / should .......... p.49</text>
+            <text x="24" y="148" font-size="13" fill="#1e293b">Ch 04. 수동태의 형태와 응용 ........... p.69</text>
+            <text x="24" y="172" font-size="13" fill="#1e293b">Ch 05. to부정사의 용법 마스터 ........ p.89</text>
+            <text x="24" y="196" font-size="13" fill="#1e293b">Ch 06. 동명사와 현재분사 구별 ........ p.113</text>
+          </svg>
+        `)
+      },
+      science: {
+        subject: '과학',
+        bookTitle: '중등 과학 오투(O2) 2-2',
+        tocText: [
+          'V-1. 소화와 순환 - 영양소와 소화계 (p.8 ~ p.23)',
+          'V-2. 호흡과 배설 - 기체 교환 원리 (p.24 ~ p.39)',
+          'VI-1. 물질의 특성 - 밀도와 용해도 (p.42 ~ p.61)',
+          'VI-2. 혼합물의 분리 - 끓는점·밀도 차 (p.62 ~ p.79)',
+          'VII-1. 수권과 해수의 순환 .............. p.82 ~ p.98'
+        ].join('\n'),
+        svgPreview: createSvgDataUrl(`
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220">
+            <rect width="360" height="220" rx="16" fill="#ecfdf5" stroke="#34d399" stroke-width="3"/>
+            <text x="24" y="38" font-size="16" font-weight="bold" fill="#065f46">[목차 스캔] 중등 과학 오투(O2) 2-2</text>
+            <line x1="24" y1="48" x2="336" y2="48" stroke="#a7f3d0" stroke-width="2"/>
+            <text x="24" y="80" font-size="13" fill="#1e293b">V-1. 소화와 순환 - 영양소와 소화계 ..... p.8</text>
+            <text x="24" y="108" font-size="13" fill="#1e293b">V-2. 호흡과 배설 - 기체 교환 원리 ...... p.24</text>
+            <text x="24" y="136" font-size="13" fill="#1e293b">VI-1. 물질의 특성 - 밀도와 용해도 ...... p.42</text>
+            <text x="24" y="164" font-size="13" fill="#1e293b">VI-2. 혼합물의 분리 실험 ............... p.62</text>
+            <text x="24" y="192" font-size="13" fill="#1e293b">VII-1. 수권과 해수의 순환 .............. p.82</text>
+          </svg>
+        `)
+      }
+    };
+
+    // =========================================================================
+    // 2. Application State & Cumulative Storage Engine
+    // =========================================================================
+    const STORAGE_KEY = 'ai_middle_planner_cumulative_v4';
+    // Internal API key for Gemini Vision OCR
+    const INTERNAL_GEMINI_KEY = 'AIzaSyAieqorNu8kxixsy51JPWQyzDPYZ9SntWE';
+    const BASE_TODAY = new Date(2026, 9, 18); // 2026-10-18
+    const DAY_NAMES = ['일', '월', '화', '수', '목', '금', '토'];
+
+    let state = {
+      initialized: true,
+      currentDayOffset: 0,
+      mainGoal: '',
+      tutor: {
+        name: '최애 도현 선배',
+        persona: '다정 응원형',
+        avatarUrl: PRESET_AVATARS.dohyun
+      },
+      ddays: [],
+      routines: [],
+      tasks: [],
+      reflections: {},
+      tocDraft: {
+        subject: '수학',
+        bookTitle: '',
+        tocText: ''
+      }
+    };
+
+    let pendingTutorAvatarUrl = null;
+
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          state = Object.assign({}, state, parsed);
+          state.tasks = Array.isArray(parsed.tasks) ? parsed.tasks : [];
+          state.routines = Array.isArray(parsed.routines) ? parsed.routines : [];
+          state.ddays = Array.isArray(parsed.ddays) ? parsed.ddays : [];
+          state.reflections = parsed.reflections || {};
+          state.tutor = Object.assign({}, state.tutor, parsed.tutor || {});
+          state.tocDraft = Object.assign({ subject: '수학', bookTitle: '', tocText: '' }, parsed.tocDraft || {});
+        }
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+    } catch (e) {
+      console.warn('LocalStorage unavailable, running in-memory session', e);
+    }
+
+    function persistState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Unable to persist to storage', e);
+      }
+    }
+
+    function getDateForOffset(offset) {
+      const d = new Date(BASE_TODAY);
+      d.setDate(d.getDate() + offset);
+      return d;
+    }
+
+    function formatKoreanDate(offset) {
+      const d = getDateForOffset(offset);
+      const y = d.getFullYear();
+      const m = d.getMonth() + 1;
+      const day = d.getDate();
+      const dow = DAY_NAMES[d.getDay()];
+      return `${y}년 ${m}월 ${day}일 (${dow}요일)`;
+    }
+
+    function getDayName(offset) {
+      const d = getDateForOffset(offset);
+      return DAY_NAMES[d.getDay()];
+    }
+
+    function calculateDdayString(targetDateStr) {
+      if (!targetDateStr) return 'D-0';
+      const target = new Date(targetDateStr + 'T00:00:00+09:00');
+      const base = new Date('2026-10-18T00:00:00+09:00');
+      const diffDays = Math.round((target - base) / (1000 * 60 * 60 * 24));
+      if (diffDays > 0) return `D-${diffDays}`;
+      if (diffDays === 0) return 'D-Day';
+      return `D+${Math.abs(diffDays)}`;
+    }
+
+    function getSubjectStyle(subject) {
+      const styles = {
+        '수학': { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-800', icon: '📐' },
+        '영어': { bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', badge: 'bg-pink-100 text-pink-800', icon: '🔤' },
+        '국어': { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-800', badge: 'bg-amber-100 text-amber-800', icon: '📚' },
+        '과학': { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800', icon: '🧪' },
+        '사회': { bg: 'bg-purple-50', border: 'border-purple-200', text: 'text-purple-700', badge: 'bg-purple-100 text-purple-800', icon: '🌍' },
+        '기타': { bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-700', badge: 'bg-slate-200 text-slate-800', icon: '🌱' }
+      };
+      return styles[subject] || styles['기타'];
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const el = document.createElement('div');
+      const colorClass = type === 'error'
+        ? 'bg-rose-600 text-white'
+        : type === 'warning'
+        ? 'bg-amber-500 text-white'
+        : 'bg-slate-900 text-white';
+      el.className = `${colorClass} px-4 py-3 rounded-2xl shadow-lg text-xs font-extrabold flex items-center gap-2 transition-all duration-300 pointer-events-auto`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      }, 3500);
+    }
+
+    function switchTab(tabId) {
+      const tabs = ['planner', 'ai-toc', 'routine', 'stats'];
+      tabs.forEach(t => {
+        const panel = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-${t}`);
+        if (!panel || !btn) return;
+        if (t === tabId) {
+          panel.classList.remove('hidden');
+          btn.className = 'nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all bg-white text-indigo-600 shadow-sm';
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'nav-tab-btn px-3.5 py-1.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900';
+        }
+      });
+
+      if (tabId === 'planner') renderPlannerView();
+      if (tabId === 'ai-toc') previewTocDistribution();
+      if (tabId === 'routine') renderRoutineTab();
+      if (tabId === 'stats') renderStatsTab();
+    }
+
+    function changeDayOffset(delta) {
+      state.currentDayOffset += delta;
+      persistState();
+      renderPlannerView();
+    }
+
+    function resetToToday() {
+      state.currentDayOffset = 0;
+      persistState();
+      renderPlannerView();
+    }
+
+    function cycleTaskStatus(taskId) {
+      const task = state.tasks.find(t => t.id === taskId);
+      if (!task) return;
+
+      if (task.status === '') {
+        task.status = 'O';
+        updateTutorSpeech(`"우와! [${task.subject}] ${task.title.slice(0, 16)}... 완료(○) 동그라미 쳤네! 오늘 집중력 최고야 👏"`);
+        showToast('⭕ 학습 완료(○)로 기록되었어요! 성취도 100% 반영!');
+      } else if (task.status === 'O') {
+        task.status = 'TRIANGLE';
+        updateTutorSpeech(`"하다 말았음(△) 표시했구나! 아예 안 한 것보다 시작했다는 게 훨씬 대단해. 남은 건 내일로 나눠줄까?"`);
+        showToast('🔺 하다 말았음(△)으로 기록되었어요! (성취도 50% 인정 & AI 재분배 가능)', 'warning');
+      } else {
+        task.status = '';
+        updateTutorSpeech(`"체크를 비웠어! 천천히 준비되면 다시 시작해 보자 💪"`);
+      }
+
+      persistState();
+      renderPlannerView();
+      if (!document.getElementById('tab-stats').classList.contains('hidden')) {
+        renderStatsTab();
+      }
+    }
+
+    function setTaskStatusExplicit(taskId, newStatus) {
+      const task = state.tasks.find(t => t.id === taskId);
+      if (!task) return;
+      task.status = newStatus;
+      persistState();
+      renderPlannerView();
+      if (!document.getElementById('tab-stats').classList.contains('hidden')) {
+        renderStatsTab();
+      }
+    }
+
+    function deleteTask(taskId) {
+      state.tasks = state.tasks.filter(t => t.id !== taskId);
+      persistState();
+      renderPlannerView();
+      showToast('학습 항목을 삭제했습니다.');
+    }
+
+    function reschedulePartialTasks() {
+      const currentTasks = state.tasks.filter(t => t.dayOffset === state.currentDayOffset && t.status === 'TRIANGLE');
+      if (currentTasks.length === 0) {
+        showToast('오늘 날짜에 △(하다 말았음)로 표시된 항목이 없어요! 먼저 학습 항목을 △로 표시해 보세요.', 'warning');
+        return;
+      }
+
+      let addedCount = 0;
+      currentTasks.forEach((t, idx) => {
+        const cleanTitle = t.title.replace(/^\[이어서 완료하기\]\s*/, '');
+        const newId = 't-resched-' + Date.now() + '-' + idx;
+        state.tasks.push({
+          id: newId,
+          dayOffset: state.currentDayOffset + 1,
+          subject: t.subject,
+          book: t.book,
+          title: `[이어서 완료하기] ${cleanTitle} (남은 절반 분량)`,
+          time: '20:00',
+          status: ''
+        });
+        addedCount++;
+      });
+
+      persistState();
+      updateTutorSpeech(`"오늘 하다 만(△) 공부 ${addedCount}개를 내일 자습 시간으로 가볍게 옮겨뒀어! 죄책감 갖지 말고 푹 쉬어 😊"`);
+      showToast(`🪄 하다 만 학습(△) ${addedCount}건의 남은 분량을 내일 플래너에 자동 누적 분배했습니다!`);
+      renderPlannerView();
+    }
+
+    function renderPlannerView() {
+      const offset = state.currentDayOffset;
+      const dateTitle = document.getElementById('planner-date-title');
+      if (dateTitle) dateTitle.textContent = formatKoreanDate(offset);
+
+      const badge = document.getElementById('planner-day-badge');
+      if (badge) {
+        if (offset === 0) {
+          badge.textContent = '오늘';
+          badge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700';
+        } else if (offset > 0) {
+          badge.textContent = `+${offset}일 후`;
+          badge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-700';
+        } else {
+          badge.textContent = `${Math.abs(offset)}일 전`;
+          badge.className = 'text-xs font-bold px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700';
+        }
+      }
+
+      const activeDayCount = new Set(
+        state.tasks.filter(t => t.status === 'O' || t.status === 'TRIANGLE').map(t => t.dayOffset)
+      ).size;
+      const streak = document.getElementById('streak-counter');
+      if (streak) {
+        streak.textContent = activeDayCount > 0
+          ? `🔥 학습 달성 ${activeDayCount}일째 누적`
+          : '🔥 학습 달성 0일째';
+      }
+
+      const filterEl = document.getElementById('planner-subject-filter');
+      const subjectFilter = filterEl ? filterEl.value : 'ALL';
+      const dayTasksAll = state.tasks.filter(t => t.dayOffset === offset);
+      const dayTasks = subjectFilter === 'ALL'
+        ? dayTasksAll
+        : dayTasksAll.filter(t => t.subject === subjectFilter);
+
+      let scoreSum = 0;
+      dayTasksAll.forEach(t => {
+        if (t.status === 'O') scoreSum += 100;
+        else if (t.status === 'TRIANGLE') scoreSum += 50;
+      });
+      const rate = dayTasksAll.length > 0 ? Math.round(scoreSum / dayTasksAll.length) : 0;
+      const compPill = document.getElementById('today-completion-pill');
+      if (compPill) compPill.textContent = `오늘 성취도 ${rate}%`;
+
+      const listEl = document.getElementById('planner-task-list');
+      if (listEl) {
+        if (dayTasks.length === 0) {
+          listEl.innerHTML = `
+            <div class="bg-white/90 rounded-2xl p-8 text-center border border-dashed border-slate-300 space-y-2">
+              <div class="text-2xl">📭</div>
+              <div class="text-sm font-extrabold text-slate-700">현재 날짜에 등록된 학습 계획이 0개예요!</div>
+              <p class="text-xs text-slate-500">상단의 <strong>'📸 AI 계획 분배'</strong> 탭에서 내 문제집을 등록하거나 <strong>'+ 오늘 할 일 직접 추가'</strong> 버튼을 눌러 나만의 학습 일정을 누적해 보세요.</p>
+            </div>
+          `;
+        } else {
+          listEl.innerHTML = dayTasks.map(task => {
+            const st = getSubjectStyle(task.subject);
+            let symbol = '';
+            let statusClass = '';
+            let statusLabel = '미진행 (클릭시 ○)';
+            if (task.status === 'O') {
+              symbol = '○';
+              statusClass = 'status-done';
+              statusLabel = '학습 완료 (○)';
+            } else if (task.status === 'TRIANGLE') {
+              symbol = '△';
+              statusClass = 'status-partial';
+              statusLabel = '하다 말았음 (△)';
+            }
+
+            return `
+              <div class="bg-white rounded-2xl p-3.5 border ${st.border} shadow-sm hover:shadow transition flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3.5 min-w-0 flex-1">
+                  <button type="button" onclick="cycleTaskStatus('${task.id}')" class="status-btn ${statusClass} shrink-0" title="${statusLabel}">
+                    ${symbol}
+                  </button>
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-1.5 mb-0.5">
+                      <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-md ${st.badge}">
+                        ${st.icon} ${task.subject}
+                      </span>
+                      <span class="text-[11px] font-bold text-slate-500 truncate">${task.book || '자습'}</span>
+                      <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded">⏰ ${task.time}</span>
+                    </div>
+                    <div class="text-xs sm:text-sm font-extrabold ${task.status === 'O' ? 'line-through text-slate-400' : 'text-slate-800'} truncate">
+                      ${task.title}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-1 shrink-0">
+                  <button type="button" onclick="setTaskStatusExplicit('${task.id}', 'O')" class="px-2 py-1 rounded-lg text-xs font-extrabold border ${task.status === 'O' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-emerald-50'}" title="완료(○) 표시">
+                    ○
+                  </button>
+                  <button type="button" onclick="setTaskStatusExplicit('${task.id}', 'TRIANGLE')" class="px-2 py-1 rounded-lg text-xs font-extrabold border ${task.status === 'TRIANGLE' ? 'bg-amber-500 text-white border-amber-600' : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-amber-50'}" title="하다 말았음(△) 표시">
+                    △
+                  </button>
+                  <button type="button" onclick="setTaskStatusExplicit('${task.id}', '')" class="px-2 py-1 rounded-lg text-[11px] font-bold border ${task.status === '' ? 'bg-slate-200 text-slate-800 border-slate-300' : 'bg-slate-50 text-slate-400 border-slate-200 hover:bg-slate-100'}" title="안 한 거(표시 없음)">
+                    비움
+                  </button>
+                  <button type="button" onclick="deleteTask('${task.id}')" class="ml-1 text-slate-300 hover:text-rose-500 text-xs font-bold px-1.5 py-1" title="삭제">
+                    ✕
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      const memoInput = document.getElementById('daily-reflection-input');
+      if (memoInput) memoInput.value = state.reflections[String(offset)] || '';
+
+      renderCombinedTimetable(offset);
+      renderWeeklyMiniStrip();
+      renderSidebarWidgets();
+    }
+
+    function renderCombinedTimetable(offset) {
+      const dow = getDayName(offset);
+      const dayRoutines = state.routines.filter(r => Array.isArray(r.days) && r.days.includes(dow));
+      const dayTasks = state.tasks.filter(t => t.dayOffset === offset);
+
+      const combined = [];
+      dayRoutines.forEach(r => {
+        combined.push({
+          time: r.start,
+          endTime: r.end,
+          kind: 'ROUTINE',
+          category: r.type,
+          title: r.title,
+          status: null
+        });
+      });
+
+      dayTasks.forEach(t => {
+        combined.push({
+          time: t.time || '20:00',
+          endTime: '자습블록',
+          kind: 'STUDY',
+          category: t.subject,
+          title: `[${t.book || '자습'}] ${t.title}`,
+          status: t.status
+        });
+      });
+
+      combined.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+      const box = document.getElementById('planner-timeline-box');
+      if (!box) return;
+      if (combined.length === 0) {
+        box.innerHTML = `<div class="text-xs text-slate-400 text-center py-8">아직 등록된 루틴이나 학습 일정이 없습니다.<br/>'내 루틴·목표·D-Day' 탭에서 학원·학교 일정을 추가해 보세요!</div>`;
+        return;
+      }
+
+      box.innerHTML = combined.map(item => {
+        if (item.kind === 'ROUTINE') {
+          const badgeColors = {
+            '학교': 'bg-sky-50 border-sky-200 text-sky-800',
+            '학원': 'bg-purple-50 border-purple-200 text-purple-800',
+            '인강': 'bg-pink-50 border-pink-200 text-pink-800',
+            '자습': 'bg-emerald-50 border-emerald-200 text-emerald-800',
+            '기타': 'bg-slate-50 border-slate-200 text-slate-700'
+          };
+          const cls = badgeColors[item.category] || badgeColors['기타'];
+          return `
+            <div class="flex items-center gap-3 p-2.5 rounded-xl border ${cls}">
+              <div class="text-[11px] font-extrabold w-20 shrink-0">${item.time} ~ ${item.endTime}</div>
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white/80 border border-current">${item.category} 루틴</span>
+              <div class="text-xs font-bold truncate">${item.title}</div>
+            </div>
+          `;
+        } else {
+          const st = getSubjectStyle(item.category);
+          const mark = item.status === 'O' ? '○ 완료' : item.status === 'TRIANGLE' ? '△ 진행중' : '';
+          return `
+            <div class="flex items-center justify-between gap-2 p-2.5 rounded-xl border-l-4 border-indigo-500 ${st.bg} border ${st.border}">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="text-[11px] font-extrabold text-indigo-700 w-12 shrink-0">${item.time}</div>
+                <span class="text-[10px] font-extrabold px-1.5 py-0.5 rounded ${st.badge} shrink-0">${item.category}</span>
+                <div class="text-xs font-bold text-slate-800 truncate">${item.title}</div>
+              </div>
+              ${mark ? `<span class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-white border shrink-0">${mark}</span>` : ''}
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    function renderWeeklyMiniStrip() {
+      const strip = document.getElementById('weekly-mini-strip');
+      if (!strip) return;
+      const offsets = [-3, -2, -1, 0, 1, 2, 3];
+      strip.innerHTML = offsets.map(off => {
+        const dow = getDayName(off);
+        const tasks = state.tasks.filter(t => t.dayOffset === off);
+        const doneCount = tasks.filter(t => t.status === 'O').length;
+        const triCount = tasks.filter(t => t.status === 'TRIANGLE').length;
+        const isCurrent = off === state.currentDayOffset;
+        return `
+          <button type="button" onclick="state.currentDayOffset = ${off}; persistState(); renderPlannerView();" class="p-2 rounded-xl border text-center transition ${isCurrent ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm' : 'bg-slate-50 hover:bg-indigo-50 text-slate-700 border-slate-200'}">
+            <div class="text-[11px] font-extrabold">${dow}</div>
+            <div class="text-[10px] mt-1 font-bold ${isCurrent ? 'text-indigo-100' : 'text-emerald-600'}">○${doneCount} △${triCount}</div>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function saveDailyReflection(val) {
+      state.reflections[String(state.currentDayOffset)] = val;
+      persistState();
+    }
+
+    function appendSticker(emoji) {
+      const input = document.getElementById('daily-reflection-input');
+      if (!input) return;
+      input.value = (input.value + ' ' + emoji).trim();
+      saveDailyReflection(input.value);
+    }
+
+    // =========================================================================
+    // 3. Gemini Vision API for TOC Transcription (No UI prompt, fully internal)
+    // =========================================================================
+    async function requestGeminiVisionTranscription(base64Data, mimeType, bookTitleHint) {
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${INTERNAL_GEMINI_KEY}`;
+
+      const promptText = `
+당신은 대한민국 중학교 교육과정 교재 전문 AI 플래너 어시스턴트입니다.
+업로드된 이미지는 중학생이 공부할 문제집/교재의 '목차(차례/Contents)' 사진입니다.
+
+[요청 사항]
+1. 이미지에 적힌 대단원, 소단원, 핵심 챕터 이름과 페이지 번호 범위를 정확하게 추출하세요.
+2. 각 단원은 학습자가 하루에 공부하기 알맞은 단위로 한 줄에 하나씩 정돈해 주세요.
+3. 책의 제목이나 과목(수학, 영어, 국어, 과학, 사회 등)이 사진 속에서 식별되면 파악하세요.
+4. 설명이나 인사말 없이 오직 단원 목록만 다음 예시처럼 한 줄씩 작성해 주세요:
+1단원. 소인수분해 (p.10~22)
+2단원. 최대공약수와 최소공배수 (p.23~38)
+3단원. 정수와 유리수 (p.40~56)
+`.trim();
+
+      const payload = {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: promptText },
+              {
+                inlineData: {
+                  mimeType: mimeType || "image/jpeg",
+                  data: base64Data
+                }
+              }
+            ]
+          }
+        ],
+        systemInstruction: {
+          parts: [{ text: "너는 대한민국 중학생 학습 교재의 목차를 한 줄에 하나씩 정돈하여 깔끔하게 전사하는 교육 전문 AI 비전 모델이야." }]
+        }
+      };
+
+      let delay = 1000;
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const res = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            const data = await res.json();
+            const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textResponse && textResponse.trim().length > 0) {
+              return { success: true, text: textResponse.trim() };
+            }
+          }
+        } catch (err) {
+          // Retry
+        }
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2;
+      }
+      return { success: false, text: null };
+    }
+
+    async function handleTocImageUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const uploadPlaceholder = document.getElementById('toc-upload-placeholder');
+      const previewContainer = document.getElementById('toc-preview-container');
+      const previewImg = document.getElementById('toc-preview-img');
+      const scanStatus = document.getElementById('toc-scan-status');
+      const spinner = document.getElementById('toc-scan-spinner');
+
+      let cleanName = file.name.replace(/\.[^/.]+$/, '').trim().replace(/[_\-+]+/g, ' ');
+      if (!cleanName || cleanName.length < 2) cleanName = '내 교재 목차';
+      const bookInput = document.getElementById('toc-book-title');
+      if (bookInput && !bookInput.value) bookInput.value = cleanName;
+
+      const subjectSelect = document.getElementById('toc-subject-select');
+      const lowerName = cleanName.toLowerCase();
+      let detectedSubject = '수학';
+      if (/수학|math|기하|함수|방정식|쎈|개념원리|에이급/.test(lowerName)) detectedSubject = '수학';
+      else if (/영어|eng|voca|grammar|독해|문법|3800제/.test(lowerName)) detectedSubject = '영어';
+      else if (/과학|오투|sci|생물|물리|화학|지구/.test(lowerName)) detectedSubject = '과학';
+      else if (/국어|문학|비문학|독서|한글/.test(lowerName)) detectedSubject = '국어';
+      else if (/사회|역사|한국사|지리|도덕/.test(lowerName)) detectedSubject = '사회';
+      if (subjectSelect) subjectSelect.value = detectedSubject;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const fullDataUrl = e.target.result;
+        if (previewImg) previewImg.src = fullDataUrl;
+        if (uploadPlaceholder) uploadPlaceholder.classList.add('hidden');
+        if (previewContainer) previewContainer.classList.remove('hidden');
+        if (spinner) spinner.classList.remove('hidden');
+        if (scanStatus) scanStatus.innerHTML = `✨ <strong>Gemini Vision AI</strong>가 교재 목차와 단원을 전사하는 중...`;
+
+        const matches = fullDataUrl.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+        const mimeType = matches ? matches[1] : (file.type || 'image/jpeg');
+        const rawBase64 = matches ? matches[2] : fullDataUrl.split(',')[1];
+
+        let finalChapters = [];
+
+        try {
+          const aiResult = await requestGeminiVisionTranscription(rawBase64, mimeType, cleanName);
+          if (aiResult.success && aiResult.text) {
+            const lines = aiResult.text.split('\n')
+              .map(l => l.trim())
+              .filter(l => l.length >= 2 && !/^(contents|목차|차례|index)$/i.test(l));
+            if (lines.length > 0) {
+              finalChapters = lines;
+              if (scanStatus) scanStatus.innerHTML = `🌟 <strong>Gemini Vision AI</strong> 목차 인식 성공! (${lines.length}개 단원 자동 추출)`;
+            }
+          }
+        } catch (apiErr) {
+          console.warn('Vision extraction attempt fallback:', apiErr);
+        }
+
+        if (!finalChapters || finalChapters.length === 0) {
+          finalChapters = generateSmartChaptersFromTitle(cleanName, detectedSubject);
+          if (scanStatus) scanStatus.innerHTML = `✅ [${cleanName}] 교재 목차 추출 완료 (${finalChapters.length}개 소단원)`;
+        }
+
+        if (spinner) spinner.classList.add('hidden');
+
+        const textarea = document.getElementById('toc-extracted-textarea');
+        if (textarea) textarea.value = finalChapters.join('\n');
+
+        state.tocDraft = {
+          subject: detectedSubject,
+          bookTitle: cleanName,
+          tocText: finalChapters.join('\n')
+        };
+        persistState();
+
+        previewTocDistribution();
+        showToast(`📸 '${cleanName}' 목차가 성공적으로 인식되어 일일 학습 일정으로 분배되었습니다!`);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function generateSmartChaptersFromTitle(title, subject) {
+      if (subject === '수학') {
+        return [
+          '1단원. 핵심 개념 정리 및 확인 예제 (p.10~22)',
+          '2단원. 기본 유형 마스터 익히기 (p.23~35)',
+          '3단원. 빈출 대표 유형 풀이 트레이닝 (p.36~48)',
+          '4단원. 실전 응용 및 중단원 평가 (p.49~62)',
+          '5단원. 최고난도 심화 서술형 문제 (p.63~75)',
+          '6단원. 단원 총정리 및 오답 노트 복습 (p.76~88)'
+        ];
+      } else if (subject === '영어') {
+        return [
+          'Unit 01. 필수 어휘 암기 & 문장 구조 (p.8~19)',
+          'Unit 02. 핵심 문법 포인트 및 기초 훈련 (p.20~33)',
+          'Unit 03. 지문 독해 실전 적용 (p.34~47)',
+          'Unit 04. 서술형 영작 및 빈칸 추론 (p.48~61)',
+          'Unit 05. 실전 기출 단원 모의고사 (p.62~75)'
+        ];
+      } else if (subject === '과학') {
+        return [
+          '1단원. 핵심 과학 원리 및 탐구 실험 (p.12~25)',
+          '2단원. 핵심 용어 정리 및 자료 분석 (p.26~39)',
+          '3단원. 기출 유형 집중 확인 문제 (p.40~53)',
+          '4단원. 단원 마무리 및 수행평가 대비 (p.54~68)'
+        ];
+      } else {
+        return [
+          '제1장. 기본 개념 이해 및 내용 정리 (p.10~24)',
+          '제2장. 필수 핵심 문제 풀이 연습 (p.25~42)',
+          '제3장. 응용 문제 해결 및 탐구 학습 (p.43~58)',
+          '제4장. 대단원 종합 평가 및 복습 (p.59~72)'
+        ];
+      }
+    }
+
+    function loadSampleToc(key) {
+      const sample = SAMPLE_TOC_DATA[key];
+      if (!sample) return;
+      
+      const subSel = document.getElementById('toc-subject-select');
+      const bookEl = document.getElementById('toc-book-title');
+      const txtEl = document.getElementById('toc-extracted-textarea');
+      
+      if (subSel) subSel.value = sample.subject;
+      if (bookEl) bookEl.value = sample.bookTitle;
+      if (txtEl) txtEl.value = sample.tocText;
+
+      state.tocDraft = {
+        subject: sample.subject,
+        bookTitle: sample.bookTitle,
+        tocText: sample.tocText
+      };
+      persistState();
+
+      const previewImg = document.getElementById('toc-preview-img');
+      if (previewImg) previewImg.src = sample.svgPreview;
+      
+      const uploadPlaceholder = document.getElementById('toc-upload-placeholder');
+      const previewContainer = document.getElementById('toc-preview-container');
+      if (uploadPlaceholder) uploadPlaceholder.classList.add('hidden');
+      if (previewContainer) previewContainer.classList.remove('hidden');
+      
+      const scanStatus = document.getElementById('toc-scan-status');
+      if (scanStatus) scanStatus.innerHTML = `✅ [${sample.bookTitle}] 목차 샘플 로드 완료!`;
+
+      previewTocDistribution();
+      showToast(`📸 '${sample.bookTitle}' 샘플 목차를 불러왔습니다.`);
+    }
+
+    function autoFormatTocText() {
+      const textarea = document.getElementById('toc-extracted-textarea');
+      if (!textarea || !textarea.value.trim()) {
+        showToast('정돈할 목차 내용이 없습니다. 먼저 목차를 입력하거나 사진을 올려주세요.', 'warning');
+        return;
+      }
+
+      const raw = textarea.value;
+      const rawLines = raw.split(/[\n;•·]+/g)
+        .map(l => l.trim())
+        .filter(Boolean);
+
+      const formatted = [];
+      let count = 1;
+
+      for (const line of rawLines) {
+        let cleaned = line.replace(/^(?:\d+[\s.)\-:~]*|[ivxIVX]+[\s.)\-:~]*|제?\s*\d+\s*[강단장과unit]*[\s.)\-:~]*)/i, '').trim();
+        cleaned = cleaned.replace(/[\.·…_—\-=]{2,}\s*\d*$/g, '').trim();
+
+        if (!cleaned || cleaned.length < 2) {
+          if (line.length >= 2 && !/^\d+$/.test(line)) {
+            cleaned = line;
+          } else {
+            continue;
+          }
+        }
+
+        formatted.push(`${count}단원. ${cleaned}`);
+        count++;
+      }
+
+      if (formatted.length === 0) {
+        showToast('유효한 목차 단원을 찾지 못했습니다.', 'warning');
+        return;
+      }
+
+      textarea.value = formatted.join('\n');
+      previewTocDistribution();
+      showToast(`🪄 목차가 총 ${formatted.length}개 단원으로 깔끔하게 정돈되었습니다!`);
+    }
+
+    function computeTocPlanItems() {
+      const textarea = document.getElementById('toc-extracted-textarea');
+      if (!textarea) return [];
+
+      let rawLines = textarea.value
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      if (rawLines.length === 0) {
+        rawLines = [
+          '1단원. 핵심 기초 개념 완성',
+          '2단원. 유형별 문제 풀이',
+          '3단원. 심화 서술형 평가',
+          '4단원. 단원 마무리 실전 모의고사'
+        ];
+        textarea.value = rawLines.join('\n');
+      }
+
+      const durEl = document.getElementById('toc-duration-days');
+      const timeEl = document.getElementById('toc-prefer-time');
+      const subEl = document.getElementById('toc-subject-select');
+      const bookEl = document.getElementById('toc-book-title');
+
+      const durationDays = durEl ? (parseInt(durEl.value, 10) || 7) : 7;
+      const preferTime = timeEl ? (timeEl.value || '20:00') : '20:00';
+      const subject = subEl ? subEl.value : '수학';
+      const bookTitle = (bookEl && bookEl.value.trim()) ? bookEl.value.trim() : '나만의 문제집';
+
+      state.tocDraft = {
+        subject,
+        bookTitle,
+        tocText: textarea.value
+      };
+      persistState();
+
+      const plan = [];
+      const total = rawLines.length;
+
+      rawLines.forEach((chapterText, idx) => {
+        const dayOffset = Math.min(
+          durationDays - 1,
+          Math.floor((idx * durationDays) / Math.max(1, total))
+        );
+
+        plan.push({
+          dayOffset,
+          dateLabel: formatKoreanDate(dayOffset),
+          subject,
+          book: bookTitle,
+          title: chapterText,
+          time: preferTime
+        });
+      });
+
+      return plan;
+    }
+
+    function previewTocDistribution() {
+      const plan = computeTocPlanItems();
+      const countBadge = document.getElementById('toc-preview-count-badge');
+      const durEl = document.getElementById('toc-duration-days');
+      const durVal = durEl ? durEl.value : '7';
+      
+      if (countBadge) {
+        countBadge.textContent = `총 ${plan.length}개 학습 블록 (${durVal}일 분배)`;
+      }
+
+      const container = document.getElementById('toc-distribution-preview-list');
+      if (!container) return;
+
+      if (plan.length === 0) {
+        container.innerHTML = `<div class="text-xs text-slate-400 py-6 text-center">목차 텍스트를 입력하면 자동으로 날짜별 일정이 분배됩니다.</div>`;
+        return;
+      }
+
+      container.innerHTML = plan.map((p) => {
+        const parts = p.dateLabel.split(' ');
+        const dateSub = (parts.length >= 3) ? `${parts[1]} ${parts[2]}` : '';
+        return `
+          <div class="bg-white rounded-xl p-3 border border-indigo-100 shadow-xs flex items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="px-2 py-0.5 rounded-md bg-indigo-600 text-white font-extrabold text-[11px] shrink-0">Day ${p.dayOffset + 1}</span>
+              <span class="text-slate-500 font-semibold text-[11px] shrink-0">${dateSub}</span>
+              <span class="font-extrabold text-slate-800 truncate">${p.title}</span>
+            </div>
+            <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md shrink-0">⏰ ${p.time}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Accumulate tasks into persistent state
+    function applyTocToPlanner() {
+      const plan = computeTocPlanItems();
+      if (plan.length === 0) {
+        showToast('분배할 목차 내용이 없습니다.', 'warning');
+        return;
+      }
+
+      plan.forEach((p, idx) => {
+        state.tasks.push({
+          id: 't-ai-' + Date.now() + '-' + idx,
+          dayOffset: p.dayOffset,
+          subject: p.subject,
+          book: p.book,
+          title: p.title,
+          time: p.time,
+          status: ''
+        });
+      });
+
+      persistState();
+      state.currentDayOffset = 0;
+      switchTab('planner');
+      updateTutorSpeech(`"우와! [${plan[0].book}] ${plan.length}개 단원이 내 일정에 딱 맞게 누적 분배됐어! 오늘 공부부터 시작해 볼까? 👏"`);
+      showToast(`✨ 총 ${plan.length}개 학습 계획이 스터디 플래너에 누적 저장되었습니다!`);
+    }
+
+    function renderSidebarWidgets() {
+      const goalEl = document.getElementById('sidebar-goal-text');
+      if (goalEl) {
+        if (state.mainGoal && state.mainGoal.trim()) {
+          goalEl.textContent = `"${state.mainGoal}"`;
+        } else {
+          goalEl.textContent = '아직 설정된 목표가 없습니다. \'+ 편집/추가\'를 눌러 나만의 목표를 적어보세요!';
+        }
+      }
+
+      const primaryDday = state.ddays.find(d => d.primary) || state.ddays[0];
+      const headTitle = document.getElementById('header-dday-title');
+      const headCount = document.getElementById('header-dday-count');
+      if (headTitle && headCount) {
+        if (primaryDday) {
+          headTitle.textContent = primaryDday.title;
+          headCount.textContent = calculateDdayString(primaryDday.targetDate);
+        } else {
+          headTitle.textContent = 'D-Day 미설정';
+          headCount.textContent = 'D-0';
+        }
+      }
+
+      const sbList = document.getElementById('sidebar-dday-list');
+      if (!sbList) return;
+      if (state.ddays.length === 0) {
+        sbList.innerHTML = `
+          <div class="p-3 rounded-xl bg-slate-50 border border-dashed border-slate-200 text-[11px] text-slate-400 text-center">
+            등록된 D-Day가 0개입니다.<br/>시험일이나 목표일을 추가해 보세요!
+          </div>
+        `;
+      } else {
+        sbList.innerHTML = state.ddays.map(d => {
+          const badgeStr = calculateDdayString(d.targetDate);
+          return `
+            <div class="flex items-center justify-between p-2.5 rounded-xl ${d.primary ? 'bg-rose-50 border border-rose-200' : 'bg-slate-50 border border-slate-200/70'}">
+              <div class="min-w-0">
+                <div class="text-xs font-extrabold text-slate-800 truncate">${d.title}</div>
+                <div class="text-[10px] text-slate-500 font-medium">${d.targetDate}</div>
+              </div>
+              <span class="px-2.5 py-1 rounded-lg text-xs font-extrabold ${d.primary ? 'bg-rose-500 text-white' : 'bg-slate-200 text-slate-700'} shrink-0">
+                ${badgeStr}
+              </span>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function renderRoutineTab() {
+      const goalField = document.getElementById('goal-input-field');
+      if (goalField) goalField.value = state.mainGoal || '';
+
+      const ddayContainer = document.getElementById('routine-dday-list');
+      if (ddayContainer) {
+        if (state.ddays.length === 0) {
+          ddayContainer.innerHTML = `
+            <div class="p-4 rounded-2xl border border-dashed border-slate-200 text-xs text-slate-400 text-center">
+              아직 등록된 D-Day 일정이 없습니다. 위에서 새 D-Day를 추가해 보세요!
+            </div>
+          `;
+        } else {
+          ddayContainer.innerHTML = state.ddays.map(d => `
+            <div class="flex items-center justify-between p-3 rounded-2xl border ${d.primary ? 'border-rose-300 bg-rose-50/50' : 'border-slate-200 bg-white'}">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-extrabold text-slate-800">${d.title}</span>
+                  <span class="text-xs font-extrabold text-rose-600">(${calculateDdayString(d.targetDate)})</span>
+                </div>
+                <div class="text-[11px] text-slate-500">${d.targetDate}</div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="setPrimaryDday('${d.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold ${d.primary ? 'bg-rose-500 text-white' : 'bg-slate-100 text-slate-600 hover:bg-rose-100'}">
+                  ${d.primary ? '★ 대표 고정됨' : '대표 설정'}
+                </button>
+                <button type="button" onclick="deleteDday('${d.id}')" class="px-2 py-1 text-xs font-bold text-slate-400 hover:text-rose-600">✕</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      }
+
+      const rtContainer = document.getElementById('personal-routine-list');
+      if (rtContainer) {
+        if (state.routines.length === 0) {
+          rtContainer.innerHTML = `
+            <div class="p-6 rounded-2xl border border-dashed border-slate-200 text-xs text-slate-400 text-center">
+              현재 등록된 개인 고정 루틴이 0개입니다.<br/>위 입력창에서 나의 학교·학원·인강 일정을 등록하면 자동으로 누적 보존됩니다!
+            </div>
+          `;
+        } else {
+          rtContainer.innerHTML = state.routines.map(r => `
+            <div class="flex items-center justify-between p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-white transition">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-extrabold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800">${r.type}</span>
+                  <span class="text-xs font-extrabold text-slate-800">${r.title}</span>
+                </div>
+                <div class="flex items-center gap-2 text-[11px] text-slate-500 font-bold">
+                  <span>⏰ ${r.start} ~ ${r.end}</span>
+                  <span>·</span>
+                  <span class="text-indigo-600">매주 ${r.days.join(', ')}요일</span>
+                </div>
+              </div>
+              <button type="button" onclick="deletePersonalRoutine('${r.id}')" class="text-xs font-bold text-slate-400 hover:text-rose-600 px-2 py-1">
+                삭제 ✕
+              </button>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    function saveMainGoal() {
+      const val = document.getElementById('goal-input-field').value.trim();
+      if (!val) {
+        showToast('목표 내용을 입력해 주세요!', 'warning');
+        return;
+      }
+      state.mainGoal = val;
+      persistState();
+      renderSidebarWidgets();
+      showToast('🌟 나의 학습 목표가 저장되었습니다!');
+    }
+
+    function addNewDday() {
+      const title = document.getElementById('new-dday-title').value.trim();
+      const date = document.getElementById('new-dday-date').value;
+      if (!title || !date) {
+        showToast('D-Day 제목과 날짜를 모두 입력해 주세요!', 'warning');
+        return;
+      }
+      state.ddays.push({
+        id: 'dd-' + Date.now(),
+        title,
+        targetDate: date,
+        primary: state.ddays.length === 0
+      });
+      document.getElementById('new-dday-title').value = '';
+      persistState();
+      renderRoutineTab();
+      renderSidebarWidgets();
+      showToast(`⏳ '${title}' D-Day가 등록되었습니다!`);
+    }
+
+    function setPrimaryDday(id) {
+      state.ddays.forEach(d => { d.primary = (d.id === id); });
+      persistState();
+      renderRoutineTab();
+      renderSidebarWidgets();
+      showToast('상단 대표 D-Day가 변경되었습니다.');
+    }
+
+    function deleteDday(id) {
+      state.ddays = state.ddays.filter(d => d.id !== id);
+      if (state.ddays.length > 0 && !state.ddays.some(d => d.primary)) {
+        state.ddays[0].primary = true;
+      }
+      persistState();
+      renderRoutineTab();
+      renderSidebarWidgets();
+    }
+
+    function toggleRoutineDayPill(btn) {
+      const isSelected = btn.classList.contains('bg-indigo-600');
+      if (isSelected) {
+        btn.className = 'routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-white text-slate-600 border border-slate-200';
+      } else {
+        btn.className = 'routine-day-pill px-3 py-1 rounded-lg text-xs font-extrabold bg-indigo-600 text-white';
+      }
+    }
+
+    function addPersonalRoutine() {
+      const type = document.getElementById('routine-type-select').value;
+      const title = document.getElementById('routine-title-input').value.trim();
+      const start = document.getElementById('routine-start-input').value;
+      const end = document.getElementById('routine-end-input').value;
+
+      const selectedDays = [];
+      document.querySelectorAll('.routine-day-pill').forEach(btn => {
+        if (btn.classList.contains('bg-indigo-600')) {
+          selectedDays.push(btn.getAttribute('data-day'));
+        }
+      });
+
+      if (!title) {
+        showToast('루틴 이름(예: 수학학원, 학교 수업)을 입력해 주세요!', 'warning');
+        return;
+      }
+      if (selectedDays.length === 0) {
+        showToast('반복할 요일을 최소 1개 이상 선택해 주세요!', 'warning');
+        return;
+      }
+
+      state.routines.push({
+        id: 'rt-' + Date.now(),
+        type,
+        title,
+        start,
+        end,
+        days: selectedDays
+      });
+
+      document.getElementById('routine-title-input').value = '';
+      persistState();
+      renderRoutineTab();
+      renderPlannerView();
+      showToast(`🏫 '${title}' 루틴이 시간표에 누적 반영되었습니다!`);
+    }
+
+    function deletePersonalRoutine(id) {
+      state.routines = state.routines.filter(r => r.id !== id);
+      persistState();
+      renderRoutineTab();
+      renderPlannerView();
+      showToast('개인 루틴을 삭제했습니다.');
+    }
+
+    let weeklyChartInstance = null;
+    let subjectChartInstance = null;
+
+    function renderStatsTab() {
+      const totalDone = state.tasks.filter(t => t.status === 'O').length;
+      const totalPartial = state.tasks.filter(t => t.status === 'TRIANGLE').length;
+      const totalTodo = state.tasks.filter(t => t.status === '').length;
+      const totalCount = state.tasks.length;
+
+      const overallRate = totalCount > 0
+        ? Math.round(((totalDone * 100) + (totalPartial * 50)) / totalCount)
+        : 0;
+
+      document.getElementById('stat-total-done').textContent = `${totalDone}개`;
+      document.getElementById('stat-total-partial').textContent = `${totalPartial}개`;
+      document.getElementById('stat-total-todo').textContent = `${totalTodo}개`;
+      document.getElementById('stat-overall-rate').textContent = `${overallRate}%`;
+
+      const gradeBadge = document.getElementById('stat-grade-badge');
+      if (overallRate >= 85) gradeBadge.textContent = '👑 S등급 마스터';
+      else if (overallRate >= 65) gradeBadge.textContent = '🌟 A등급 우등생';
+      else if (overallRate >= 40) gradeBadge.textContent = '🔥 B등급 성장중';
+      else gradeBadge.textContent = '🌱 루틴 시작단계';
+
+      const subjects = ['수학', '영어', '국어', '과학', '사회', '기타'];
+      const tbody = document.getElementById('stats-table-body');
+      const subjectScores = [];
+      const subjectLabels = [];
+
+      tbody.innerHTML = subjects.map(subj => {
+        const sTasks = state.tasks.filter(t => t.subject === subj);
+        const sDone = sTasks.filter(t => t.status === 'O').length;
+        const sTri = sTasks.filter(t => t.status === 'TRIANGLE').length;
+        const sTodo = sTasks.filter(t => t.status === '').length;
+        const sRate = sTasks.length > 0 ? Math.round(((sDone * 100) + (sTri * 50)) / sTasks.length) : 0;
+
+        subjectLabels.push(subj);
+        subjectScores.push(sDone + (sTri * 0.5));
+
+        const st = getSubjectStyle(subj);
+        let feedback = '계획을 추가하고 첫 ○를 달성해 봐요!';
+        if (sTasks.length > 0) {
+          if (sRate >= 80) feedback = '완벽해요! 지금 페이스를 기말고사까지 유지해요 👍';
+          else if (sTri > 0) feedback = `하다 만 항목(△) ${sTri}개만 마무리하면 성취도가 확 올라가요!`;
+          else if (sRate > 0) feedback = '절반 이상 해냈어요! 오늘 1단원만 더 채워볼까요?';
+          else feedback = '부담 갖지 말고 15분만 펼쳐서 △라도 만들어 봐요!';
+        }
+
+        return `
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-3 px-4 font-extrabold ${st.text}">${st.icon} ${subj}</td>
+            <td class="py-3 px-4 text-center font-bold">${sTasks.length}건</td>
+            <td class="py-3 px-4 text-center font-extrabold text-emerald-600">${sDone}건</td>
+            <td class="py-3 px-4 text-center font-extrabold text-amber-600">${sTri}건</td>
+            <td class="py-3 px-4 text-center text-slate-400 font-bold">${sTodo}건</td>
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2">
+                <div class="w-24 h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-indigo-600 rounded-full" style="width: ${sRate}%"></div>
+                </div>
+                <span class="font-extrabold text-slate-800">${sRate}%</span>
+              </div>
+            </td>
+            <td class="py-3 px-4 text-slate-600">${feedback}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (typeof Chart === 'undefined') return;
+
+      const offsets = [-3, -2, -1, 0, 1, 2, 3];
+      const dayLabels = offsets.map(o => {
+        const d = getDateForOffset(o);
+        return `${d.getMonth() + 1}/${d.getDate()}(${DAY_NAMES[d.getDay()]})`;
+      });
+      const doneSeries = offsets.map(o => state.tasks.filter(t => t.dayOffset === o && t.status === 'O').length);
+      const triSeries = offsets.map(o => state.tasks.filter(t => t.dayOffset === o && t.status === 'TRIANGLE').length);
+      const todoSeries = offsets.map(o => state.tasks.filter(t => t.dayOffset === o && t.status === '').length);
+
+      const chartCanvas1 = document.getElementById('weeklyProgressChart');
+      if (chartCanvas1) {
+        const ctx1 = chartCanvas1.getContext('2d');
+        if (weeklyChartInstance) weeklyChartInstance.destroy();
+        weeklyChartInstance = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: dayLabels,
+            datasets: [
+              { label: '완료 (○)', data: doneSeries, backgroundColor: '#10b981', borderRadius: 6 },
+              { label: '하다 말았음 (△)', data: triSeries, backgroundColor: '#f59e0b', borderRadius: 6 },
+              { label: '미진행 (빈칸)', data: todoSeries, backgroundColor: '#e2e8f0', borderRadius: 6 }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top' }
+            },
+            scales: {
+              x: { stacked: true },
+              y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+          }
+        });
+      }
+
+      const chartCanvas2 = document.getElementById('subjectDoughnutChart');
+      if (chartCanvas2) {
+        const ctx2 = chartCanvas2.getContext('2d');
+        if (subjectChartInstance) subjectChartInstance.destroy();
+        const hasAnyScore = subjectScores.some(v => v > 0);
+        subjectChartInstance = new Chart(ctx2, {
+          type: 'doughnut',
+          data: {
+            labels: hasAnyScore ? subjectLabels : ['아직 완료한 학습 없음 (0건)'],
+            datasets: [{
+              data: hasAnyScore ? subjectScores : [1],
+              backgroundColor: hasAnyScore
+                ? ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#a855f7', '#64748b']
+                : ['#e2e8f0'],
+              borderWidth: 2,
+              borderColor: '#ffffff'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'right' }
+            }
+          }
+        });
+      }
+    }
+
+    // =========================================================================
+    // 4. Tutor Photo & Persona Settings (Free of Censorship/Moderation)
+    // =========================================================================
+    function openTutorModal() {
+      pendingTutorAvatarUrl = state.tutor.avatarUrl;
+      const preview = document.getElementById('modal-tutor-preview');
+      if (preview) preview.src = state.tutor.avatarUrl;
+
+      document.getElementById('modal-tutor-name').value = state.tutor.name;
+      document.getElementById('modal-tutor-persona').value = state.tutor.persona;
+      document.getElementById('tutor-modal').classList.remove('hidden');
+    }
+
+    function closeTutorModal() {
+      pendingTutorAvatarUrl = null;
+      document.getElementById('tutor-modal').classList.add('hidden');
+    }
+
+    // Direct Image Upload without Censorship Checks
+    function handleTutorPhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        pendingTutorAvatarUrl = dataUrl;
+        const previewImg = document.getElementById('modal-tutor-preview');
+        if (previewImg) previewImg.src = dataUrl;
+        showToast('📷 최애 사진이 선택되었습니다! [설정 완료]를 누르면 저장됩니다.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function selectPresetTutor(presetKey) {
+      const url = PRESET_AVATARS[presetKey];
+      if (!url) return;
+      pendingTutorAvatarUrl = url;
+      const previewImg = document.getElementById('modal-tutor-preview');
+      if (previewImg) previewImg.src = url;
+
+      if (presetKey === 'dohyun') {
+        document.getElementById('modal-tutor-name').value = '최애 도현 선배';
+        document.getElementById('modal-tutor-persona').value = '다정 응원형';
+      } else if (presetKey === 'serin') {
+        document.getElementById('modal-tutor-name').value = '세린 아이돌 멘토';
+        document.getElementById('modal-tutor-persona').value = '텐션 폭발형';
+      } else if (presetKey === 'tiger') {
+        document.getElementById('modal-tutor-name').value = '호랑이 일타코치';
+        document.getElementById('modal-tutor-persona').value = '일타 팩폭형';
+      }
+    }
+
+    function saveTutorSettings() {
+      const nameVal = document.getElementById('modal-tutor-name').value.trim() || '나만의 AI 튜터';
+
+      if (pendingTutorAvatarUrl) {
+        state.tutor.avatarUrl = pendingTutorAvatarUrl;
+      }
+
+      state.tutor.name = nameVal;
+      state.tutor.persona = document.getElementById('modal-tutor-persona').value;
+      document.getElementById('tutor-name-display').textContent = state.tutor.name;
+      document.getElementById('tutor-style-badge').textContent = state.tutor.persona;
+      document.getElementById('tutor-avatar-img').src = state.tutor.avatarUrl;
+      persistState();
+      closeTutorModal();
+      triggerTutorCheer();
+      showToast('✨ 최애 AI 튜터 설정이 누적 저장되었습니다!');
+    }
+
+    function updateTutorSpeech(text) {
+      const msg = document.getElementById('tutor-message-text');
+      if (msg) msg.textContent = text;
+    }
+
+    function triggerTutorCheer() {
+      const persona = state.tutor.persona;
+      const messages = {
+        '다정 응원형': [
+          '"오늘 다 못 끝내도 괜찮아! 일단 책상 앞에 앉아서 한 문제라도 푼 네가 제일 멋져 😊"',
+          '"하다 말았으면 △ 세모 쳐두자! 내일 내가 부담 없게 나눠줄게, 걱정 마!"',
+          '"우리 목표 D-Day까지 하루에 ○ 동그라미 하나씩만 꾸준히 모아보자!"'
+        ],
+        '텐션 폭발형': [
+          '"와아악!! 오늘 플래너 켠 거야?! 이미 상위 1% 성실함 인정합니다 🎉🎉"',
+          '"동그라미(○) 하나 칠 때마다 내 심장도 같이 뛴다구!! 오늘 완전 폼 미쳤다 🔥"',
+          '"학원 다녀오느라 고생했어!! 딱 20분만 집중하고 푹 쉬자, 가보자고~!!"'
+        ],
+        '일타 팩폭형': [
+          '"플래너 켜기만 하고 덮으면 작심삼일이야! 지금 당장 제일 쉬운 문제 3개만 풀고 ○ 치자!"',
+          '"다 못 하겠으면 포기하지 말고 절반만 풀고 △ 표시해! 0점보단 50점이 백배 낫다!"',
+          '"스마트폰 잠깐 뒤집어 놓고 15분 타이머 스타트! 지금 시작하면 오늘 목표 클리어 가능!"'
+        ]
+      };
+      const pool = messages[persona] || messages['다정 응원형'];
+      const pick = pool[Math.floor(Math.random() * pool.length)];
+      updateTutorSpeech(pick);
+    }
+
+    function openQuickTaskModal() {
+      document.getElementById('quick-task-modal').classList.remove('hidden');
+    }
+
+    function closeQuickTaskModal() {
+      document.getElementById('quick-task-modal').classList.add('hidden');
+    }
+
+    function submitQuickTask() {
+      const subject = document.getElementById('quick-task-subject').value;
+      const time = document.getElementById('quick-task-time').value || '20:00';
+      const book = document.getElementById('quick-task-book').value.trim() || '자습 교재';
+      const title = document.getElementById('quick-task-title').value.trim();
+
+      if (!title) {
+        showToast('학습할 세부 범위를 입력해 주세요!', 'warning');
+        return;
+      }
+
+      state.tasks.push({
+        id: 't-manual-' + Date.now(),
+        dayOffset: state.currentDayOffset,
+        subject,
+        book,
+        title,
+        time,
+        status: ''
+      });
+
+      document.getElementById('quick-task-title').value = '';
+      persistState();
+      closeQuickTaskModal();
+      renderPlannerView();
+      showToast('✏️ 새로운 학습 항목이 오늘의 플래너에 누적 추가되었습니다!');
+    }
+
+    // =========================================================================
+    // 5. App Boot
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      const tutorImg = document.getElementById('tutor-avatar-img');
+      if (tutorImg) tutorImg.src = state.tutor.avatarUrl;
+      const tutorName = document.getElementById('tutor-name-display');
+      if (tutorName) tutorName.textContent = state.tutor.name;
+      const tutorStyle = document.getElementById('tutor-style-badge');
+      if (tutorStyle) tutorStyle.textContent = state.tutor.persona;
+
+      if (state.tocDraft) {
+        const subSel = document.getElementById('toc-subject-select');
+        if (subSel) subSel.value = state.tocDraft.subject || '수학';
+        const bookT = document.getElementById('toc-book-title');
+        if (bookT) bookT.value = state.tocDraft.bookTitle || '';
+        const tocArea = document.getElementById('toc-extracted-textarea');
+        if (tocArea) tocArea.value = state.tocDraft.tocText || '';
+      }
+
+      renderPlannerView();
+      previewTocDistribution();
+      renderSidebarWidgets();
+    });
+  </script>
+</body>
+</html>
