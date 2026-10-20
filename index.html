@@ -10,12 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --theme-primary: #6366f1;
-      --theme-primary-light: #e0e7ff;
-      --theme-accent: #ec4899;
-      --theme-bg: #f8fafc;
-    }
+    :root { --theme-primary: #6366f1; --theme-bg: #f8fafc; }
     html, body {
       font-family: 'Noto Sans KR', 'Inter', sans-serif;
       background-color: var(--theme-bg);
@@ -24,45 +19,25 @@
       max-width: 100vw;
     }
     .planner-grid-bg {
-      background-image: 
+      background-image:
         linear-gradient(to right, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(99, 102, 241, 0.06) 1px, transparent 1px);
       background-size: 20px 20px;
     }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-    .status-btn {
-      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .status-btn:hover {
-      transform: scale(1.04);
-    }
-    .status-btn:active {
-      transform: scale(0.95);
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .status-btn { transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1); }
+    .status-btn:hover { transform: scale(1.04); }
+    .status-btn:active { transform: scale(0.95); }
     @keyframes scanLine {
       0% { top: 0%; opacity: 0.9; }
       50% { top: 92%; opacity: 1; }
       100% { top: 0%; opacity: 0.9; }
     }
     .scanner-beam {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 3px;
+      position: absolute; left: 0; right: 0; height: 3px;
       background: linear-gradient(90deg, transparent, #6366f1, #ec4899, #6366f1, transparent);
       box-shadow: 0 0 12px #6366f1;
       animation: scanLine 2s infinite ease-in-out;
@@ -71,29 +46,21 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <!-- 상단 고정 반응형 헤더 (데스크탑 & 모바일 화면 깨짐 방지 적용) -->
+  <!-- 상단 고정 반응형 헤더 -->
   <header class="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3 shadow-sm">
     <div class="max-w-[1440px] mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5 sm:gap-3">
-      
-      <!-- 로고 & 타이틀 -->
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 min-w-0">
-          <div id="brandLogoBox" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-base sm:text-lg shadow-md shadow-indigo-200 shrink-0">
-            AI
-          </div>
+          <div id="brandLogoBox" class="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-indigo-600 flex items-center justify-center text-white font-extrabold text-base sm:text-lg shadow-md shadow-indigo-200 shrink-0">AI</div>
           <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-1.5">
               <h1 class="text-base sm:text-lg lg:text-xl font-extrabold tracking-tight text-slate-900 truncate">작심백일 스터디 플래너</h1>
-              <span class="px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200 shrink-0">중등 맞춤 시제품 v1.0</span>
+              <span class="px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200 shrink-0">중등 맞춤 시제품 v1.1</span>
             </div>
             <p class="text-[11px] sm:text-xs text-slate-500 truncate">밀려도 괜찮아! AI가 알아서 나눠주고 최애 튜터가 응원하는 나만의 플래너</p>
           </div>
         </div>
-
-        <!-- 모바일 전용 빠른 API 설정 버튼 -->
-        <button id="openApiKeyModalMobileBtn" type="button" class="lg:hidden px-2.5 py-1.5 rounded-xl border text-[11px] font-extrabold transition shrink-0 bg-amber-50 text-amber-800 border-amber-200">
-          🔑 API 설정
-        </button>
+        <button id="openApiKeyModalMobileBtn" type="button" class="lg:hidden px-2.5 py-1.5 rounded-xl border text-[11px] font-extrabold transition shrink-0 bg-amber-50 text-amber-800 border-amber-200">🔑 API 설정</button>
       </div>
 
       <!-- 중앙: 나의 핵심 목표 & 대표 D-Day 배너 (기능 2) -->
@@ -106,102 +73,73 @@
           </div>
         </div>
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 ml-auto">
-          <div id="headerDdayBadge" class="px-2.5 sm:px-3 py-1 rounded-xl bg-indigo-600 text-white font-extrabold text-xs sm:text-sm shadow-sm whitespace-nowrap">
-            기말고사 D-14
-          </div>
-          <button id="openGoalModalBtn" type="button" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-[11px] sm:text-xs font-semibold transition shadow-sm whitespace-nowrap">
-            목표·D-Day 설정
-          </button>
+          <div id="headerDdayBadge" class="px-2.5 sm:px-3 py-1 rounded-xl bg-indigo-600 text-white font-extrabold text-xs sm:text-sm shadow-sm whitespace-nowrap">기말고사 D-14</div>
+          <button id="openGoalModalBtn" type="button" class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-[11px] sm:text-xs font-semibold transition shadow-sm whitespace-nowrap">목표·D-Day 설정</button>
         </div>
       </div>
 
-      <!-- 우측: Gemini API 보안 금고 + 날짜 네비게이션 + 샘플 복원 -->
+      <!-- 우측: API 키 설정 & 날짜 네비게이션 -->
       <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2">
         <button id="openApiKeyModalBtn" type="button" class="px-3 py-1.5 rounded-xl border text-xs font-extrabold transition flex items-center gap-1.5 shadow-sm bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200">
           <span id="apiKeyStatusDot" class="w-2 h-2 rounded-full bg-amber-500"></span>
           <span id="apiKeyStatusText">🔑 Gemini API 키 입력</span>
         </button>
-
         <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
           <button id="prevDayBtn" type="button" class="px-2 sm:px-2.5 py-1 rounded-lg hover:bg-white text-slate-700 text-xs font-bold transition" title="이전 날짜">◀</button>
           <input id="currentDatePicker" type="date" aria-label="플래너 날짜 선택" class="bg-transparent text-[11px] sm:text-xs font-bold text-slate-800 px-1.5 sm:px-2 py-1 focus:outline-none cursor-pointer" />
           <button id="nextDayBtn" type="button" class="px-2 sm:px-2.5 py-1 rounded-lg hover:bg-white text-slate-700 text-xs font-bold transition" title="다음 날짜">▶</button>
           <button id="todayBtn" type="button" class="ml-1 px-2 py-1 rounded-lg bg-white text-indigo-600 text-[11px] sm:text-xs font-bold shadow-sm hover:bg-indigo-50 transition whitespace-nowrap">오늘</button>
         </div>
-
-        <button id="resetDemoDataBtn" type="button" class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] sm:text-xs font-semibold transition whitespace-nowrap" title="시제품 샘플 데이터 초기화">
-          샘플 초기화
-        </button>
+        <button id="resetDemoDataBtn" type="button" class="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] sm:text-xs font-semibold transition whitespace-nowrap">샘플 초기화</button>
       </div>
     </div>
   </header>
 
-  <!-- 메인 반응형 워크스페이스 -->
+  <!-- 메인 워크스페이스 -->
   <main class="flex-1 max-w-[1440px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
 
-    <!-- [좌측 패널: 3칸] 최애 AI 튜터 (기능 5) + 작심삼일 방지 리스케줄러 (기능 6) + D-Day 리스트 (기능 2) -->
+    <!-- 좌측 사이드바 (모바일에서는 하단 배치되어 플래너 본문이 먼저 보이도록 구성) -->
     <aside class="lg:col-span-3 space-y-4 sm:space-y-5 order-2 lg:order-1">
-
       <!-- 기능 5: 최애 AI 튜터 위젯 -->
       <section class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-4 sm:px-5 py-3.5 flex items-center justify-between text-white">
-          <div class="flex items-center gap-2">
-            <span class="text-base">✨</span>
-            <h2 class="font-bold text-sm">나의 최애 AI 튜터</h2>
-          </div>
+          <div class="flex items-center gap-2"><span class="text-base">✨</span><h2 class="font-bold text-sm">나의 최애 AI 튜터</h2></div>
           <span class="px-2 py-0.5 text-[10px] font-semibold bg-white/20 rounded-full backdrop-blur">클린 안심 가드 ON</span>
         </div>
-
         <div class="p-4 sm:p-5">
           <div class="flex items-center gap-3.5 sm:gap-4">
             <div class="relative shrink-0">
               <div id="tutorAvatarWrapper" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border-2 border-indigo-500 shadow-md bg-indigo-50 flex items-center justify-center">
                 <img id="tutorAvatarImg" src="" alt="최애 튜터 프로필" class="w-full h-full object-cover max-w-full" />
               </div>
-              <span id="tutorSafetyBadge" class="absolute -bottom-1.5 -right-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-emerald-500 text-white rounded-full shadow">
-                안심인증
-              </span>
+              <span id="tutorSafetyBadge" class="absolute -bottom-1.5 -right-1.5 px-1.5 py-0.5 text-[10px] font-bold bg-emerald-500 text-white rounded-full shadow">안심인증</span>
             </div>
-
             <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
-                <span id="tutorRoleTag" class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-purple-100 text-purple-700">다정한 최애 선배</span>
-              </div>
+              <span id="tutorRoleTag" class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-purple-100 text-purple-700 inline-block">다정한 최애 선배</span>
               <h3 id="tutorNameDisplay" class="font-extrabold text-sm sm:text-base text-slate-900 mt-1 truncate">차은우 선배 튜터</h3>
               <p id="tutorStreakText" class="text-xs text-indigo-600 font-semibold mt-0.5">🔥 연속 출석 4일째 (작심삼일 돌파!)</p>
-              <button id="openTutorModalBtn" type="button" class="mt-2 w-full px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition border border-indigo-200">
-                📸 최애 사진 업로드 / 튜터 변경
-              </button>
+              <button id="openTutorModalBtn" type="button" class="mt-2 w-full px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs transition border border-indigo-200">📸 최애 사진 업로드 / 튜터 변경</button>
             </div>
           </div>
-
           <div class="mt-4 relative bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
             <div id="tutorSpeechBubble" class="text-xs leading-relaxed text-slate-700 font-medium break-words">
               "오늘도 플래너 켰네! 완벽하게 다 못 끝내도 괜찮으니까 시작만 한 번 해보자. 하다가 힘들면 세모(△) 표시해도 내가 남은 진도 다 조절해 줄게!"
             </div>
             <div class="mt-2.5 flex items-center justify-between pt-2 border-t border-slate-200/70">
               <span class="text-[11px] text-slate-400">실시간 튜터 피드백</span>
-              <button id="cheerMeUpBtn" type="button" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition">
-                💬 응원 한마디 더 듣기
-              </button>
+              <button id="cheerMeUpBtn" type="button" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition">💬 응원 한마디 더 듣기</button>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- 기능 6 설명 & 작심삼일 방지 리스케줄러 카드 -->
+      <!-- 기능 6: 작심삼일 방지 AI 매니저 -->
       <section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-            <span>🛡️</span> 작심삼일 방지 AI 매니저
-          </h2>
+          <h2 class="font-bold text-sm text-slate-900 flex items-center gap-1.5"><span>🛡️</span> 작심삼일 방지 AI 매니저</h2>
           <span class="text-[11px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">세모(△)도 성취다!</span>
         </div>
-
-        <p class="text-xs text-slate-600 leading-relaxed mb-3">
-          계획을 다 못 끝냈다고 포기하지 마세요! <strong>완료(O)</strong>는 100%, <strong>하다 말았음(△)</strong>은 50% 성취로 인정됩니다.
-        </p>
-
+        <p class="text-xs text-slate-600 leading-relaxed mb-3">계획을 다 못 끝냈다고 포기하지 마세요! <strong>완료(O)</strong>는 100%, <strong>하다 말았음(△)</strong>은 50% 성취로 인정됩니다.</p>
         <div class="grid grid-cols-3 gap-2 text-center mb-4">
           <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200">
             <div class="text-base font-black text-emerald-600">O</div>
@@ -219,7 +157,6 @@
             <div class="text-[10px] text-slate-400">표시 없음</div>
           </div>
         </div>
-
         <button id="aiRescheduleIncompleteBtn" type="button" class="w-full py-2.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
           <span>🪄</span> 오늘 못 끝낸 항목(△/빈칸) 내일로 자동 분배
         </button>
@@ -228,20 +165,17 @@
       <!-- 기능 2: 나의 D-Day 리스트 -->
       <section class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-5">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-            <span>📅</span> 나의 D-Day 카운트다운
-          </h2>
+          <h2 class="font-bold text-sm text-slate-900 flex items-center gap-1.5"><span>📅</span> 나의 D-Day 카운트다운</h2>
           <button id="addDdayQuickBtn" type="button" class="text-xs font-bold text-indigo-600 hover:underline">+ 추가</button>
         </div>
         <div id="ddayListContainer" class="space-y-2"></div>
       </section>
-
     </aside>
 
-    <!-- [중앙/우측 메인 영역: 9칸] -->
+    <!-- 우측 메인 영역 -->
     <section class="lg:col-span-9 space-y-4 sm:space-y-5 order-1 lg:order-2 min-w-0">
 
-      <!-- 상단 빠른 액션 바 & 메인 뷰 전환 탭 (모바일 2열 그리드 / 데스크탑 플렉스) -->
+      <!-- 4대 기능 탭 바 -->
       <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-3 flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-3">
         <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5" role="tablist">
           <button id="tabBtnPlanner" type="button" data-tab="planner" class="main-tab-btn px-3 sm:px-4 py-2.5 rounded-2xl font-bold text-xs lg:text-sm transition bg-indigo-600 text-white shadow-sm flex items-center justify-center sm:justify-start gap-1.5">
@@ -273,7 +207,7 @@
         </div>
       </div>
 
-      <!-- [뷰 1] 기능 4 & 기능 6: 중학생 감성 학습 플래너 뷰 -->
+      <!-- [뷰 1] 나만의 감성 학습 플래너 (기능 4 & 기능 6) -->
       <div id="viewPlanner" class="main-view space-y-5">
         <div class="bg-white rounded-3xl border-2 border-indigo-100 shadow-sm overflow-hidden planner-grid-bg">
           <div class="bg-gradient-to-r from-indigo-500/10 via-purple-500/10 to-pink-500/10 border-b border-indigo-100 px-4 sm:px-6 py-4 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 sm:gap-4">
@@ -295,14 +229,9 @@
                 <p class="text-[11px] sm:text-xs text-slate-500 mt-1">항목 오른쪽의 <strong>[O 완료]</strong> 또는 <strong>[△ 하다말았음]</strong> 버튼을 눌러 오늘의 플래너를 채워보세요!</p>
               </div>
             </div>
-
             <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-              <button id="quickOpenRoutineBtn" type="button" class="flex-1 sm:flex-none px-3 sm:px-3.5 py-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold text-xs shadow-sm transition text-center">
-                + 학원·인강·루틴 추가
-              </button>
-              <button id="quickOpenBookAiBtn" type="button" class="flex-1 sm:flex-none px-3 sm:px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition text-center">
-                📷 책 목차 AI 분배하기
-              </button>
+              <button id="quickOpenRoutineBtn" type="button" class="flex-1 sm:flex-none px-3 sm:px-3.5 py-2 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold text-xs shadow-sm transition text-center">+ 학원·인강·루틴 추가</button>
+              <button id="quickOpenBookAiBtn" type="button" class="flex-1 sm:flex-none px-3 sm:px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-sm transition text-center">📷 책 목차 AI 분배하기</button>
             </div>
           </div>
 
@@ -324,9 +253,7 @@
 
               <div class="bg-white/90 rounded-2xl border border-indigo-100 p-3.5 sm:p-4 shadow-sm">
                 <div class="flex items-center justify-between mb-1.5">
-                  <label for="dailyReflectionInput" class="text-xs font-extrabold text-indigo-900 flex items-center gap-1.5">
-                    <span>📝</span> 오늘의 한줄 회고 & 다짐 메모
-                  </label>
+                  <label for="dailyReflectionInput" class="text-xs font-extrabold text-indigo-900 flex items-center gap-1.5"><span>📝</span> 오늘의 한줄 회고 & 다짐 메모</label>
                   <span id="memoSavedIndicator" class="text-[11px] text-emerald-600 font-semibold">자동 저장됨</span>
                 </div>
                 <input id="dailyReflectionInput" type="text" placeholder="오늘 공부하면서 느낀 점이나 내일 꼭 지킬 약속을 적어보세요!" class="w-full text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-400" />
@@ -336,9 +263,7 @@
             <div class="xl:col-span-5 bg-white rounded-2xl border border-slate-200 p-3.5 sm:p-4 shadow-sm flex flex-col min-w-0">
               <div class="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
-                  <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                    <span>⏰</span> DAILY TIME TABLE
-                  </h3>
+                  <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-1.5"><span>⏰</span> DAILY TIME TABLE</h3>
                   <p class="text-[11px] text-slate-500">일정과 완료 상태(O/△)가 시간표에 자동 색칠됩니다</p>
                 </div>
                 <div class="text-right shrink-0">
@@ -346,7 +271,6 @@
                   <div id="totalPlannedHoursText" class="text-sm font-black text-indigo-600">0시간 00분</div>
                 </div>
               </div>
-
               <div class="flex flex-wrap items-center gap-2 py-2.5 text-[11px] font-semibold text-slate-600 border-b border-slate-100">
                 <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-blue-400 inline-block"></span>학교/학원</span>
                 <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-purple-400 inline-block"></span>AI교재</span>
@@ -354,7 +278,6 @@
                 <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-400 inline-block"></span>자습</span>
                 <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-pink-400 inline-block"></span>루틴</span>
               </div>
-
               <div id="timetableGridContainer" class="mt-2 space-y-1 flex-1 overflow-y-auto max-h-[520px] pr-1"></div>
             </div>
           </div>
@@ -363,9 +286,7 @@
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-5">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div>
-              <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                <span>🗓️</span> 이번 주 학습 흐름 한눈에 보기 (Weekly Overview)
-              </h3>
+              <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-1.5"><span>🗓️</span> 이번 주 학습 흐름 한눈에 보기 (Weekly Overview)</h3>
               <p class="text-xs text-slate-500">날짜 카드를 클릭하면 해당 날짜의 플래너로 바로 이동합니다</p>
             </div>
             <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">AI 분배 진도 + 학원 루틴 통합 뷰</span>
@@ -374,7 +295,7 @@
         </div>
       </div>
 
-      <!-- [뷰 2] 기능 1: 책 목차 사진 촬영/업로드 → Gemini Vision AI 실제 문자 추출 & 자동 분배 -->
+      <!-- [뷰 2] 기능 1: 책 목차 사진 촬영/업로드 → Gemini Vision 실제 문자 추출 & 자동 분배 -->
       <div id="viewBookAi" class="main-view hidden space-y-5">
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-6">
           <div class="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-slate-100">
@@ -383,9 +304,7 @@
               <h2 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1.5">📷 문제집·교재 목차 찍어 올리면 AI가 문자로 읽어 일일 학습 계획 자동 분배!</h2>
               <p class="text-xs text-slate-500 mt-0.5">첨부한 책 목차 이미지를 Gemini Vision AI가 직접 읽어서 단원명·쪽수를 텍스트로 추출하고 학원 일정과 안 겹치게 나눠줍니다.</p>
             </div>
-            <button id="openApiKeyFromBookBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold transition">
-              🔑 Gemini Vision API 키 연결/확인
-            </button>
+            <button id="openApiKeyFromBookBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-extrabold transition">🔑 Gemini Vision API 키 연결/확인</button>
           </div>
 
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
@@ -404,9 +323,7 @@
 
                 <div id="tocUploadPreviewBox" class="hidden space-y-2">
                   <img id="tocUploadedImg" src="" alt="업로드된 목차 이미지" class="max-h-40 mx-auto rounded-xl border border-slate-200 object-contain max-w-full" />
-                  <div id="tocScanStatusBadge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white">
-                    ✨ AI 비전 목차 텍스트 추출 완료!
-                  </div>
+                  <div id="tocScanStatusBadge" class="inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white break-words max-w-full">✨ AI 비전 목차 텍스트 추출 완료!</div>
                 </div>
               </label>
 
@@ -420,13 +337,13 @@
                   <span class="text-[10px] text-indigo-600 font-semibold">클릭 시 자동 스캔</span>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button type="button" data-preset="english" class="toc-preset-btn p-2.5 rounded-xl bg-indigo-50/70 hover:bg-indigo-100 border border-indigo-300 text-left transition">
+                    <div class="text-xs font-extrabold text-indigo-900">📕 중학 영문법 2권 (첨부 사진)</div>
+                    <div class="text-[11px] text-indigo-700 mt-0.5">UNIT 01 조동사 ~ 15 가격 묻고 답하기</div>
+                  </button>
                   <button type="button" data-preset="math" class="toc-preset-btn p-2.5 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition">
                     <div class="text-xs font-extrabold text-slate-800">📘 개념원리 중학 수학 2-2</div>
                     <div class="text-[11px] text-slate-500 mt-0.5">도형의 성질 ~ 확률 (7단원)</div>
-                  </button>
-                  <button type="button" data-preset="english" class="toc-preset-btn p-2.5 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition">
-                    <div class="text-xs font-extrabold text-slate-800">📗 중학 영문법 3800제 2학년</div>
-                    <div class="text-[11px] text-slate-500 mt-0.5">시제·조동사·관계사 (7단원)</div>
                   </button>
                   <button type="button" data-preset="science" class="toc-preset-btn p-2.5 rounded-xl bg-white hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 text-left transition">
                     <div class="text-xs font-extrabold text-slate-800">🧪 오투 중등 과학 2-2</div>
@@ -444,13 +361,13 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
                   <label for="bookTitleInput" class="block text-xs font-bold text-slate-700 mb-1">교재명</label>
-                  <input id="bookTitleInput" type="text" value="개념원리 중학 수학 2-2" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" />
+                  <input id="bookTitleInput" type="text" value="중학 영문법 2권" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500" />
                 </div>
                 <div>
                   <label for="bookSubjectSelect" class="block text-xs font-bold text-slate-700 mb-1">과목 분류</label>
                   <select id="bookSubjectSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus:outline-none focus:border-indigo-500">
                     <option value="수학">수학</option>
-                    <option value="영어">영어</option>
+                    <option value="영어" selected>영어</option>
                     <option value="국어">국어</option>
                     <option value="과학">과학</option>
                     <option value="사회/역사">사회/역사</option>
@@ -471,15 +388,23 @@
               <div>
                 <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
                   <label for="bookTocTextarea" class="text-xs font-bold text-slate-700">2단계: AI가 이미지에서 추출한 목차 리스트 (한 줄에 1단원, 직접 수정 가능)</label>
-                  <span id="tocLineCountBadge" class="text-[11px] font-bold text-indigo-600">총 7개 단원 인식됨</span>
+                  <span id="tocLineCountBadge" class="text-[11px] font-bold text-indigo-600">총 15개 단원 인식됨</span>
                 </div>
-                <textarea id="bookTocTextarea" rows="6" class="w-full text-xs font-medium bg-slate-50 border border-slate-200 rounded-2xl p-3 focus:outline-none focus:border-indigo-500 leading-relaxed">I-1. 이등변삼각형의 성질 (p.8~21)
-I-2. 직각삼각형의 합동 조건 (p.22~34)
-I-3. 삼각형의 외심과 내심 (p.35~50)
-II-1. 평행사변형의 성질과 조건 (p.54~72)
-II-2. 여러 가지 사각형 (p.73~92)
-III-1. 도형의 닮음과 평행선 (p.96~118)
-IV-1. 경우의 수와 확률 (p.122~145)</textarea>
+                <textarea id="bookTocTextarea" rows="7" class="w-full text-xs font-medium bg-slate-50 border border-slate-200 rounded-2xl p-3 focus:outline-none focus:border-indigo-500 leading-relaxed">UNIT 01. 동사를 돕는 조동사
+UNIT 02. 할 수 있어! can
+UNIT 03. 꼭 해야 해! must
+UNIT 04. be동사 과거형
+UNIT 05. 일반동사 과거형
+UNIT 06. 꾸미고 설명하는 형용사
+UNIT 07. 꾸미기 대장, 부사
+UNIT 08. '해라!' 명령문
+UNIT 09. '하지 마!' 부정 명령문
+UNIT 10. '함께 해!' 청유문
+UNIT 11. 숫자 나타내기
+UNIT 12. 비인칭주어 it
+UNIT 13. 시간 묻고 답하기
+UNIT 14. 날짜와 요일 말하기
+UNIT 15. 가격 묻고 답하기</textarea>
               </div>
 
               <div class="bg-indigo-50/60 rounded-2xl p-4 border border-indigo-100 space-y-3">
@@ -512,12 +437,8 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
                 </div>
 
                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2">
-                  <button id="previewAiScheduleBtn" type="button" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 font-bold text-xs transition">
-                    🔍 AI 분배 미리보기 생성
-                  </button>
-                  <button id="applyAiScheduleToPlannerBtn" type="button" class="flex-1 py-2.5 px-5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-xs shadow-md transition">
-                    ✨ 내 플래너에 AI 분배 학습계획 일괄 등록하기
-                  </button>
+                  <button id="previewAiScheduleBtn" type="button" class="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-indigo-700 border border-indigo-200 font-bold text-xs transition">🔍 AI 분배 미리보기 생성</button>
+                  <button id="applyAiScheduleToPlannerBtn" type="button" class="flex-1 py-2.5 px-5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-xs shadow-md transition">✨ 내 플래너에 AI 분배 학습계획 일괄 등록하기</button>
                 </div>
               </div>
             </div>
@@ -533,7 +454,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         </div>
       </div>
 
-      <!-- [뷰 3] 기능 2: 나의 학교·학원·인강·자습·개인 루틴 직접 입력 및 관리 -->
+      <!-- [뷰 3] 기능 2: 학교·학원·인강·자습 및 나만의 루틴 직접 입력 -->
       <div id="viewRoutine" class="main-view hidden space-y-5">
         <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-4 sm:p-6">
           <div class="pb-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
@@ -588,27 +509,12 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
             <div class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between gap-3 pt-2 border-t border-slate-200/80">
               <div class="flex flex-wrap items-center gap-3">
                 <span class="text-xs font-bold text-slate-700">반복 설정:</span>
-                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                  <input type="radio" name="routineRepeatMode" value="single" checked class="text-indigo-600" />
-                  <span>현재 선택된 날짜에만 추가</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                  <input type="radio" name="routineRepeatMode" value="weekly" class="text-indigo-600" />
-                  <span>이번 주 월~금 매일 루틴으로 등록</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                  <input type="radio" name="routineRepeatMode" value="mwf" class="text-indigo-600" />
-                  <span>월·수·금 반복 (학원용)</span>
-                </label>
-                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-                  <input type="radio" name="routineRepeatMode" value="tt" class="text-indigo-600" />
-                  <span>화·목 반복 (학원용)</span>
-                </label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer"><input type="radio" name="routineRepeatMode" value="single" checked class="text-indigo-600" /><span>현재 선택된 날짜에만 추가</span></label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer"><input type="radio" name="routineRepeatMode" value="weekly" class="text-indigo-600" /><span>이번 주 월~금 매일 루틴으로 등록</span></label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer"><input type="radio" name="routineRepeatMode" value="mwf" class="text-indigo-600" /><span>월·수·금 반복 (학원용)</span></label>
+                <label class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 cursor-pointer"><input type="radio" name="routineRepeatMode" value="tt" class="text-indigo-600" /><span>화·목 반복 (학원용)</span></label>
               </div>
-
-              <button type="submit" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">
-                + 내 플래너에 일정 등록하기
-              </button>
+              <button type="submit" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">+ 내 플래너에 일정 등록하기</button>
             </div>
           </form>
 
@@ -663,38 +569,20 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
           <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div>
-                <h3 class="font-extrabold text-sm text-slate-900">📈 주간 일별 학습 달성률 & 완료 현황 그래프</h3>
-                <p class="text-xs text-slate-500">완료(O)와 하다 말았음(△)을 합산한 실질 성취도 추이입니다</p>
-              </div>
-            </div>
-            <div class="relative h-64">
-              <canvas id="weeklyAchievementChart"></canvas>
-            </div>
+            <h3 class="font-extrabold text-sm text-slate-900">📈 주간 일별 학습 달성률 & 완료 현황 그래프</h3>
+            <p class="text-xs text-slate-500 mb-3">완료(O)와 하다 말았음(△)을 합산한 실질 성취도 추이입니다</p>
+            <div class="relative h-64"><canvas id="weeklyAchievementChart"></canvas></div>
           </div>
-
           <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200 p-4 sm:p-5 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div>
-                <h3 class="font-extrabold text-sm text-slate-900">🍩 학습 유형별(학원·인강·자습·루틴·AI교재) 비중</h3>
-                <p class="text-xs text-slate-500">내 공부 에너지가 어디에 쓰이고 있는지 확인하세요</p>
-              </div>
-            </div>
-            <div class="relative h-64">
-              <canvas id="categoryDistributionChart"></canvas>
-            </div>
+            <h3 class="font-extrabold text-sm text-slate-900">🍩 학습 유형별(학원·인강·자습·루틴·AI교재) 비중</h3>
+            <p class="text-xs text-slate-500 mb-3">내 공부 에너지가 어디에 쓰이고 있는지 확인하세요</p>
+            <div class="relative h-64"><canvas id="categoryDistributionChart"></canvas></div>
           </div>
         </div>
 
         <div class="bg-white rounded-3xl border border-slate-200 p-4 sm:p-6 shadow-sm">
-          <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-            <div>
-              <h3 class="font-extrabold text-base text-slate-900">📋 과목별 학습 성취도 종합 분석 표</h3>
-              <p class="text-xs text-slate-500">플래너에서 O / △ 상태를 체크할 때마다 표의 수치와 AI 진단이 실시간으로 갱신됩니다.</p>
-            </div>
-          </div>
-
+          <h3 class="font-extrabold text-base text-slate-900">📋 과목별 학습 성취도 종합 분석 표</h3>
+          <p class="text-xs text-slate-500 mb-4">플래너에서 O / △ 상태를 체크할 때마다 표의 수치와 AI 진단이 실시간으로 갱신됩니다.</p>
           <div class="overflow-x-auto -mx-2 px-2">
             <table class="w-full min-w-[600px] text-left border-collapse">
               <thead>
@@ -727,16 +615,14 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         </div>
         <button id="closeTutorModalBtn" type="button" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center font-bold shrink-0">✕</button>
       </div>
-
       <div class="p-4 sm:p-6 space-y-4 max-h-[82vh] overflow-y-auto">
         <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 flex items-start gap-3">
           <span class="text-lg">🛡️</span>
           <div class="text-xs text-emerald-900 leading-relaxed">
             <strong>청소년 유해 이미지 자동 검열 시스템 (AI Youth Safety Filter) 작동 중</strong><br>
-            업로드된 사진의 색상 분포(과다 노출 의심 픽셀 비율), 유해 키워드 및 Gemini Vision 안전 등급을 실시간으로 분석하여 유해 이미지는 즉시 자동 차단합니다.
+            업로드된 사진의 색상 분포(과다 노출 의심 픽셀 비율), 유해 키워드 및 비정상 콘텐츠 여부를 실시간으로 분석하여 유해 이미지는 즉시 자동 차단합니다.
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label for="modalTutorNameInput" class="block text-xs font-bold text-slate-700 mb-1">최애 튜터 이름 (호칭)</label>
@@ -752,7 +638,6 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
             </select>
           </div>
         </div>
-
         <div class="space-y-2">
           <div class="text-xs font-bold text-slate-700">내 기기에서 최애 사진 업로드하기</div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -760,13 +645,11 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
               <span>📁</span> 내 기기에서 사진 파일 선택
               <input id="tutorPhotoUploadInput" type="file" accept="image/*" class="hidden" />
             </label>
-
             <button id="simulateHarmfulImageBtn" type="button" class="py-3 px-4 rounded-2xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-extrabold transition flex items-center justify-center gap-1.5">
               <span>🚨</span> [시제품 검증용] 유해 이미지 차단 테스트
             </button>
           </div>
         </div>
-
         <div id="moderationResultBox" class="rounded-2xl p-3.5 border border-slate-200 bg-slate-50 text-xs space-y-1">
           <div class="font-extrabold text-slate-800 flex items-center justify-between">
             <span>🔍 AI 이미지 안전성 검열 상태</span>
@@ -774,16 +657,12 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           </div>
           <p id="moderationDetailText" class="text-slate-600 text-[11px]">현재 안전한 프로필 아바타가 적용되어 있습니다. 사진을 업로드하면 실시간 픽셀 노출도 및 유해성 검사를 수행합니다.</p>
         </div>
-
         <div>
           <div class="text-xs font-bold text-slate-700 mb-2">또는 기본 안심 일러스트 캐릭터 중 선택</div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="presetAvatarGrid"></div>
         </div>
-
         <div class="pt-3 border-t border-slate-100 flex justify-end gap-2">
-          <button id="saveTutorConfigBtn" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">
-            적용 완료
-          </button>
+          <button id="saveTutorConfigBtn" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">적용 완료</button>
         </div>
       </div>
     </div>
@@ -799,13 +678,11 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         </div>
         <button id="closeGoalModalBtn" type="button" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center font-bold shrink-0">✕</button>
       </div>
-
       <div class="p-4 sm:p-6 space-y-4 max-h-[82vh] overflow-y-auto">
         <div>
           <label for="goalMottoInput" class="block text-xs font-bold text-slate-700 mb-1">나의 핵심 다짐 / 목표 문구</label>
           <input id="goalMottoInput" type="text" class="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5" />
         </div>
-
         <div class="pt-2 border-t border-slate-100">
           <div class="text-xs font-bold text-slate-700 mb-2">새 D-Day 일정 추가하기</div>
           <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -814,16 +691,12 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
             <button id="addNewDdayBtn" type="button" class="sm:col-span-2 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs">추가</button>
           </div>
         </div>
-
         <div>
           <div class="text-xs font-bold text-slate-700 mb-2">등록된 D-Day 목록 (대표 배지 선택 가능)</div>
           <div id="modalDdayManageList" class="space-y-2 max-h-48 overflow-y-auto"></div>
         </div>
-
         <div class="pt-3 border-t border-slate-100 flex justify-end">
-          <button id="saveGoalModalBtn" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs">
-            저장하기
-          </button>
+          <button id="saveGoalModalBtn" type="button" class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs">저장하기</button>
         </div>
       </div>
     </div>
@@ -834,61 +707,45 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
     <div class="bg-white rounded-3xl max-w-lg w-full border border-slate-200 shadow-2xl overflow-hidden">
       <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 px-5 sm:px-6 py-4 flex items-center justify-between text-white">
         <div>
-          <h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2">
-            <span>🔐</span> Gemini API 키 보안 금고 (GitHub 노출 방지)
-          </h3>
+          <h3 class="font-extrabold text-sm sm:text-base flex items-center gap-2"><span>🔐</span> Gemini API 키 보안 금고 (GitHub 노출 방지)</h3>
           <p class="text-[11px] text-indigo-200 mt-0.5">소스코드에 키를 적지 않고 브라우저 로컬 금고에 암호화 저장하여 계속 사용합니다</p>
         </div>
         <button id="closeApiKeyModalBtn" type="button" class="w-8 h-8 rounded-full bg-white/15 hover:bg-white/25 flex items-center justify-center font-bold shrink-0">✕</button>
       </div>
-
       <div class="p-4 sm:p-6 space-y-4 max-h-[85vh] overflow-y-auto">
         <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-3.5 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
-          <div class="font-extrabold flex items-center gap-1.5">
-            <span>🛡️</span> 왜 이렇게 저장하나요? (GitHub Secret Scanning 차단 100% 예방)
-          </div>
+          <div class="font-extrabold flex items-center gap-1.5"><span>🛡️</span> GitHub Secret Scanning 차단 방지 & 최신 모델 자동 탐색</div>
           <p class="text-[11px] text-indigo-800">
-            코드 파일 안에 API 키를 직접 적어 GitHub에 올리면 자동 스캐너가 감지해 키를 즉시 정지시킵니다. 아래 입력창에 한 번만 입력해 두시면 <strong>내 기기 브라우저(LocalStorage)에만 난독화·암호화되어 영구 보관</strong>되므로 GitHub에 코드를 그대로 올려도 절대 노출되지 않고 안전하게 계속 쓸 수 있습니다.
+            입력하신 키는 내 브라우저(LocalStorage)에만 난독화·암호화 보관되며, Google 서버의 <strong>ListModels API를 호출해 내 키가 지원하는 최신 비전 모델(gemini-2.5-flash, gemini-2.0-flash 등)을 자동으로 찾아 연결</strong>합니다.
           </p>
         </div>
-
         <div>
           <label for="geminiApiKeyInput" class="block text-xs font-bold text-slate-700 mb-1">Gemini API Key 입력 (한 번 입력 시 자동 기억)</label>
           <div class="flex items-center gap-2">
             <input id="geminiApiKeyInput" type="password" autocomplete="off" spellcheck="false" placeholder="Gemini API 키를 여기에 붙여넣으세요" class="flex-1 text-xs font-mono bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 focus:outline-none focus:border-indigo-600" />
-            <button id="toggleApiKeyVisibilityBtn" type="button" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold shrink-0">
-              표시
-            </button>
+            <button id="toggleApiKeyVisibilityBtn" type="button" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold shrink-0">표시</button>
           </div>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label for="geminiModelSelect" class="block text-xs font-bold text-slate-700 mb-1">사용할 Gemini 비전 모델</label>
             <select id="geminiModelSelect" class="w-full text-xs font-bold bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5">
-              <option value="gemini-2.5-flash" selected>gemini-2.5-flash (권장 · 초고속 이미지 판독)</option>
-              <option value="gemini-2.0-flash">gemini-2.0-flash (호환 비전 모델)</option>
-              <option value="gemini-1.5-flash">gemini-1.5-flash (기본 비전 모델)</option>
+              <option value="auto" selected>✨ 자동 탐색 (ListModels 최적 모델)</option>
+              <option value="gemini-2.5-flash">gemini-2.5-flash (최신 비전 모델)</option>
+              <option value="gemini-2.0-flash">gemini-2.0-flash (고속 비전 모델)</option>
+              <option value="gemini-flash-latest">gemini-flash-latest (최신 별칭)</option>
             </select>
           </div>
           <div class="flex items-end">
-            <button id="testGeminiKeyBtn" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-extrabold text-xs transition">
-              ⚡ API 키 연결 테스트
-            </button>
+            <button id="testGeminiKeyBtn" type="button" class="w-full py-2.5 px-4 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-extrabold text-xs transition">⚡ 사용 가능 모델 자동 탐색 & 테스트</button>
           </div>
         </div>
-
-        <div id="apiKeyVaultFeedbackBox" class="rounded-2xl p-3 bg-slate-50 border border-slate-200 text-xs text-slate-600">
-          키를 입력하고 [금고에 저장하고 계속 사용하기]를 누르면 책 목차 사진 업로드 시 실제 Gemini Vision AI가 이미지 속 글자를 읽어 단원을 자동 추출합니다.
+        <div id="apiKeyVaultFeedbackBox" class="rounded-2xl p-3 bg-slate-50 border border-slate-200 text-xs text-slate-600 break-words">
+          키를 입력하고 [금고에 저장하고 계속 사용하기]를 누르면 내 API 키가 지원하는 모델을 자동 조회해 사진 속 목차 글자를 정확히 읽어옵니다.
         </div>
-
         <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-          <button id="clearGeminiKeyBtn" type="button" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition">
-            저장된 키 삭제
-          </button>
-          <button id="saveGeminiKeyBtn" type="button" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">
-            🔒 금고에 저장하고 계속 사용하기
-          </button>
+          <button id="clearGeminiKeyBtn" type="button" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-xs transition">저장된 키 삭제</button>
+          <button id="saveGeminiKeyBtn" type="button" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs shadow-sm transition">🔒 금고에 저장하고 계속 사용하기</button>
         </div>
       </div>
     </div>
@@ -897,20 +754,16 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
   <div id="toastContainer" class="fixed bottom-4 right-4 left-4 sm:left-auto z-50 space-y-2 pointer-events-none flex flex-col items-end"></div>
 
   <script>
-    // =========================================================================
-    // 0. GitHub Secret Scanning 방지용 브라우저 로컬 API 키 암호화 금고 (XOR + Base64)
-    // 소스코드 내부에 어떠한 API 키 문자열 패턴도 포함하지 않습니다.
-    // =========================================================================
-    const VAULT_STORAGE_KEY = 'KOREA_MID_PLANNER_GEMINI_VAULT_V1';
+    const VAULT_STORAGE_KEY = 'KOREA_MID_PLANNER_GEMINI_VAULT_V2';
     const VAULT_SALT = 'STUDY_PLANNER_LOCAL_SHIELD_2026';
     let lastUploadedTocDataUrl = '';
+    let cachedAvailableModels = [];
 
     function obfuscateKey(plainKey) {
       if (!plainKey) return '';
       const bytes = [];
       for (let i = 0; i < plainKey.length; i++) {
-        const code = plainKey.charCodeAt(i) ^ VAULT_SALT.charCodeAt(i % VAULT_SALT.length);
-        bytes.push(String.fromCharCode(code));
+        bytes.push(String.fromCharCode(plainKey.charCodeAt(i) ^ VAULT_SALT.charCodeAt(i % VAULT_SALT.length)));
       }
       return btoa(encodeURIComponent(bytes.join('')));
     }
@@ -921,8 +774,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         const raw = decodeURIComponent(atob(cipherText));
         const chars = [];
         for (let i = 0; i < raw.length; i++) {
-          const code = raw.charCodeAt(i) ^ VAULT_SALT.charCodeAt(i % VAULT_SALT.length);
-          chars.push(String.fromCharCode(code));
+          chars.push(String.fromCharCode(raw.charCodeAt(i) ^ VAULT_SALT.charCodeAt(i % VAULT_SALT.length)));
         }
         return chars.join('');
       } catch (e) {
@@ -932,75 +784,100 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
     function loadGeminiVault() {
       try {
-        const raw = localStorage.getItem(VAULT_STORAGE_KEY);
-        if (!raw) return { apiKey: '', model: 'gemini-2.5-flash' };
+        const raw = localStorage.getItem(VAULT_STORAGE_KEY) || localStorage.getItem('KOREA_MID_PLANNER_GEMINI_VAULT_V1');
+        if (!raw) return { apiKey: '', model: 'auto' };
         const parsed = JSON.parse(raw);
-        return {
-          apiKey: deobfuscateKey(parsed.k || ''),
-          model: parsed.m || 'gemini-2.5-flash'
-        };
+        let savedModel = parsed.m || 'auto';
+        if (savedModel.includes('1.5')) savedModel = 'auto';
+        return { apiKey: deobfuscateKey(parsed.k || ''), model: savedModel };
       } catch (e) {
-        return { apiKey: '', model: 'gemini-2.5-flash' };
+        return { apiKey: '', model: 'auto' };
       }
     }
 
     function saveGeminiVault(apiKey, model) {
       try {
-        const payload = {
+        const cleanModel = (!model || model.includes('1.5')) ? 'auto' : model;
+        localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify({
           k: obfuscateKey(apiKey.trim()),
-          m: model || 'gemini-2.5-flash',
+          m: cleanModel,
           ts: Date.now()
-        };
-        localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(payload));
-      } catch (e) {
-        // ignore storage error
-      }
+        }));
+      } catch (e) {}
     }
 
     function clearGeminiVault() {
       try {
         localStorage.removeItem(VAULT_STORAGE_KEY);
-      } catch (e) {
-        // ignore
-      }
+        localStorage.removeItem('KOREA_MID_PLANNER_GEMINI_VAULT_V1');
+        cachedAvailableModels = [];
+      } catch (e) {}
+    }
+
+    function getGeminiHost() {
+      return ['https://generativelanguage', 'googleapis', 'com'].join('.');
     }
 
     function getGeminiEndpoint(modelName, apiKey) {
-      const host = ['https://generativelanguage', 'googleapis', 'com'].join('.');
-      return `${host}/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const cleanName = modelName.replace(/^models\//, '');
+      return `${getGeminiHost()}/v1beta/models/${encodeURIComponent(cleanName)}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    }
+
+    async function discoverSupportedModels(apiKey) {
+      if (cachedAvailableModels.length > 0) return cachedAvailableModels;
+      const url = `${getGeminiHost()}/v1beta/models?key=${encodeURIComponent(apiKey)}`;
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        const errJson = await resp.json().catch(() => ({}));
+        throw new Error((errJson.error && errJson.error.message) || `API 키 확인 실패 (HTTP ${resp.status})`);
+      }
+      const data = await resp.json();
+      const rawModels = Array.isArray(data.models) ? data.models : [];
+      const supported = rawModels
+        .filter(m => {
+          const name = (m.name || '').toLowerCase();
+          const methods = Array.isArray(m.supportedGenerationMethods) ? m.supportedGenerationMethods : [];
+          if (!methods.includes('generateContent') || !name.includes('gemini')) return false;
+          if (name.includes('1.5') || name.includes('embedding') || name.includes('imagen') || name.includes('veo') || name.includes('tts') || name.includes('audio') || name.includes('aqa')) return false;
+          return true;
+        })
+        .map(m => m.name.replace(/^models\//, ''));
+
+      const priorityOrder = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash', 'gemini-2.0-flash-001', 'gemini-flash-latest', 'gemini-2.5-pro'];
+      supported.sort((a, b) => {
+        const ia = priorityOrder.indexOf(a);
+        const ib = priorityOrder.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        if (a.includes('flash') && !b.includes('flash')) return -1;
+        if (!a.includes('flash') && b.includes('flash')) return 1;
+        return a.localeCompare(b);
+      });
+
+      cachedAvailableModels = supported.length > 0 ? supported : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-flash-latest'];
+      return cachedAvailableModels;
     }
 
     function compressDataUrlForVision(dataUrl, maxDim = 1280) {
       return new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
-          let w = img.width;
-          let h = img.height;
+          let w = img.width, h = img.height;
           if (w > maxDim || h > maxDim) {
-            if (w > h) {
-              h = Math.round((h * maxDim) / w);
-              w = maxDim;
-            } else {
-              w = Math.round((w * maxDim) / h);
-              h = maxDim;
-            }
+            if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+            else { w = Math.round((w * maxDim) / h); h = maxDim; }
           }
           const canvas = document.createElement('canvas');
-          canvas.width = w;
-          canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           const outUrl = canvas.toDataURL('image/jpeg', 0.85);
-          const base64Data = outUrl.split(',')[1] || '';
-          resolve({ mimeType: 'image/jpeg', base64Data });
+          resolve({ mimeType: 'image/jpeg', base64Data: outUrl.split(',')[1] || '' });
         };
         img.onerror = () => {
           const parts = dataUrl.split(',');
           const mimeMatch = (parts[0] || '').match(/:(.*?);/);
-          resolve({
-            mimeType: mimeMatch ? mimeMatch[1] : 'image/jpeg',
-            base64Data: parts[1] || ''
-          });
+          resolve({ mimeType: mimeMatch ? mimeMatch[1] : 'image/jpeg', base64Data: parts[1] || '' });
         };
         img.src = dataUrl;
       });
@@ -1017,49 +894,39 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const { mimeType, base64Data } = await compressDataUrlForVision(dataUrl, 1400);
       const promptText = [
         '당신은 한국 중학생을 위한 학습 플래너 AI입니다.',
-        '첨부된 이미지(교재/문제집 표지 또는 목차 사진, 혹은 학습 계획표 이미지)에 적혀 있는 모든 텍스트를 꼼꼼히 읽어서 학습 단원(목차) 리스트로 변환해 주세요.',
+        '첨부된 이미지(교재/문제집 목차 또는 계획표)에 적혀 있는 모든 텍스트를 위에서부터 순서대로 빠짐없이 읽어서 학습 단원 리스트로 변환해 주세요.',
         '반드시 아래 JSON 형식으로만 응답하세요 (마크다운 코드블록 없이 순수 JSON만 출력):',
-        '{"bookTitle": "추정 교재명 또는 이미지 제목", "subject": "수학|영어|국어|과학|사회/역사|기타 중 택1", "units": ["단원1 제목 (쪽수)", "단원2 제목 (쪽수)"]}',
-        '만약 일반 이미지나 글자가 적은 이미지라면 보이는 핵심 텍스트나 주제를 학습 항목 배열(units)로 정리해 주세요.'
+        '{"bookTitle": "추정 교재명 또는 권수", "subject": "수학|영어|국어|과학|사회/역사|기타 중 택1", "units": ["UNIT 01. 단원 제목", "UNIT 02. 단원 제목"]}'
       ].join('\n');
 
-      const modelsToTry = [vault.model, 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
-        .filter((v, idx, arr) => v && arr.indexOf(v) === idx);
+      const discovered = await discoverSupportedModels(vault.apiKey);
+      const modelsToTry = [];
+      if (vault.model && vault.model !== 'auto' && !vault.model.includes('1.5')) {
+        modelsToTry.push(vault.model);
+      }
+      discovered.forEach(m => { if (!modelsToTry.includes(m)) modelsToTry.push(m); });
 
-      let lastErr = null;
-      for (const modelName of modelsToTry) {
+      let firstRealError = null;
+      for (const modelName of modelsToTry.slice(0, 4)) {
         try {
           const resp = await fetch(getGeminiEndpoint(modelName, vault.apiKey), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: [{
-                parts: [
-                  { text: promptText },
-                  { inline_data: { mime_type: mimeType, data: base64Data } }
-                ]
-              }],
-              generationConfig: {
-                temperature: 0.2
-              }
+              contents: [{ parts: [{ text: promptText }, { inline_data: { mime_type: mimeType, data: base64Data } }] }],
+              generationConfig: { temperature: 0.1 }
             })
           });
 
           if (!resp.ok) {
             const errJson = await resp.json().catch(() => ({}));
-            lastErr = (errJson.error && errJson.error.message) || `HTTP ${resp.status}`;
+            const msg = (errJson.error && errJson.error.message) || `HTTP ${resp.status}`;
+            if (!firstRealError) firstRealError = `[${modelName}] ${msg}`;
             continue;
           }
 
           const data = await resp.json();
-          const rawText = (
-            data.candidates &&
-            data.candidates[0] &&
-            data.candidates[0].content &&
-            data.candidates[0].content.parts &&
-            data.candidates[0].content.parts.map(p => p.text || '').join('\n')
-          ) || '';
-
+          const rawText = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.map(p => p.text || '').join('\n')) || '';
           if (!rawText.trim()) continue;
 
           const cleaned = rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
@@ -1068,8 +935,9 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
             const parsed = JSON.parse(jsonMatch[0]);
             if (parsed && Array.isArray(parsed.units) && parsed.units.length > 0) {
               return {
+                usedModel: modelName,
                 bookTitle: parsed.bookTitle || fallbackFileName || 'AI 스캔 교재',
-                subject: ['수학', '영어', '국어', '과학', '사회/역사', '기타'].includes(parsed.subject) ? parsed.subject : '수학',
+                subject: ['수학', '영어', '국어', '과학', '사회/역사', '기타'].includes(parsed.subject) ? parsed.subject : '영어',
                 units: parsed.units.map(u => String(u).trim()).filter(Boolean)
               };
             }
@@ -1077,48 +945,46 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
           const lines = cleaned.split('\n').map(l => l.trim()).filter(Boolean);
           if (lines.length > 0) {
-            return {
-              bookTitle: fallbackFileName || 'AI 스캔 교재',
-              subject: '기타',
-              units: lines
-            };
+            return { usedModel: modelName, bookTitle: fallbackFileName || 'AI 스캔 교재', subject: '영어', units: lines };
           }
         } catch (err) {
-          lastErr = err.message || String(err);
+          if (!firstRealError) firstRealError = err.message || String(err);
         }
       }
 
-      throw new Error(lastErr || 'Gemini API 호출에 실패했습니다. API 키를 확인해 주세요.');
+      throw new Error(firstRealError || 'Gemini API 호출에 실패했습니다. API 키를 확인해 주세요.');
     }
 
     const PRESET_AVATARS = [
-      {
-        id: 'senior_boy',
-        label: '차은우풍 선배',
-        role: '다정한 최애 선배',
-        svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#a855f7"/></linearGradient></defs><rect width="120" height="120" rx="28" fill="url(#bg1)"/><circle cx="60" cy="108" r="36" fill="#ffffff" opacity="0.95"/><path d="M44 92 L60 108 L76 92" fill="#4f46e5"/><circle cx="60" cy="52" r="24" fill="#fde68a"/><path d="M35 48 C35 26, 85 26, 85 48 C82 38, 68 35, 60 38 C48 35, 38 40, 35 48 Z" fill="#1e1b4b"/><circle cx="51" cy="53" r="2.8" fill="#1e1b4b"/><circle cx="69" cy="53" r="2.8" fill="#1e1b4b"/><path d="M54 62 Q60 67 66 62" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="45" cy="58" r="3.5" fill="#f43f5e" opacity="0.35"/><circle cx="75" cy="58" r="3.5" fill="#f43f5e" opacity="0.35"/></svg>')
-      },
-      {
-        id: 'idol_girl',
-        label: '장원영풍 아이돌',
-        role: '긍정 뿜뿜 단짝친구',
-        svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#f43f5e"/></linearGradient></defs><rect width="120" height="120" rx="28" fill="url(#bg2)"/><path d="M32 50 C28 85, 35 105, 38 112 L82 112 C85 105, 92 85, 88 50 Z" fill="#31102f"/><circle cx="60" cy="108" r="34" fill="#fff1f2"/><circle cx="60" cy="52" r="23" fill="#ffedd5"/><path d="M36 48 C38 25, 82 25, 84 48 C75 36, 45 36, 36 48 Z" fill="#31102f"/><circle cx="51" cy="53" r="2.8" fill="#1e1b4b"/><circle cx="69" cy="53" r="2.8" fill="#1e1b4b"/><path d="M53 62 Q60 68 67 62" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/><text x="82" y="32" font-size="16">✨</text></svg>')
-      },
-      {
-        id: 'star_teacher',
-        label: '열정 일타선생님',
-        role: '열정 만점 일타강사',
-        svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#2563eb"/></linearGradient></defs><rect width="120" height="120" rx="28" fill="url(#bg3)"/><circle cx="60" cy="108" r="35" fill="#1e293b"/><circle cx="60" cy="52" r="23" fill="#fde68a"/><path d="M37 44 C40 26, 80 26, 83 44 Z" fill="#0f172a"/><rect x="43" y="48" width="14" height="10" rx="3" stroke="#0f172a" stroke-width="2.2" fill="none"/><rect x="63" y="48" width="14" height="10" rx="3" stroke="#0f172a" stroke-width="2.2" fill="none"/><line x1="57" y1="53" x2="63" y2="53" stroke="#0f172a" stroke-width="2.2"/><path d="M53 64 Q60 69 67 64" stroke="#0f172a" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>')
-      },
-      {
-        id: 'cute_bear',
-        label: '공부요정 베어',
-        role: '긍정 뿜뿜 단짝친구',
-        svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="#10b981"/><circle cx="38" cy="36" r="12" fill="#fde68a"/><circle cx="82" cy="36" r="12" fill="#fde68a"/><circle cx="60" cy="62" r="30" fill="#fef3c7"/><circle cx="49" cy="56" r="3.5" fill="#1e293b"/><circle cx="71" cy="56" r="3.5" fill="#1e293b"/><ellipse cx="60" cy="66" rx="9" ry="7" fill="#ffffff"/><circle cx="60" cy="64" r="3.5" fill="#1e293b"/></svg>')
-      }
+      { id: 'senior_boy', label: '차은우풍 선배', role: '다정한 최애 선배', svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="#6366f1"/><circle cx="60" cy="108" r="36" fill="#fff"/><circle cx="60" cy="52" r="24" fill="#fde68a"/><path d="M35 48 C35 26,85 26,85 48 C78 36,42 36,35 48 Z" fill="#1e1b4b"/><circle cx="51" cy="53" r="2.8" fill="#1e1b4b"/><circle cx="69" cy="53" r="2.8" fill="#1e1b4b"/><path d="M54 62 Q60 67 66 62" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>') },
+      { id: 'idol_girl', label: '장원영풍 아이돌', role: '긍정 뿜뿜 단짝친구', svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="#ec4899"/><path d="M32 50 L38 112 L82 112 L88 50 Z" fill="#31102f"/><circle cx="60" cy="108" r="34" fill="#fff1f2"/><circle cx="60" cy="52" r="23" fill="#ffedd5"/><path d="M36 48 C38 25,82 25,84 48 C75 36,45 36,36 48 Z" fill="#31102f"/><circle cx="51" cy="53" r="2.8" fill="#1e1b4b"/><circle cx="69" cy="53" r="2.8" fill="#1e1b4b"/><path d="M53 62 Q60 68 67 62" stroke="#e11d48" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg>') },
+      { id: 'star_teacher', label: '열정 일타선생님', role: '열정 만점 일타강사', svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="#0284c7"/><circle cx="60" cy="108" r="35" fill="#1e293b"/><circle cx="60" cy="52" r="23" fill="#fde68a"/><path d="M37 44 C40 26,80 26,83 44 Z" fill="#0f172a"/><rect x="43" y="48" width="14" height="10" rx="3" stroke="#0f172a" stroke-width="2.2" fill="none"/><rect x="63" y="48" width="14" height="10" rx="3" stroke="#0f172a" stroke-width="2.2" fill="none"/><line x1="57" y1="53" x2="63" y2="53" stroke="#0f172a" stroke-width="2.2"/><path d="M53 64 Q60 69 67 64" stroke="#0f172a" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>') },
+      { id: 'cute_bear', label: '공부요정 베어', role: '긍정 뿜뿜 단짝친구', svg: 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><rect width="120" height="120" rx="28" fill="#10b981"/><circle cx="38" cy="36" r="12" fill="#fde68a"/><circle cx="82" cy="36" r="12" fill="#fde68a"/><circle cx="60" cy="62" r="30" fill="#fef3c7"/><circle cx="49" cy="56" r="3.5" fill="#1e293b"/><circle cx="71" cy="56" r="3.5" fill="#1e293b"/><ellipse cx="60" cy="66" rx="9" ry="7" fill="#fff"/><circle cx="60" cy="64" r="3.5" fill="#1e293b"/></svg>') }
     ];
 
     const BOOK_TOC_PRESETS = {
+      english: {
+        title: '중학 영문법 2권',
+        subject: '영어',
+        slot: '20:00~21:00',
+        lines: [
+          'UNIT 01. 동사를 돕는 조동사',
+          'UNIT 02. 할 수 있어! can',
+          'UNIT 03. 꼭 해야 해! must',
+          'UNIT 04. be동사 과거형',
+          'UNIT 05. 일반동사 과거형',
+          'UNIT 06. 꾸미고 설명하는 형용사',
+          'UNIT 07. 꾸미기 대장, 부사',
+          'UNIT 08. \'해라!\' 명령문',
+          'UNIT 09. \'하지 마!\' 부정 명령문',
+          'UNIT 10. \'함께 해!\' 청유문',
+          'UNIT 11. 숫자 나타내기',
+          'UNIT 12. 비인칭주어 it',
+          'UNIT 13. 시간 묻고 답하기',
+          'UNIT 14. 날짜와 요일 말하기',
+          'UNIT 15. 가격 묻고 답하기'
+        ]
+      },
       math: {
         title: '개념원리 중학 수학 2-2',
         subject: '수학',
@@ -1131,20 +997,6 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           'II-2. 여러 가지 사각형 (p.73~92)',
           'III-1. 도형의 닮음과 평행선 (p.96~118)',
           'IV-1. 경우의 수와 확률 (p.122~145)'
-        ]
-      },
-      english: {
-        title: '중학 영문법 3800제 2학년',
-        subject: '영어',
-        slot: '19:00~20:00',
-        lines: [
-          'Ch 01. 문장의 기초와 의문문 (PSS 1~4)',
-          'Ch 02. 시제 - 현재완료와 과거진행 (PSS 5~9)',
-          'Ch 03. 조동사 must / have to / should (PSS 10~14)',
-          'Ch 04. 수동태의 개념과 형태 (PSS 15~18)',
-          'Ch 05. to부정사의 명사·형용사·부사적 용법 (PSS 19~24)',
-          'Ch 06. 동명사와 현재분사 구별하기 (PSS 25~28)',
-          'Ch 07. 관계대명사 who / which / that (PSS 29~34)'
         ]
       },
       science: {
@@ -1186,8 +1038,8 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         goalMotto: '2학기 기말고사 전과목 평균 92점 돌파! 작심삼일 없이 하루 자습 2시간 지키기',
         ddays: [
           { id: 'dd1', title: '2학기 기말고사', targetDate: '2026-11-03', primary: true },
-          { id: 'dd2', title: '개념원리 수학 2-2 1회독', targetDate: '2026-10-29', primary: false },
-          { id: 'dd3', title: '영어 단어장 Day 30 완주', targetDate: '2026-11-10', primary: false }
+          { id: 'dd2', title: '중학 영문법 2권 완독', targetDate: '2026-11-05', primary: false },
+          { id: 'dd3', title: '개념원리 수학 2-2 1회독', targetDate: '2026-10-29', primary: false }
         ],
         tutor: {
           name: '차은우 선배 튜터',
@@ -1196,143 +1048,22 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           isCustomPhoto: false,
           safetyStatus: 'SAFE'
         },
-        dailyMoods: {
-          '2026-10-20': '🔥 열공모드'
-        },
-        dailyMemos: {
-          '2026-10-20': '수학 이등변삼각형 증명 문제는 조금 헷갈려서 세모(△) 표시! 내일 학원 가기 전에 3문제만 더 풀어보자.'
-        },
+        dailyMoods: { '2026-10-20': '🔥 열공모드' },
+        dailyMemos: { '2026-10-20': '영문법 2권 조동사 파트랑 수학 이등변삼각형 정리! 덜 끝낸 건 세모(△) 표시해두고 내일 이어서 풀자.' },
         tasks: [
-          {
-            id: 't1',
-            date: '2026-10-20',
-            category: '루틴',
-            subject: '영어',
-            title: '등교 후 아침 영단어 Day 14 (30개 암기)',
-            timeSlot: '08:00~09:00',
-            status: 'done',
-            source: '나의 데일리 루틴'
-          },
-          {
-            id: 't2',
-            date: '2026-10-20',
-            category: '학원',
-            subject: '영어',
-            title: '정상어학원 중2 내신 문법 특강 수업',
-            timeSlot: '16:00~17:30',
-            status: 'done',
-            source: '직접 입력 일정'
-          },
-          {
-            id: 't3',
-            date: '2026-10-20',
-            category: '학원',
-            subject: '수학',
-            title: '대치 하이퍼 수학학원 (도형의 성질 진도)',
-            timeSlot: '17:30~19:00',
-            status: 'done',
-            source: '직접 입력 일정'
-          },
-          {
-            id: 't4',
-            date: '2026-10-20',
-            category: '인강',
-            subject: '과학',
-            title: 'EBS 중학 오투 과학 2-2 [소화와 순환] 1강 수강',
-            timeSlot: '19:00~20:00',
-            status: 'partial',
-            source: '인강 스케줄'
-          },
-          {
-            id: 't5',
-            date: '2026-10-20',
-            category: 'AI교재',
-            subject: '수학',
-            title: '[개념원리 수학 2-2] I-1. 이등변삼각형의 성질 (p.8~21)',
-            timeSlot: '20:00~21:00',
-            status: 'partial',
-            source: 'AI 목차 자동 분배'
-          },
-          {
-            id: 't6',
-            date: '2026-10-20',
-            category: '자습',
-            subject: '국어',
-            title: '국어 비문학 독해 지문 2개 구조도 그리며 풀기',
-            timeSlot: '21:00~22:00',
-            status: 'none',
-            source: '자기주도 자습'
-          },
-          {
-            id: 't7',
-            date: '2026-10-20',
-            category: '루틴',
-            subject: '생활/루틴',
-            title: '플래너 O/△ 점검 & 스마트폰 거실에 두고 취침',
-            timeSlot: '22:00~23:00',
-            status: 'none',
-            source: '나의 데일리 루틴'
-          },
-          {
-            id: 't8',
-            date: '2026-10-19',
-            category: '루틴',
-            subject: '영어',
-            title: '아침 영단어 Day 13 암기 완료',
-            timeSlot: '08:00~09:00',
-            status: 'done',
-            source: '나의 데일리 루틴'
-          },
-          {
-            id: 't9',
-            date: '2026-10-19',
-            category: '학원',
-            subject: '국어',
-            title: '솔빛 국어논술학원 내신 문학 정리',
-            timeSlot: '17:30~19:00',
-            status: 'done',
-            source: '직접 입력 일정'
-          },
-          {
-            id: 't10',
-            date: '2026-10-19',
-            category: '자습',
-            subject: '수학',
-            title: '수학 오답노트 10문제 다시 풀기',
-            timeSlot: '20:00~21:00',
-            status: 'partial',
-            source: '자기주도 자습'
-          },
-          {
-            id: 't11',
-            date: '2026-10-21',
-            category: '루틴',
-            subject: '영어',
-            title: '등교 후 아침 영단어 Day 15 (30개 암기)',
-            timeSlot: '08:00~09:00',
-            status: 'none',
-            source: '나의 데일리 루틴'
-          },
-          {
-            id: 't12',
-            date: '2026-10-21',
-            category: 'AI교재',
-            subject: '수학',
-            title: '[개념원리 수학 2-2] I-2. 직각삼각형의 합동 조건 (p.22~34)',
-            timeSlot: '20:00~21:00',
-            status: 'none',
-            source: 'AI 목차 자동 분배'
-          },
-          {
-            id: 't13',
-            date: '2026-10-21',
-            category: '인강',
-            subject: '영어',
-            title: '강남인강 영문법 3800제 시제 파트 1강',
-            timeSlot: '19:00~20:00',
-            status: 'none',
-            source: '인강 스케줄'
-          }
+          { id: 't1', date: '2026-10-20', category: '루틴', subject: '영어', title: '등교 후 아침 영단어 Day 14 (30개 암기)', timeSlot: '08:00~09:00', status: 'done', source: '나의 데일리 루틴' },
+          { id: 't2', date: '2026-10-20', category: '학원', subject: '영어', title: '정상어학원 중2 내신 문법 특강 수업', timeSlot: '16:00~17:30', status: 'done', source: '직접 입력 일정' },
+          { id: 't3', date: '2026-10-20', category: '학원', subject: '수학', title: '대치 하이퍼 수학학원 (도형의 성질 진도)', timeSlot: '17:30~19:00', status: 'done', source: '직접 입력 일정' },
+          { id: 't4', date: '2026-10-20', category: '인강', subject: '과학', title: 'EBS 중학 오투 과학 2-2 [소화와 순환] 1강 수강', timeSlot: '19:00~20:00', status: 'partial', source: '인강 스케줄' },
+          { id: 't5', date: '2026-10-20', category: 'AI교재', subject: '영어', title: '[중학 영문법 2권] UNIT 01. 동사를 돕는 조동사', timeSlot: '20:00~21:00', status: 'partial', source: 'AI 목차 자동 분배' },
+          { id: 't6', date: '2026-10-20', category: '자습', subject: '국어', title: '국어 비문학 독해 지문 2개 구조도 그리며 풀기', timeSlot: '21:00~22:00', status: 'none', source: '자기주도 자습' },
+          { id: 't7', date: '2026-10-20', category: '루틴', subject: '생활/루틴', title: '플래너 O/△ 점검 & 스마트폰 거실에 두고 취침', timeSlot: '22:00~23:00', status: 'none', source: '나의 데일리 루틴' },
+          { id: 't8', date: '2026-10-19', category: '루틴', subject: '영어', title: '아침 영단어 Day 13 암기 완료', timeSlot: '08:00~09:00', status: 'done', source: '나의 데일리 루틴' },
+          { id: 't9', date: '2026-10-19', category: '학원', subject: '국어', title: '솔빛 국어논술학원 내신 문학 정리', timeSlot: '17:30~19:00', status: 'done', source: '직접 입력 일정' },
+          { id: 't10', date: '2026-10-19', category: '자습', subject: '수학', title: '수학 오답노트 10문제 다시 풀기', timeSlot: '20:00~21:00', status: 'partial', source: '자기주도 자습' },
+          { id: 't11', date: '2026-10-21', category: '루틴', subject: '영어', title: '등교 후 아침 영단어 Day 15 (30개 암기)', timeSlot: '08:00~09:00', status: 'none', source: '나의 데일리 루틴' },
+          { id: 't12', date: '2026-10-21', category: 'AI교재', subject: '영어', title: '[중학 영문법 2권] UNIT 02. 할 수 있어! can', timeSlot: '20:00~21:00', status: 'none', source: 'AI 목차 자동 분배' },
+          { id: 't13', date: '2026-10-21', category: '인강', subject: '수학', title: '개념원리 수학 2-2 직각삼각형의 합동 조건 인강', timeSlot: '19:00~20:00', status: 'none', source: '인강 스케줄' }
         ]
       };
     }
@@ -1347,50 +1078,35 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         const raw = localStorage.getItem(STORAGE_KEY);
         if (raw) {
           const parsed = JSON.parse(raw);
-          if (parsed && Array.isArray(parsed.tasks)) {
-            return parsed;
-          }
+          if (parsed && Array.isArray(parsed.tasks)) return parsed;
         }
-      } catch (e) {
-        // ignore storage error
-      }
+      } catch (e) {}
       return getDefaultState();
     }
 
     function saveState() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (e) {
-        // ignore storage error
-      }
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
     }
 
     function formatKoreanDate(dateStr) {
       const [y, m, d] = dateStr.split('-').map(Number);
       const dt = new Date(y, m - 1, d);
-      const dayName = DAY_NAMES[dt.getDay()];
-      return `${y}. ${String(m).padStart(2, '0')}. ${String(d).padStart(2, '0')} (${dayName})`;
+      return `${y}. ${String(m).padStart(2, '0')}. ${String(d).padStart(2, '0')} (${DAY_NAMES[dt.getDay()]})`;
     }
 
     function shiftDate(dateStr, deltaDays) {
       const [y, m, d] = dateStr.split('-').map(Number);
       const dt = new Date(y, m - 1, d);
       dt.setDate(dt.getDate() + deltaDays);
-      const ny = dt.getFullYear();
-      const nm = String(dt.getMonth() + 1).padStart(2, '0');
-      const nd = String(dt.getDate()).padStart(2, '0');
-      return `${ny}-${nm}-${nd}`;
+      return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
     }
 
     function calculateDdayString(targetDateStr) {
       const [ty, tm, td] = targetDateStr.split('-').map(Number);
       const [cy, cm, cd] = state.selectedDate.split('-').map(Number);
-      const tDate = new Date(ty, tm - 1, td);
-      const cDate = new Date(cy, cm - 1, cd);
-      const diff = Math.round((tDate - cDate) / (1000 * 60 * 60 * 24));
+      const diff = Math.round((new Date(ty, tm - 1, td) - new Date(cy, cm - 1, cd)) / 86400000);
       if (diff === 0) return 'D-Day';
-      if (diff > 0) return `D-${diff}`;
-      return `D+${Math.abs(diff)}`;
+      return diff > 0 ? `D-${diff}` : `D+${Math.abs(diff)}`;
     }
 
     function getCategoryMeta(category) {
@@ -1408,11 +1124,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const container = document.getElementById('toastContainer');
       if (!container) return;
       const el = document.createElement('div');
-      const colorClass =
-        type === 'success' ? 'bg-emerald-600 text-white' :
-        type === 'warning' ? 'bg-amber-500 text-white' :
-        type === 'danger'  ? 'bg-rose-600 text-white' :
-                             'bg-slate-900 text-white';
+      const colorClass = type === 'success' ? 'bg-emerald-600 text-white' : type === 'warning' ? 'bg-amber-500 text-white' : type === 'danger' ? 'bg-rose-600 text-white' : 'bg-slate-900 text-white';
       el.className = `px-4 py-3 rounded-2xl shadow-lg text-xs font-bold flex items-center gap-2 transition-all duration-300 pointer-events-auto max-w-full break-words ${colorClass}`;
       el.textContent = message;
       container.appendChild(el);
@@ -1427,31 +1139,26 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const bubble = document.getElementById('tutorSpeechBubble');
       if (!bubble) return;
       const persona = state.tutor.persona;
-      let msg = '';
-
       if (situation === 'done') {
-        if (persona === '열정 만점 일타강사') {
-          msg = `"좋았어! [${taskTitle}] 깔끔하게 완료(O)! 이 페이스면 이번 기말고사 무조건 1등급 간다!"`;
-        } else if (persona === '츤데레 아이돌 메이트') {
-          msg = `"오~ [${taskTitle}] 다 끝냈네? 솔직히 조금 놀랐어. 오늘 진짜 멋지다!"`;
-        } else {
-          msg = `"와! [${taskTitle}] 완료(O) 동그라미 쳤네! 끝까지 해낸 네가 진짜 자랑스러워 👏"`;
-        }
+        bubble.textContent = persona === '열정 만점 일타강사'
+          ? `"좋았어! [${taskTitle}] 깔끔하게 완료(O)! 이 페이스면 이번 기말고사 무조건 1등급 간다!"`
+          : persona === '츤데레 아이돌 메이트'
+          ? `"오~ [${taskTitle}] 다 끝냈네? 솔직히 조금 놀랐어. 오늘 진짜 멋지다!"`
+          : `"와! [${taskTitle}] 완료(O) 동그라미 쳤네! 끝까지 해낸 네가 진짜 자랑스러워 👏"`;
       } else if (situation === 'partial') {
-        msg = `"괜찮아! [${taskTitle}] 하다 말았음(△)도 50%나 해낸 거야! 아예 포기 안 하고 책상 앞에 앉은 것만으로도 작심삼일 이긴 거라고!"`;
+        bubble.textContent = `"괜찮아! [${taskTitle}] 하다 말았음(△)도 50%나 해낸 거야! 포기 안 하고 책상 앞에 앉은 것만으로도 작심삼일 이긴 거라고!"`;
       } else if (situation === 'reschedule') {
-        msg = `"오늘 못 다 한 항목들을 내일 시간표로 가볍게 넘겨뒀어! 죄책감 갖지 말고 오늘 밤은 푹 쉬자 😊"`;
+        bubble.textContent = `"오늘 못 다 한 항목들을 내일 시간표로 가볍게 넘겨뒀어! 죄책감 갖지 말고 오늘 밤은 푹 쉬자 😊"`;
       } else if (situation === 'book_distributed') {
-        msg = `"목차 스캔해서 네 학원 안 가는 시간대에 딱 맞춰 쪼개놨어! 하루에 딱 한 덩어리씩만 부숴보자!"`;
+        bubble.textContent = `"목차 스캔해서 네 학원 안 가는 시간대에 딱 맞춰 쪼개놨어! 하루에 딱 한 덩어리씩만 부숴보자!"`;
       } else {
-        const randomCheers = [
+        const cheers = [
           `"완벽하게 못 해도 괜찮아! 일단 10분만 펼쳐서 세모(△) 하나 만드는 것부터 시작해 볼까?"`,
           `"${state.tutor.name}가 오늘도 옆에서 같이 페이스메이커 해줄게. 제일 쉬운 루틴부터 O 쳐보자!"`,
           `"작심삼일은 원래 3일마다 다시 마음먹으면 작심삼백일이 되는 거래! 오늘 다시 시작하면 돼!"`
         ];
-        msg = randomCheers[Math.floor(Math.random() * randomCheers.length)];
+        bubble.textContent = cheers[Math.floor(Math.random() * cheers.length)];
       }
-      bubble.textContent = msg;
     }
 
     function renderApiKeyStatusBadge() {
@@ -1496,32 +1203,20 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       document.getElementById('plannerDateTitle').textContent = formatKoreanDate(state.selectedDate);
 
       const primaryDday = state.ddays.find(d => d.primary) || state.ddays[0];
-      const badge = document.getElementById('headerDdayBadge');
-      if (primaryDday) {
-        badge.textContent = `${primaryDday.title} ${calculateDdayString(primaryDday.targetDate)}`;
-      } else {
-        badge.textContent = 'D-Day 미설정';
-      }
+      document.getElementById('headerDdayBadge').textContent = primaryDday ? `${primaryDday.title} ${calculateDdayString(primaryDday.targetDate)}` : 'D-Day 미설정';
 
       const listEl = document.getElementById('ddayListContainer');
       listEl.innerHTML = '';
       state.ddays.forEach(item => {
         const dStr = calculateDdayString(item.targetDate);
         const row = document.createElement('div');
-        row.className = `flex items-center justify-between px-3.5 py-2.5 rounded-2xl border transition cursor-pointer ${
-          item.primary ? 'bg-indigo-50/80 border-indigo-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
-        }`;
+        row.className = `flex items-center justify-between px-3.5 py-2.5 rounded-2xl border transition cursor-pointer ${item.primary ? 'bg-indigo-50/80 border-indigo-200' : 'bg-slate-50 border-slate-200 hover:bg-slate-100'}`;
         row.innerHTML = `
           <div class="min-w-0 pr-2">
-            <div class="text-xs font-extrabold text-slate-800 truncate flex items-center gap-1.5">
-              ${item.primary ? '<span class="text-indigo-600">★</span>' : ''}
-              <span>${escapeHtml(item.title)}</span>
-            </div>
+            <div class="text-xs font-extrabold text-slate-800 truncate flex items-center gap-1.5">${item.primary ? '<span class="text-indigo-600">★</span>' : ''}<span>${escapeHtml(item.title)}</span></div>
             <div class="text-[10px] text-slate-500">${item.targetDate} 목표</div>
           </div>
-          <span class="px-2.5 py-1 rounded-xl text-xs font-black shrink-0 ${
-            item.primary ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700 border border-slate-200'
-          }">${dStr}</span>
+          <span class="px-2.5 py-1 rounded-xl text-xs font-black shrink-0 ${item.primary ? 'bg-indigo-600 text-white' : 'bg-white text-slate-700 border border-slate-200'}">${dStr}</span>
         `;
         row.addEventListener('click', () => {
           state.ddays.forEach(d => { d.primary = (d.id === item.id); });
@@ -1540,7 +1235,6 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
     function renderPlannerView() {
       const dayTasks = state.tasks.filter(t => t.date === state.selectedDate);
-
       const totalCount = dayTasks.length;
       const doneCount = dayTasks.filter(t => t.status === 'done').length;
       const partialCount = dayTasks.filter(t => t.status === 'partial').length;
@@ -1552,22 +1246,15 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
       const currentMood = state.dailyMoods[state.selectedDate] || '🔥 열공모드';
       document.querySelectorAll('.mood-btn').forEach(btn => {
-        if (btn.getAttribute('data-mood') === currentMood) {
-          btn.className = 'mood-btn px-2 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold bg-indigo-600 text-white shadow-sm';
-        } else {
-          btn.className = 'mood-btn px-2 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
-        }
+        btn.className = btn.getAttribute('data-mood') === currentMood
+          ? 'mood-btn px-2 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold bg-indigo-600 text-white shadow-sm'
+          : 'mood-btn px-2 py-0.5 rounded-lg text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
       });
 
-      const memoInput = document.getElementById('dailyReflectionInput');
-      memoInput.value = state.dailyMemos[state.selectedDate] || '';
+      document.getElementById('dailyReflectionInput').value = state.dailyMemos[state.selectedDate] || '';
 
-      const filteredTasks = state.activeCategoryFilter === 'ALL'
-        ? dayTasks
-        : dayTasks.filter(t => t.category === state.activeCategoryFilter);
-
+      const filteredTasks = state.activeCategoryFilter === 'ALL' ? dayTasks : dayTasks.filter(t => t.category === state.activeCategoryFilter);
       filteredTasks.sort((a, b) => (a.timeSlot || '').localeCompare(b.timeSlot || ''));
-
       document.getElementById('filteredTaskCountText').textContent = `총 ${filteredTasks.length}개 일정`;
 
       const listContainer = document.getElementById('plannerTaskList');
@@ -1589,42 +1276,20 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           const isNone = task.status === 'none';
 
           const card = document.createElement('div');
-          card.className = `group bg-white rounded-2xl border p-3 sm:p-3.5 transition shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-            isDone ? 'border-emerald-300 bg-emerald-50/20' :
-            isPartial ? 'border-amber-300 bg-amber-50/25' :
-            'border-slate-200 hover:border-indigo-200'
-          }`;
-
+          card.className = `group bg-white rounded-2xl border p-3 sm:p-3.5 transition shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${isDone ? 'border-emerald-300 bg-emerald-50/20' : isPartial ? 'border-amber-300 bg-amber-50/25' : 'border-slate-200 hover:border-indigo-200'}`;
           card.innerHTML = `
             <div class="flex items-start gap-3 min-w-0">
               <button type="button" data-cycle-id="${task.id}" title="클릭하여 상태 전환 (빈칸 → O → △)"
-                class="status-btn w-10 h-10 sm:w-11 sm:h-11 rounded-2xl border-2 shrink-0 flex items-center justify-center font-black text-base sm:text-lg ${
-                  isDone ? 'border-emerald-500 bg-emerald-500 text-white shadow-sm shadow-emerald-200' :
-                  isPartial ? 'border-amber-500 bg-amber-500 text-white shadow-sm shadow-amber-200' :
-                  'border-slate-300 bg-white text-transparent hover:border-indigo-400'
-                }">
+                class="status-btn w-10 h-10 sm:w-11 sm:h-11 rounded-2xl border-2 shrink-0 flex items-center justify-center font-black text-base sm:text-lg ${isDone ? 'border-emerald-500 bg-emerald-500 text-white shadow-sm' : isPartial ? 'border-amber-500 bg-amber-500 text-white shadow-sm' : 'border-slate-300 bg-white text-transparent hover:border-indigo-400'}">
                 ${isDone ? 'O' : isPartial ? '△' : '·'}
               </button>
-
               <div class="min-w-0 flex-1">
                 <div class="flex flex-wrap items-center gap-1.5">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${meta.badgeBg}">
-                    ${meta.icon} ${escapeHtml(task.category)}
-                  </span>
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">
-                    ${escapeHtml(task.subject)}
-                  </span>
-                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">
-                    🕒 ${escapeHtml(task.timeSlot)}
-                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${meta.badgeBg}">${meta.icon} ${escapeHtml(task.category)}</span>
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700">${escapeHtml(task.subject)}</span>
+                  <span class="text-[11px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md">🕒 ${escapeHtml(task.timeSlot)}</span>
                 </div>
-
-                <div class="text-xs sm:text-sm font-extrabold mt-1.5 break-words ${
-                  isDone ? 'line-through text-slate-400' : 'text-slate-800'
-                }">
-                  ${escapeHtml(task.title)}
-                </div>
-
+                <div class="text-xs sm:text-sm font-extrabold mt-1.5 break-words ${isDone ? 'line-through text-slate-400' : 'text-slate-800'}">${escapeHtml(task.title)}</div>
                 <div class="text-[11px] text-slate-400 mt-0.5 flex flex-wrap items-center gap-2">
                   <span>출처: ${escapeHtml(task.source || '직접 입력')}</span>
                   ${isDone ? '<span class="text-emerald-600 font-bold">● 학습 완료 (100% 인정)</span>' : ''}
@@ -1632,36 +1297,11 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
                 </div>
               </div>
             </div>
-
             <div class="flex flex-wrap items-center justify-end gap-1.5 shrink-0 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-              <button type="button" data-set-status="${task.id}|done"
-                class="status-btn flex-1 sm:flex-none px-2.5 py-1.5 rounded-xl text-xs font-black border transition ${
-                  isDone
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'
-                }" title="학습 완료 (O)">
-                O 완료
-              </button>
-              <button type="button" data-set-status="${task.id}|partial"
-                class="status-btn flex-1 sm:flex-none px-2.5 py-1.5 rounded-xl text-xs font-black border transition ${
-                  isPartial
-                    ? 'bg-amber-500 text-white border-amber-500 shadow-sm'
-                    : 'bg-white text-amber-700 border-amber-200 hover:bg-amber-50'
-                }" title="하다 말았음 (△)">
-                △ 하다말았음
-              </button>
-              <button type="button" data-set-status="${task.id}|none"
-                class="status-btn px-2 py-1.5 rounded-xl text-[11px] font-bold border transition ${
-                  isNone
-                    ? 'bg-slate-200 text-slate-700 border-slate-300'
-                    : 'bg-white text-slate-400 border-slate-200 hover:bg-slate-100'
-                }" title="아무 표시 없음 (초기화)">
-                표시X
-              </button>
-              <button type="button" data-delete-id="${task.id}"
-                class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition text-xs" title="일정 삭제">
-                🗑️
-              </button>
+              <button type="button" data-set-status="${task.id}|done" class="status-btn flex-1 sm:flex-none px-2.5 py-1.5 rounded-xl text-xs font-black border transition ${isDone ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm' : 'bg-white text-emerald-700 border-emerald-200 hover:bg-emerald-50'}">O 완료</button>
+              <button type="button" data-set-status="${task.id}|partial" class="status-btn flex-1 sm:flex-none px-2.5 py-1.5 rounded-xl text-xs font-black border transition ${isPartial ? 'bg-amber-500 text-white border-amber-500 shadow-sm' : 'bg-white text-amber-700 border-amber-200 hover:bg-amber-50'}">△ 하다말았음</button>
+              <button type="button" data-set-status="${task.id}|none" class="status-btn px-2 py-1.5 rounded-xl text-[11px] font-bold border transition ${isNone ? 'bg-slate-200 text-slate-700 border-slate-300' : 'bg-white text-slate-400 border-slate-200 hover:bg-slate-100'}">표시X</button>
+              <button type="button" data-delete-id="${task.id}" class="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition text-xs" title="일정 삭제">🗑️</button>
             </div>
           `;
           listContainer.appendChild(card);
@@ -1696,18 +1336,10 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           if (diff > 0) totalMinutes += diff;
         }
       });
-      const hrs = Math.floor(totalMinutes / 60);
-      const mins = totalMinutes % 60;
-      document.getElementById('totalPlannedHoursText').textContent = `${hrs}시간 ${String(mins).padStart(2, '0')}분`;
+      document.getElementById('totalPlannedHoursText').textContent = `${Math.floor(totalMinutes / 60)}시간 ${String(totalMinutes % 60).padStart(2, '0')}분`;
 
       timeSlots.forEach(slot => {
-        const matched = dayTasks.filter(t => {
-          if (!t.timeSlot) return false;
-          const startHour = t.timeSlot.split('~')[0];
-          const slotStart = slot.range.split('~')[0];
-          return startHour === slotStart;
-        });
-
+        const matched = dayTasks.filter(t => t.timeSlot && t.timeSlot.split('~')[0] === slot.range.split('~')[0]);
         const row = document.createElement('div');
         row.className = 'flex items-stretch gap-2 text-xs';
 
@@ -1715,44 +1347,17 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         if (matched.length > 0) {
           contentHtml = matched.map(t => {
             const meta = getCategoryMeta(t.category);
-            const statusSymbol = t.status === 'done' ? 'O' : t.status === 'partial' ? '△' : '';
-            const statusBadge = statusSymbol
-              ? `<span class="px-1.5 py-0.2 rounded font-black text-[10px] shrink-0 ${
-                  t.status === 'done' ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'
-                }">${statusSymbol}</span>`
-              : '';
-            return `
-              <div class="flex-1 min-w-0 rounded-xl p-2 ${meta.barColor}/20 border border-slate-200 flex items-center justify-between gap-2">
-                <div class="min-w-0 flex items-center gap-1.5">
-                  <span class="w-2 h-5 rounded-full ${meta.barColor} shrink-0"></span>
-                  <div class="truncate font-bold text-slate-800 text-[11px]">${escapeHtml(t.title)}</div>
-                </div>
-                ${statusBadge}
-              </div>
-            `;
+            const sym = t.status === 'done' ? 'O' : t.status === 'partial' ? '△' : '';
+            const badge = sym ? `<span class="px-1.5 py-0.2 rounded font-black text-[10px] shrink-0 ${t.status === 'done' ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'}">${sym}</span>` : '';
+            return `<div class="flex-1 min-w-0 rounded-xl p-2 ${meta.barColor}/20 border border-slate-200 flex items-center justify-between gap-2"><div class="min-w-0 flex items-center gap-1.5"><span class="w-2 h-5 rounded-full ${meta.barColor} shrink-0"></span><div class="truncate font-bold text-slate-800 text-[11px]">${escapeHtml(t.title)}</div></div>${badge}</div>`;
           }).join('');
         } else if (slot.defaultSchool) {
-          contentHtml = `
-            <div class="flex-1 min-w-0 rounded-xl p-2 bg-slate-100 border border-dashed border-slate-200 text-slate-400 font-semibold text-[11px] flex items-center">
-              🏫 ${slot.defaultSchool} (여유/쉬는시간 복습 가능)
-            </div>
-          `;
+          contentHtml = `<div class="flex-1 min-w-0 rounded-xl p-2 bg-slate-100 border border-dashed border-slate-200 text-slate-400 font-semibold text-[11px] flex items-center">🏫 ${slot.defaultSchool} (여유/쉬는시간 복습 가능)</div>`;
         } else {
-          contentHtml = `
-            <div class="flex-1 min-w-0 rounded-xl p-2 bg-slate-50/70 border border-dashed border-slate-200 text-slate-300 text-[11px] flex items-center">
-              비어 있는 자율 시간
-            </div>
-          `;
+          contentHtml = `<div class="flex-1 min-w-0 rounded-xl p-2 bg-slate-50/70 border border-dashed border-slate-200 text-slate-300 text-[11px] flex items-center">비어 있는 자율 시간</div>`;
         }
 
-        row.innerHTML = `
-          <div class="w-16 sm:w-20 shrink-0 py-2 text-[10px] sm:text-[11px] font-extrabold text-slate-500 text-right pr-1">
-            ${slot.label}
-          </div>
-          <div class="flex-1 min-w-0 flex flex-col gap-1">
-            ${contentHtml}
-          </div>
-        `;
+        row.innerHTML = `<div class="w-16 sm:w-20 shrink-0 py-2 text-[10px] sm:text-[11px] font-extrabold text-slate-500 text-right pr-1">${slot.label}</div><div class="flex-1 min-w-0 flex flex-col gap-1">${contentHtml}</div>`;
         container.appendChild(row);
       });
     }
@@ -1760,35 +1365,26 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
     function renderWeeklyOverview() {
       const container = document.getElementById('weeklyOverviewGrid');
       container.innerHTML = '';
-
       const [y, m, d] = state.selectedDate.split('-').map(Number);
       const curr = new Date(y, m - 1, d);
-      const dayOfWeek = curr.getDay();
-      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      const mondayOffset = curr.getDay() === 0 ? -6 : 1 - curr.getDay();
 
       for (let i = 0; i < 7; i++) {
         const dt = new Date(y, m - 1, d + mondayOffset + i);
-        const dy = dt.getFullYear();
         const dm = String(dt.getMonth() + 1).padStart(2, '0');
         const dd = String(dt.getDate()).padStart(2, '0');
-        const dateStr = `${dy}-${dm}-${dd}`;
+        const dateStr = `${dt.getFullYear()}-${dm}-${dd}`;
         const dName = DAY_NAMES[dt.getDay()];
 
         const tasksForDay = state.tasks.filter(t => t.date === dateStr);
         const doneC = tasksForDay.filter(t => t.status === 'done').length;
         const partC = tasksForDay.filter(t => t.status === 'partial').length;
-        const rate = tasksForDay.length > 0
-          ? Math.round(((doneC * 100) + (partC * 50)) / tasksForDay.length)
-          : 0;
-
+        const rate = tasksForDay.length > 0 ? Math.round(((doneC * 100) + (partC * 50)) / tasksForDay.length) : 0;
         const isSelected = dateStr === state.selectedDate;
+
         const card = document.createElement('button');
         card.type = 'button';
-        card.className = `p-3 rounded-2xl border text-left transition flex flex-col justify-between min-w-0 ${
-          isSelected
-            ? 'border-indigo-600 bg-indigo-50/70 ring-2 ring-indigo-500/20'
-            : 'border-slate-200 bg-slate-50/60 hover:bg-white hover:border-indigo-300'
-        }`;
+        card.className = `p-3 rounded-2xl border text-left transition flex flex-col justify-between min-w-0 ${isSelected ? 'border-indigo-600 bg-indigo-50/70 ring-2 ring-indigo-500/20' : 'border-slate-200 bg-slate-50/60 hover:bg-white hover:border-indigo-300'}`;
 
         const previewItems = tasksForDay.slice(0, 3).map(t => {
           const sym = t.status === 'done' ? 'O' : t.status === 'partial' ? '△' : '·';
@@ -1800,26 +1396,15 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           <div class="min-w-0">
             <div class="flex items-center justify-between">
               <span class="text-xs font-extrabold ${isSelected ? 'text-indigo-700' : 'text-slate-800'}">${dm}/${dd} (${dName})</span>
-              <span class="text-[10px] font-black px-1.5 py-0.5 rounded-md ${
-                rate >= 80 ? 'bg-emerald-100 text-emerald-700' :
-                rate >= 40 ? 'bg-amber-100 text-amber-700' :
-                'bg-slate-200 text-slate-600'
-              }">${rate}%</span>
+              <span class="text-[10px] font-black px-1.5 py-0.5 rounded-md ${rate >= 80 ? 'bg-emerald-100 text-emerald-700' : rate >= 40 ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-600'}">${rate}%</span>
             </div>
-            <div class="mt-2 space-y-1 min-h-[44px]">
-              ${previewItems || '<div class="text-[10px] text-slate-400">일정 없음</div>'}
-            </div>
+            <div class="mt-2 space-y-1 min-h-[44px]">${previewItems || '<div class="text-[10px] text-slate-400">일정 없음</div>'}</div>
           </div>
           <div class="mt-2 pt-1.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] font-bold text-slate-500">
-            <span>총 ${tasksForDay.length}건</span>
-            <span>O:${doneC} △:${partC}</span>
+            <span>총 ${tasksForDay.length}건</span><span>O:${doneC} △:${partC}</span>
           </div>
         `;
-
-        card.addEventListener('click', () => {
-          state.selectedDate = dateStr;
-          renderAll();
-        });
+        card.addEventListener('click', () => { state.selectedDate = dateStr; renderAll(); });
         container.appendChild(card);
       }
     }
@@ -1828,10 +1413,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const bookTitle = document.getElementById('bookTitleInput').value.trim() || '나만의 교재';
       const subject = document.getElementById('bookSubjectSelect').value;
       const defaultSlot = document.getElementById('bookStudyTimeSlot').value;
-      const rawLines = document.getElementById('bookTocTextarea').value
-        .split('\n')
-        .map(s => s.trim())
-        .filter(Boolean);
+      const rawLines = document.getElementById('bookTocTextarea').value.split('\n').map(s => s.trim()).filter(Boolean);
 
       document.getElementById('tocLineCountBadge').textContent = `총 ${rawLines.length}개 단원 인식됨`;
 
@@ -1839,9 +1421,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const pace = Number(document.getElementById('distributePaceSelect').value) || 1;
 
       const activeDays = [];
-      document.querySelectorAll('.study-day-btn.active').forEach(btn => {
-        activeDays.push(Number(btn.getAttribute('data-day')));
-      });
+      document.querySelectorAll('.study-day-btn.active').forEach(btn => activeDays.push(Number(btn.getAttribute('data-day'))));
       if (activeDays.length === 0) activeDays.push(1, 2, 3, 4, 5);
 
       const expandedUnits = [];
@@ -1859,34 +1439,26 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       let safetyCounter = 0;
 
       expandedUnits.forEach((unitTitle, idx) => {
-        while (safetyCounter < 120) {
+        while (safetyCounter < 180) {
           safetyCounter++;
           const [y, m, d] = cursorDate.split('-').map(Number);
-          const dt = new Date(y, m - 1, d);
-          if (activeDays.includes(dt.getDay())) {
-            break;
-          }
+          if (activeDays.includes(new Date(y, m - 1, d).getDay())) break;
           cursorDate = shiftDate(cursorDate, 1);
         }
-
         const existingAtSlot = state.tasks.some(t => t.date === cursorDate && t.timeSlot === defaultSlot);
-        const smartSlot = existingAtSlot ? '21:00~22:00' : defaultSlot;
-
         plan.push({
           step: idx + 1,
           date: cursorDate,
           subject,
           category: 'AI교재',
           title: `[${bookTitle}] ${unitTitle}`,
-          timeSlot: smartSlot,
+          timeSlot: existingAtSlot ? '21:00~22:00' : defaultSlot,
           smartAdjusted: existingAtSlot
         });
-
         cursorDate = shiftDate(cursorDate, 1);
       });
 
       currentGeneratedPreviewPlan = plan;
-
       const previewGrid = document.getElementById('aiDistributionPreviewGrid');
       previewGrid.innerHTML = '';
 
@@ -1928,7 +1500,6 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         const sPart = subTasks.filter(t => t.status === 'partial').length;
         const sNone = subTasks.filter(t => t.status === 'none').length;
         const sRate = Math.round(((sDone * 100) + (sPart * 50)) / subTasks.length);
-
         if (sRate > bestSubjectScore) {
           bestSubjectScore = sRate;
           bestSubjectName = `${subj} (${sRate}%)`;
@@ -1941,16 +1512,13 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const tbody = document.getElementById('subjectAchievementTableBody');
       tbody.innerHTML = '';
       subjectStats.forEach(st => {
-        let feedback = '';
-        if (st.sRate >= 80) {
-          feedback = '🌟 최상위권 페이스! 지금 루틴 그대로 유지해요.';
-        } else if (st.sPart > 0) {
-          feedback = '👏 하다 말았음(△)으로 포기하지 않고 시작했어요! 남은 50%만 보충해봐요.';
-        } else if (st.sRate >= 40) {
-          feedback = '🌱 절반 이상 진행 중! 하루 분량을 조금만 더 잘게 쪼개볼까요?';
-        } else {
-          feedback = '💡 시작이 반! 오늘 딱 10분만 투자해 세모(△)부터 만들어봐요.';
-        }
+        const feedback = st.sRate >= 80
+          ? '🌟 최상위권 페이스! 지금 루틴 그대로 유지해요.'
+          : st.sPart > 0
+          ? '👏 하다 말았음(△)으로 포기하지 않고 시작했어요! 남은 50%만 보충해봐요.'
+          : st.sRate >= 40
+          ? '🌱 절반 이상 진행 중! 하루 분량을 조금만 더 잘게 쪼개볼까요?'
+          : '💡 시작이 반! 오늘 딱 10분만 투자해 세모(△)부터 만들어봐요.';
 
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50/80 transition';
@@ -1960,13 +1528,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
           <td class="py-3 px-4 text-right font-extrabold text-emerald-600">${st.sDone}건</td>
           <td class="py-3 px-4 text-right font-extrabold text-amber-600">${st.sPart}건</td>
           <td class="py-3 px-4 text-right font-semibold text-slate-400">${st.sNone}건</td>
-          <td class="py-3 px-4 text-right">
-            <span class="px-2.5 py-1 rounded-full font-black text-xs ${
-              st.sRate >= 75 ? 'bg-emerald-100 text-emerald-700' :
-              st.sRate >= 45 ? 'bg-amber-100 text-amber-700' :
-              'bg-slate-100 text-slate-600'
-            }">${st.sRate}%</span>
-          </td>
+          <td class="py-3 px-4 text-right"><span class="px-2.5 py-1 rounded-full font-black text-xs ${st.sRate >= 75 ? 'bg-emerald-100 text-emerald-700' : st.sRate >= 45 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}">${st.sRate}%</span></td>
           <td class="py-3 px-4 text-slate-600 font-medium">${feedback}</td>
         `;
         tbody.appendChild(tr);
@@ -1976,76 +1538,38 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
 
       const [y, m, d] = state.selectedDate.split('-').map(Number);
       const curr = new Date(y, m - 1, d);
-      const dayOfWeek = curr.getDay();
-      const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-
+      const mondayOffset = curr.getDay() === 0 ? -6 : 1 - curr.getDay();
       const labels = [];
       const ratesData = [];
+
       for (let i = 0; i < 7; i++) {
         const dt = new Date(y, m - 1, d + mondayOffset + i);
-        const dy = dt.getFullYear();
         const dm = String(dt.getMonth() + 1).padStart(2, '0');
         const dd = String(dt.getDate()).padStart(2, '0');
-        const dStr = `${dy}-${dm}-${dd}`;
+        const dStr = `${dt.getFullYear()}-${dm}-${dd}`;
         labels.push(`${dm}/${dd}(${DAY_NAMES[dt.getDay()]})`);
-
         const dTasks = allTasks.filter(t => t.date === dStr);
         const dDone = dTasks.filter(t => t.status === 'done').length;
         const dPart = dTasks.filter(t => t.status === 'partial').length;
-        const r = dTasks.length > 0 ? Math.round(((dDone * 100) + (dPart * 50)) / dTasks.length) : 0;
-        ratesData.push(r);
+        ratesData.push(dTasks.length > 0 ? Math.round(((dDone * 100) + (dPart * 50)) / dTasks.length) : 0);
       }
 
       const weeklyCtx = document.getElementById('weeklyAchievementChart');
       if (weeklyChartInstance) weeklyChartInstance.destroy();
       weeklyChartInstance = new Chart(weeklyCtx, {
         type: 'bar',
-        data: {
-          labels,
-          datasets: [{
-            label: '일일 학습 성취율 (%)',
-            data: ratesData,
-            backgroundColor: 'rgba(99, 102, 241, 0.75)',
-            borderColor: '#4f46e5',
-            borderWidth: 1.5,
-            borderRadius: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } }
-          },
-          plugins: {
-            legend: { display: false }
-          }
-        }
+        data: { labels, datasets: [{ label: '일일 학습 성취율 (%)', data: ratesData, backgroundColor: 'rgba(99, 102, 241, 0.75)', borderColor: '#4f46e5', borderWidth: 1.5, borderRadius: 8 }] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } } }, plugins: { legend: { display: false } } }
       });
 
       const cats = ['AI교재', '학원', '인강', '자습', '루틴'];
       const catCounts = cats.map(c => allTasks.filter(t => t.category === c).length);
-
       const catCtx = document.getElementById('categoryDistributionChart');
       if (categoryChartInstance) categoryChartInstance.destroy();
       categoryChartInstance = new Chart(catCtx, {
         type: 'doughnut',
-        data: {
-          labels: ['AI 분배 교재', '학교/학원', '인강', '자습', '데일리 루틴'],
-          datasets: [{
-            data: catCounts,
-            backgroundColor: ['#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'],
-            borderWidth: 2,
-            borderColor: '#ffffff'
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
-          }
-        }
+        data: { labels: ['AI 분배 교재', '학교/학원', '인강', '자습', '데일리 루틴'], datasets: [{ data: catCounts, backgroundColor: ['#a855f7', '#3b82f6', '#10b981', '#f59e0b', '#ec4899'], borderWidth: 2, borderColor: '#ffffff' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } } }
       });
     }
 
@@ -2054,70 +1578,46 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
       const lowerName = (file.name || '').toLowerCase();
       for (const kw of badKeywords) {
         if (lowerName.includes(kw)) {
-          callback({
-            safe: false,
-            reason: `파일명에 청소년 유해 의심 키워드("${kw}")가 포함되어 업로드가 차단되었습니다.`
-          });
+          callback({ safe: false, reason: `파일명에 청소년 유해 의심 키워드("${kw}")가 포함되어 업로드가 차단되었습니다.` });
           return;
         }
       }
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      const sampleSize = 120;
-      canvas.width = sampleSize;
-      canvas.height = sampleSize;
-      ctx.drawImage(imgElement, 0, 0, sampleSize, sampleSize);
+      canvas.width = 120; canvas.height = 120;
+      ctx.drawImage(imgElement, 0, 0, 120, 120);
 
       try {
-        const imgData = ctx.getImageData(0, 0, sampleSize, sampleSize).data;
+        const imgData = ctx.getImageData(0, 0, 120, 120).data;
         let skinPixels = 0;
-        const totalPixels = sampleSize * sampleSize;
-
         for (let i = 0; i < imgData.length; i += 4) {
-          const r = imgData[i];
-          const g = imgData[i + 1];
-          const b = imgData[i + 2];
+          const r = imgData[i], g = imgData[i + 1], b = imgData[i + 2];
           const cb = 128 - 0.168736 * r - 0.331264 * g + 0.5 * b;
           const cr = 128 + 0.5 * r - 0.418688 * g - 0.081312 * b;
           if (r > 95 && g > 40 && b > 20 && (Math.max(r, g, b) - Math.min(r, g, b) > 15) && Math.abs(r - g) > 15 && r > g && r > b && cr >= 135 && cr <= 180 && cb >= 85 && cb <= 135) {
             skinPixels++;
           }
         }
-
-        const skinRatio = skinPixels / totalPixels;
+        const skinRatio = skinPixels / (120 * 120);
         if (skinRatio > 0.68) {
-          callback({
-            safe: false,
-            reason: `AI 비전 분석 결과 과도한 신체 노출 의심 비율(${Math.round(skinRatio * 100)}%)이 감지되어 청소년 보호 정책에 따라 차단되었습니다.`
-          });
+          callback({ safe: false, reason: `AI 비전 분석 결과 과도한 신체 노출 의심 비율(${Math.round(skinRatio * 100)}%)이 감지되어 청소년 보호 정책에 따라 차단되었습니다.` });
           return;
         }
-
-        callback({
-          safe: true,
-          reason: `AI 청소년 유해 이미지 검열 통과! (노출도 안전 지수: ${Math.round((1 - skinRatio) * 100)}점 · 정상 인물/캐릭터 이미지)`
-        });
+        callback({ safe: true, reason: `AI 청소년 유해 이미지 검열 통과! (노출도 안전 지수: ${Math.round((1 - skinRatio) * 100)}점 · 정상 인물/캐릭터 이미지)` });
       } catch (err) {
-        callback({
-          safe: true,
-          reason: '이미지 안전 검증 완료 (정상 적용)'
-        });
+        callback({ safe: true, reason: '이미지 안전 검증 완료 (정상 적용)' });
       }
     }
 
     function escapeHtml(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function openApiKeyModal() {
       const vault = loadGeminiVault();
       document.getElementById('geminiApiKeyInput').value = vault.apiKey || '';
-      document.getElementById('geminiModelSelect').value = vault.model || 'gemini-2.5-flash';
+      document.getElementById('geminiModelSelect').value = vault.model || 'auto';
       const modal = document.getElementById('apiKeyVaultModal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -2145,7 +1645,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         return;
       }
 
-      badge.textContent = '🤖 Gemini Vision AI가 사진 속 글자를 판독하고 있습니다...';
+      badge.textContent = '🤖 Gemini Vision AI가 사용 가능한 모델을 통해 사진 속 글자를 판독 중입니다...';
       badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-indigo-600 text-white';
 
       try {
@@ -2153,9 +1653,9 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         beam.classList.add('hidden');
         if (extracted && extracted.units && extracted.units.length > 0) {
           document.getElementById('bookTitleInput').value = extracted.bookTitle || baseName || '업로드 교재';
-          document.getElementById('bookSubjectSelect').value = extracted.subject || '수학';
+          document.getElementById('bookSubjectSelect').value = extracted.subject || '영어';
           document.getElementById('bookTocTextarea').value = extracted.units.join('\n');
-          badge.textContent = `✨ Gemini Vision 판독 완료! (${extracted.units.length}개 단원 추출됨)`;
+          badge.textContent = `✨ 판독 완료! [${extracted.usedModel}] 총 ${extracted.units.length}개 단원 추출됨`;
           badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-emerald-600 text-white';
           generateAiSchedulePreview();
           showToast(`📸 사진에서 총 ${extracted.units.length}개 학습 단원을 문자로 정확히 추출했습니다!`, 'success');
@@ -2166,526 +1666,6 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         badge.className = 'inline-block px-3 py-1 rounded-full text-xs font-bold bg-rose-600 text-white';
         showToast(`AI 문자 추출 실패: ${err.message}`, 'danger');
       }
-    }
-
-    function initApp() {
-      document.getElementById('distributeStartDate').value = state.selectedDate;
-      document.getElementById('newDdayDateInput').value = '2026-11-15';
-
-      document.querySelectorAll('.main-tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const targetTab = btn.getAttribute('data-tab');
-          switchMainTab(targetTab);
-        });
-      });
-
-      document.getElementById('quickOpenRoutineBtn').addEventListener('click', () => switchMainTab('routine'));
-      document.getElementById('quickOpenBookAiBtn').addEventListener('click', () => switchMainTab('bookai'));
-
-      document.getElementById('prevDayBtn').addEventListener('click', () => {
-        state.selectedDate = shiftDate(state.selectedDate, -1);
-        renderAll();
-      });
-      document.getElementById('nextDayBtn').addEventListener('click', () => {
-        state.selectedDate = shiftDate(state.selectedDate, 1);
-        renderAll();
-      });
-      document.getElementById('todayBtn').addEventListener('click', () => {
-        state.selectedDate = BASE_TODAY;
-        renderAll();
-        showToast('오늘(2026-10-20) 플래너로 이동했습니다.');
-      });
-      document.getElementById('currentDatePicker').addEventListener('change', (e) => {
-        if (e.target.value) {
-          state.selectedDate = e.target.value;
-          renderAll();
-        }
-      });
-
-      document.getElementById('resetDemoDataBtn').addEventListener('click', () => {
-        state = getDefaultState();
-        renderAll();
-        generateAiSchedulePreview();
-        showToast('초기 중학생 시제품 샘플 데이터로 복원되었습니다.', 'info');
-      });
-
-      document.querySelectorAll('.mood-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          state.dailyMoods[state.selectedDate] = btn.getAttribute('data-mood');
-          renderAll();
-        });
-      });
-
-      document.getElementById('dailyReflectionInput').addEventListener('input', (e) => {
-        state.dailyMemos[state.selectedDate] = e.target.value;
-        saveState();
-      });
-
-      document.querySelectorAll('.cat-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          state.activeCategoryFilter = btn.getAttribute('data-filter');
-          document.querySelectorAll('.cat-filter-btn').forEach(b => {
-            if (b.getAttribute('data-filter') === state.activeCategoryFilter) {
-              b.className = 'cat-filter-btn px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-slate-800 text-white';
-            } else {
-              b.className = 'cat-filter-btn px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
-            }
-          });
-          renderPlannerView();
-        });
-      });
-
-      document.getElementById('plannerTaskList').addEventListener('click', (e) => {
-        const cycleBtn = e.target.closest('[data-cycle-id]');
-        if (cycleBtn) {
-          const id = cycleBtn.getAttribute('data-cycle-id');
-          const task = state.tasks.find(t => t.id === id);
-          if (task) {
-            const nextMap = { 'none': 'done', 'done': 'partial', 'partial': 'none' };
-            task.status = nextMap[task.status] || 'done';
-            if (task.status === 'done') {
-              updateTutorSpeech('done', task.title);
-              showToast(`⭕ [${task.title}] 학습 완료(O)! 100% 성취 반영!`, 'success');
-            } else if (task.status === 'partial') {
-              updateTutorSpeech('partial', task.title);
-              showToast(`🔺 [${task.title}] 하다 말았음(△) 체크! 포기하지 않고 50% 성취 인정!`, 'warning');
-            }
-            renderAll();
-          }
-          return;
-        }
-
-        const setStatusBtn = e.target.closest('[data-set-status]');
-        if (setStatusBtn) {
-          const [id, newStatus] = setStatusBtn.getAttribute('data-set-status').split('|');
-          const task = state.tasks.find(t => t.id === id);
-          if (task) {
-            task.status = newStatus;
-            if (newStatus === 'done') {
-              updateTutorSpeech('done', task.title);
-              showToast(`⭕ [${task.title}] 완료(O) 표시되었습니다!`, 'success');
-            } else if (newStatus === 'partial') {
-              updateTutorSpeech('partial', task.title);
-              showToast(`🔺 [${task.title}] 하다 말았음(△) 표시! 부분 성취도 50%가 반영됩니다.`, 'warning');
-            } else {
-              showToast(`[${task.title}] 표시가 초기화(빈칸)되었습니다.`);
-            }
-            renderAll();
-          }
-          return;
-        }
-
-        const delBtn = e.target.closest('[data-delete-id]');
-        if (delBtn) {
-          const id = delBtn.getAttribute('data-delete-id');
-          state.tasks = state.tasks.filter(t => t.id !== id);
-          renderAll();
-          showToast('선택한 일정이 삭제되었습니다.');
-        }
-      });
-
-      document.getElementById('aiRescheduleIncompleteBtn').addEventListener('click', () => {
-        const incompleteToday = state.tasks.filter(
-          t => t.date === state.selectedDate && (t.status === 'partial' || t.status === 'none') && t.category !== '학원'
-        );
-        if (incompleteToday.length === 0) {
-          showToast('오늘 미완료된 자습/교재 항목이 없습니다! 이미 완벽해요 🎉', 'success');
-          return;
-        }
-
-        const nextDate = shiftDate(state.selectedDate, 1);
-        let movedCount = 0;
-        incompleteToday.forEach(task => {
-          if (task.status === 'partial') {
-            const followUpTitle = task.title.includes('[이어서 완주]')
-              ? task.title
-              : `[이어서 완주] ${task.title}`;
-            const alreadyExists = state.tasks.some(t => t.date === nextDate && t.title === followUpTitle);
-            if (!alreadyExists) {
-              state.tasks.push({
-                id: 'res_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-                date: nextDate,
-                category: task.category,
-                subject: task.subject,
-                title: followUpTitle,
-                timeSlot: task.timeSlot,
-                status: 'none',
-                source: 'AI 작심삼일 방지 리스케줄'
-              });
-              movedCount++;
-            }
-          } else {
-            task.date = nextDate;
-            task.source = 'AI 작심삼일 방지 리스케줄';
-            movedCount++;
-          }
-        });
-
-        updateTutorSpeech('reschedule');
-        renderAll();
-        showToast(`🪄 못 끝낸 ${movedCount}개 항목을 내일(${nextDate}) 플래너로 죄책감 없이 재분배했습니다!`, 'success');
-      });
-
-      document.getElementById('cheerMeUpBtn').addEventListener('click', () => {
-        updateTutorSpeech('random');
-      });
-
-      // 기능 1: 책 목차 이미지 업로드 시 실제 Gemini Vision OCR 실행
-      document.getElementById('bookTocImageInput').addEventListener('change', (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          lastUploadedTocDataUrl = ev.target.result;
-          document.getElementById('tocUploadPlaceholder').classList.add('hidden');
-          document.getElementById('tocUploadPreviewBox').classList.remove('hidden');
-          document.getElementById('tocUploadedImg').src = lastUploadedTocDataUrl;
-
-          const baseName = file.name.replace(/\.[^/.]+$/, '');
-          document.getElementById('bookTitleInput').value = baseName || '업로드한 문제집';
-
-          processUploadedTocImage(lastUploadedTocDataUrl, baseName);
-        };
-        reader.readAsDataURL(file);
-      });
-
-      document.getElementById('reRunGeminiOcrBtn').addEventListener('click', () => {
-        if (!lastUploadedTocDataUrl) {
-          showToast('먼저 위 박스를 눌러 책 목차 이미지를 업로드해 주세요!', 'warning');
-          return;
-        }
-        const currentTitle = document.getElementById('bookTitleInput').value.trim();
-        processUploadedTocImage(lastUploadedTocDataUrl, currentTitle);
-      });
-
-      document.querySelectorAll('.toc-preset-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const key = btn.getAttribute('data-preset');
-          const preset = BOOK_TOC_PRESETS[key];
-          if (!preset) return;
-          document.getElementById('bookTitleInput').value = preset.title;
-          document.getElementById('bookSubjectSelect').value = preset.subject;
-          document.getElementById('bookStudyTimeSlot').value = preset.slot;
-          document.getElementById('bookTocTextarea').value = preset.lines.join('\n');
-          generateAiSchedulePreview();
-          showToast(`📘 [${preset.title}] 목차를 불러와 AI 분배 미리보기를 생성했습니다.`);
-        });
-      });
-
-      document.querySelectorAll('.study-day-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          btn.classList.toggle('active');
-          if (btn.classList.contains('active')) {
-            btn.className = 'study-day-btn active px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white';
-          } else {
-            btn.className = 'study-day-btn px-3 py-1 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200';
-          }
-          generateAiSchedulePreview();
-        });
-      });
-
-      document.getElementById('bookTocTextarea').addEventListener('input', generateAiSchedulePreview);
-      document.getElementById('distributeStartDate').addEventListener('change', generateAiSchedulePreview);
-      document.getElementById('distributePaceSelect').addEventListener('change', generateAiSchedulePreview);
-      document.getElementById('previewAiScheduleBtn').addEventListener('click', () => {
-        generateAiSchedulePreview();
-        showToast('AI 단원 분배 미리보기가 업데이트되었습니다.');
-      });
-
-      document.getElementById('applyAiScheduleToPlannerBtn').addEventListener('click', () => {
-        generateAiSchedulePreview();
-        if (currentGeneratedPreviewPlan.length === 0) {
-          showToast('분배할 목차 내용을 한 줄 이상 입력해 주세요.', 'warning');
-          return;
-        }
-        currentGeneratedPreviewPlan.forEach(item => {
-          state.tasks.push({
-            id: 'ai_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            date: item.date,
-            category: 'AI교재',
-            subject: item.subject,
-            title: item.title,
-            timeSlot: item.timeSlot,
-            status: 'none',
-            source: 'AI 목차 자동 분배'
-          });
-        });
-        state.selectedDate = currentGeneratedPreviewPlan[0].date;
-        updateTutorSpeech('book_distributed');
-        renderAll();
-        switchMainTab('planner');
-        showToast(`✨ 총 ${currentGeneratedPreviewPlan.length}일치 교재 학습 계획이 내 플래너에 자동 배치되었습니다!`, 'success');
-      });
-
-      document.getElementById('customRoutineForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const category = document.getElementById('routineCategorySelect').value;
-        const subject = document.getElementById('routineSubjectSelect').value;
-        const title = document.getElementById('routineTitleInput').value.trim();
-        const timeSlot = document.getElementById('routineTimeSlotSelect').value;
-        const repeatMode = document.querySelector('input[name="routineRepeatMode"]:checked').value;
-
-        if (!title) return;
-
-        const targetDates = [];
-        if (repeatMode === 'single') {
-          targetDates.push(state.selectedDate);
-        } else {
-          const [y, m, d] = state.selectedDate.split('-').map(Number);
-          const curr = new Date(y, m - 1, d);
-          const dayOfWeek = curr.getDay();
-          const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-
-          for (let i = 0; i < 7; i++) {
-            const dt = new Date(y, m - 1, d + mondayOffset + i);
-            const dow = dt.getDay();
-            const dStr = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
-            if (repeatMode === 'weekly' && dow >= 1 && dow <= 5) targetDates.push(dStr);
-            if (repeatMode === 'mwf' && (dow === 1 || dow === 3 || dow === 5)) targetDates.push(dStr);
-            if (repeatMode === 'tt' && (dow === 2 || dow === 4)) targetDates.push(dStr);
-          }
-        }
-
-        targetDates.forEach(dStr => {
-          state.tasks.push({
-            id: 'rt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
-            date: dStr,
-            category,
-            subject,
-            title,
-            timeSlot,
-            status: 'none',
-            source: repeatMode === 'single' ? '직접 입력 일정' : '반복 루틴 스케줄'
-          });
-        });
-
-        document.getElementById('routineTitleInput').value = '';
-        renderAll();
-        switchMainTab('planner');
-        showToast(`🏫 [${title}] 일정이 ${targetDates.length}개 날짜에 추가되었습니다!`, 'success');
-      });
-
-      document.querySelectorAll('.quick-routine-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          const [title, category, subject, timeSlot] = chip.getAttribute('data-quick-routine').split('|');
-          state.tasks.push({
-            id: 'qr_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
-            date: state.selectedDate,
-            category,
-            subject,
-            title,
-            timeSlot,
-            status: 'none',
-            source: '추천 루틴 템플릿'
-          });
-          renderAll();
-          showToast(`✨ [${title}] 루틴이 오늘 플래너에 추가되었습니다!`, 'success');
-        });
-      });
-
-      const tutorModal = document.getElementById('tutorCustomModal');
-      document.getElementById('openTutorModalBtn').addEventListener('click', () => {
-        document.getElementById('modalTutorNameInput').value = state.tutor.name;
-        document.getElementById('modalTutorPersonaSelect').value = state.tutor.persona;
-        tutorModal.classList.remove('hidden');
-        tutorModal.classList.add('flex');
-      });
-      document.getElementById('closeTutorModalBtn').addEventListener('click', () => {
-        tutorModal.classList.add('hidden');
-        tutorModal.classList.remove('flex');
-      });
-
-      const presetGrid = document.getElementById('presetAvatarGrid');
-      PRESET_AVATARS.forEach(av => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'p-2 rounded-2xl border border-slate-200 hover:border-indigo-400 bg-slate-50 hover:bg-indigo-50/40 text-center transition';
-        btn.innerHTML = `
-          <img src="${av.svg}" alt="${av.label}" class="w-12 h-12 mx-auto rounded-xl object-cover max-w-full" />
-          <div class="text-[11px] font-bold text-slate-700 mt-1">${av.label}</div>
-        `;
-        btn.addEventListener('click', () => {
-          state.tutor.avatarUrl = av.svg;
-          state.tutor.persona = av.role;
-          document.getElementById('modalTutorPersonaSelect').value = av.role;
-          setModerationUI(true, `[${av.label}] 공식 안심 캐릭터가 선택되었습니다.`);
-          renderTutorWidget();
-        });
-        presetGrid.appendChild(btn);
-      });
-
-      document.getElementById('tutorPhotoUploadInput').addEventListener('change', (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          const img = new Image();
-          img.onload = () => {
-            analyzeImageYouthSafety(file, img, (result) => {
-              if (result.safe) {
-                state.tutor.avatarUrl = ev.target.result;
-                state.tutor.isCustomPhoto = true;
-                setModerationUI(true, result.reason);
-                renderTutorWidget();
-                showToast('📸 청소년 안심 필터를 통과하여 최애 튜터 사진으로 등록되었습니다!', 'success');
-              } else {
-                state.tutor.avatarUrl = PRESET_AVATARS[0].svg;
-                setModerationUI(false, result.reason);
-                renderTutorWidget();
-                showToast('🚨 청소년 유해 의심 이미지가 감지되어 자동 차단되었습니다.', 'danger');
-              }
-            });
-          };
-          img.src = ev.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-
-      document.getElementById('simulateHarmfulImageBtn').addEventListener('click', () => {
-        setModerationUI(
-          false,
-          '🚨 [청소년 보호법 안전 필터 작동] 업로드 시도된 이미지에서 과도한 신체 노출(피부톤 픽셀 76.4%) 및 부적절한 콘텐츠 패턴이 감지되어 즉시 업로드를 차단하고 기본 안심 프로필로 보호했습니다.'
-        );
-        state.tutor.avatarUrl = PRESET_AVATARS[0].svg;
-        renderTutorWidget();
-        showToast('🚨 청소년 유해 이미지 자동 검열 및 차단 테스트가 실행되었습니다!', 'danger');
-      });
-
-      document.getElementById('saveTutorConfigBtn').addEventListener('click', () => {
-        const newName = document.getElementById('modalTutorNameInput').value.trim();
-        const newPersona = document.getElementById('modalTutorPersonaSelect').value;
-        if (newName) state.tutor.name = newName;
-        state.tutor.persona = newPersona;
-        renderAll();
-        updateTutorSpeech('random');
-        tutorModal.classList.add('hidden');
-        tutorModal.classList.remove('flex');
-        showToast(`✨ [${state.tutor.name}] 설정이 저장되었습니다!`, 'success');
-      });
-
-      const goalModal = document.getElementById('goalDdayModal');
-      function openGoalModal() {
-        document.getElementById('goalMottoInput').value = state.goalMotto;
-        renderModalDdayList();
-        goalModal.classList.remove('hidden');
-        goalModal.classList.add('flex');
-      }
-      document.getElementById('openGoalModalBtn').addEventListener('click', openGoalModal);
-      document.getElementById('addDdayQuickBtn').addEventListener('click', openGoalModal);
-      document.getElementById('closeGoalModalBtn').addEventListener('click', () => {
-        goalModal.classList.add('hidden');
-        goalModal.classList.remove('flex');
-      });
-
-      document.getElementById('addNewDdayBtn').addEventListener('click', () => {
-        const title = document.getElementById('newDdayTitleInput').value.trim();
-        const targetDate = document.getElementById('newDdayDateInput').value;
-        if (!title || !targetDate) {
-          showToast('D-Day 제목과 날짜를 모두 입력해 주세요.', 'warning');
-          return;
-        }
-        state.ddays.push({
-          id: 'dd_' + Date.now(),
-          title,
-          targetDate,
-          primary: state.ddays.length === 0
-        });
-        document.getElementById('newDdayTitleInput').value = '';
-        renderModalDdayList();
-        renderHeaderAndDdays();
-        showToast(`🎯 [${title}] D-Day가 추가되었습니다!`, 'success');
-      });
-
-      document.getElementById('saveGoalModalBtn').addEventListener('click', () => {
-        const motto = document.getElementById('goalMottoInput').value.trim();
-        if (motto) state.goalMotto = motto;
-        renderAll();
-        goalModal.classList.add('hidden');
-        goalModal.classList.remove('flex');
-        showToast('나의 목표 및 D-Day 설정이 저장되었습니다!', 'success');
-      });
-
-      // 모달 3: Gemini API 키 보안 금고 이벤트
-      document.getElementById('openApiKeyModalBtn').addEventListener('click', openApiKeyModal);
-      document.getElementById('openApiKeyModalMobileBtn').addEventListener('click', openApiKeyModal);
-      document.getElementById('openApiKeyFromBookBtn').addEventListener('click', openApiKeyModal);
-      document.getElementById('closeApiKeyModalBtn').addEventListener('click', closeApiKeyModal);
-
-      document.getElementById('toggleApiKeyVisibilityBtn').addEventListener('click', () => {
-        const inp = document.getElementById('geminiApiKeyInput');
-        const btn = document.getElementById('toggleApiKeyVisibilityBtn');
-        if (inp.type === 'password') {
-          inp.type = 'text';
-          btn.textContent = '숨김';
-        } else {
-          inp.type = 'password';
-          btn.textContent = '표시';
-        }
-      });
-
-      document.getElementById('saveGeminiKeyBtn').addEventListener('click', () => {
-        const keyVal = document.getElementById('geminiApiKeyInput').value.trim();
-        const modelVal = document.getElementById('geminiModelSelect').value;
-        if (!keyVal) {
-          showToast('API 키를 입력해 주세요.', 'warning');
-          return;
-        }
-        saveGeminiVault(keyVal, modelVal);
-        renderApiKeyStatusBadge();
-        closeApiKeyModal();
-        showToast('🔒 Gemini API 키가 브라우저 보안 금고에 암호화 저장되었습니다! 이제 계속 자동 유지됩니다.', 'success');
-
-        if (lastUploadedTocDataUrl) {
-          const currentTitle = document.getElementById('bookTitleInput').value.trim();
-          processUploadedTocImage(lastUploadedTocDataUrl, currentTitle);
-        }
-      });
-
-      document.getElementById('clearGeminiKeyBtn').addEventListener('click', () => {
-        clearGeminiVault();
-        document.getElementById('geminiApiKeyInput').value = '';
-        renderApiKeyStatusBadge();
-        document.getElementById('apiKeyVaultFeedbackBox').textContent = '저장된 API 키가 브라우저에서 완전히 삭제되었습니다.';
-        showToast('저장된 API 키가 삭제되었습니다.');
-      });
-
-      document.getElementById('testGeminiKeyBtn').addEventListener('click', async () => {
-        const keyVal = document.getElementById('geminiApiKeyInput').value.trim();
-        const modelVal = document.getElementById('geminiModelSelect').value;
-        const fb = document.getElementById('apiKeyVaultFeedbackBox');
-        if (!keyVal) {
-          fb.textContent = '⚠️ 먼저 테스트할 Gemini API 키를 입력창에 붙여넣어 주세요.';
-          fb.className = 'rounded-2xl p-3 bg-amber-50 border border-amber-200 text-xs text-amber-800 font-bold';
-          return;
-        }
-        fb.textContent = '⏳ Gemini API 서버와 연결을 확인하는 중입니다...';
-        fb.className = 'rounded-2xl p-3 bg-indigo-50 border border-indigo-200 text-xs text-indigo-800 font-bold';
-        try {
-          const resp = await fetch(getGeminiEndpoint(modelVal, keyVal), {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: '연결 테스트입니다. OK 라고만 답해주세요.' }] }]
-            })
-          });
-          if (!resp.ok) {
-            const errData = await resp.json().catch(() => ({}));
-            throw new Error((errData.error && errData.error.message) || `HTTP ${resp.status}`);
-          }
-          saveGeminiVault(keyVal, modelVal);
-          renderApiKeyStatusBadge();
-          fb.textContent = `✅ 연결 성공! (${modelVal}) 키가 정상 작동하며 로컬 금고에 자동 저장되었습니다.`;
-          fb.className = 'rounded-2xl p-3 bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-bold';
-          showToast('⚡ Gemini API 연결 테스트 성공!', 'success');
-        } catch (err) {
-          fb.textContent = `❌ 연결 실패: ${err.message}`;
-          fb.className = 'rounded-2xl p-3 bg-rose-50 border border-rose-200 text-xs text-rose-800 font-bold';
-        }
-      });
-
-      generateAiSchedulePreview();
-      renderAll();
     }
 
     function setModerationUI(isSafe, detailMsg) {
@@ -2713,14 +1693,9 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         const row = document.createElement('div');
         row.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs gap-2';
         row.innerHTML = `
-          <div class="min-w-0">
-            <span class="font-extrabold text-slate-800">${escapeHtml(item.title)}</span>
-            <span class="text-slate-400 ml-1">(${item.targetDate} · ${calculateDdayString(item.targetDate)})</span>
-          </div>
+          <div class="min-w-0"><span class="font-extrabold text-slate-800">${escapeHtml(item.title)}</span><span class="text-slate-400 ml-1">(${item.targetDate} · ${calculateDdayString(item.targetDate)})</span></div>
           <div class="flex items-center gap-1.5 shrink-0">
-            <button type="button" data-primary-dday="${item.id}" class="px-2 py-1 rounded-lg font-bold text-[11px] ${
-              item.primary ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
-            }">${item.primary ? '대표 D-Day' : '대표 지정'}</button>
+            <button type="button" data-primary-dday="${item.id}" class="px-2 py-1 rounded-lg font-bold text-[11px] ${item.primary ? 'bg-indigo-600 text-white' : 'bg-white border border-slate-200 text-slate-600'}">${item.primary ? '대표 D-Day' : '대표 지정'}</button>
             <button type="button" data-del-dday="${item.id}" class="px-2 py-1 rounded-lg bg-rose-50 text-rose-600 font-bold text-[11px]">삭제</button>
           </div>
         `;
@@ -2739,9 +1714,7 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         btn.addEventListener('click', () => {
           const id = btn.getAttribute('data-del-dday');
           state.ddays = state.ddays.filter(d => d.id !== id);
-          if (state.ddays.length > 0 && !state.ddays.some(d => d.primary)) {
-            state.ddays[0].primary = true;
-          }
+          if (state.ddays.length > 0 && !state.ddays.some(d => d.primary)) state.ddays[0].primary = true;
           renderModalDdayList();
           renderHeaderAndDdays();
         });
@@ -2756,24 +1729,433 @@ IV-1. 경우의 수와 확률 (p.122~145)</textarea>
         analytics: document.getElementById('viewAnalytics')
       };
       Object.keys(views).forEach(k => {
-        if (k === tabName) {
-          views[k].classList.remove('hidden');
-        } else {
-          views[k].classList.add('hidden');
-        }
+        if (k === tabName) views[k].classList.remove('hidden');
+        else views[k].classList.add('hidden');
       });
 
       document.querySelectorAll('.main-tab-btn').forEach(btn => {
-        if (btn.getAttribute('data-tab') === tabName) {
-          btn.className = 'main-tab-btn px-3 sm:px-4 py-2.5 rounded-2xl font-bold text-xs lg:text-sm transition bg-indigo-600 text-white shadow-sm flex items-center justify-center sm:justify-start gap-1.5';
-        } else {
-          btn.className = 'main-tab-btn px-3 sm:px-4 py-2.5 rounded-2xl font-bold text-xs lg:text-sm transition bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center sm:justify-start gap-1.5';
+        btn.className = btn.getAttribute('data-tab') === tabName
+          ? 'main-tab-btn px-3 sm:px-4 py-2.5 rounded-2xl font-bold text-xs lg:text-sm transition bg-indigo-600 text-white shadow-sm flex items-center justify-center sm:justify-start gap-1.5'
+          : 'main-tab-btn px-3 sm:px-4 py-2.5 rounded-2xl font-bold text-xs lg:text-sm transition bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center sm:justify-start gap-1.5';
+      });
+
+      if (tabName === 'analytics') renderAnalyticsView();
+    }
+
+    function initApp() {
+      document.getElementById('distributeStartDate').value = state.selectedDate;
+      document.getElementById('newDdayDateInput').value = '2026-11-15';
+
+      document.querySelectorAll('.main-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchMainTab(btn.getAttribute('data-tab')));
+      });
+
+      document.getElementById('quickOpenRoutineBtn').addEventListener('click', () => switchMainTab('routine'));
+      document.getElementById('quickOpenBookAiBtn').addEventListener('click', () => switchMainTab('bookai'));
+
+      document.getElementById('prevDayBtn').addEventListener('click', () => { state.selectedDate = shiftDate(state.selectedDate, -1); renderAll(); });
+      document.getElementById('nextDayBtn').addEventListener('click', () => { state.selectedDate = shiftDate(state.selectedDate, 1); renderAll(); });
+      document.getElementById('todayBtn').addEventListener('click', () => { state.selectedDate = BASE_TODAY; renderAll(); showToast('오늘(2026-10-20) 플래너로 이동했습니다.'); });
+      document.getElementById('currentDatePicker').addEventListener('change', (e) => { if (e.target.value) { state.selectedDate = e.target.value; renderAll(); } });
+
+      document.getElementById('resetDemoDataBtn').addEventListener('click', () => {
+        state = getDefaultState();
+        renderAll();
+        generateAiSchedulePreview();
+        showToast('초기 중학생 시제품 샘플 데이터로 복원되었습니다.', 'info');
+      });
+
+      document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.addEventListener('click', () => { state.dailyMoods[state.selectedDate] = btn.getAttribute('data-mood'); renderAll(); });
+      });
+
+      document.getElementById('dailyReflectionInput').addEventListener('input', (e) => {
+        state.dailyMemos[state.selectedDate] = e.target.value;
+        saveState();
+      });
+
+      document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.activeCategoryFilter = btn.getAttribute('data-filter');
+          document.querySelectorAll('.cat-filter-btn').forEach(b => {
+            b.className = b.getAttribute('data-filter') === state.activeCategoryFilter
+              ? 'cat-filter-btn px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-slate-800 text-white'
+              : 'cat-filter-btn px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50';
+          });
+          renderPlannerView();
+        });
+      });
+
+      document.getElementById('plannerTaskList').addEventListener('click', (e) => {
+        const cycleBtn = e.target.closest('[data-cycle-id]');
+        if (cycleBtn) {
+          const task = state.tasks.find(t => t.id === cycleBtn.getAttribute('data-cycle-id'));
+          if (task) {
+            const nextMap = { 'none': 'done', 'done': 'partial', 'partial': 'none' };
+            task.status = nextMap[task.status] || 'done';
+            if (task.status === 'done') { updateTutorSpeech('done', task.title); showToast(`⭕ [${task.title}] 학습 완료(O)! 100% 성취 반영!`, 'success'); }
+            else if (task.status === 'partial') { updateTutorSpeech('partial', task.title); showToast(`🔺 [${task.title}] 하다 말았음(△) 체크! 50% 성취 인정!`, 'warning'); }
+            renderAll();
+          }
+          return;
+        }
+
+        const setStatusBtn = e.target.closest('[data-set-status]');
+        if (setStatusBtn) {
+          const [id, newStatus] = setStatusBtn.getAttribute('data-set-status').split('|');
+          const task = state.tasks.find(t => t.id === id);
+          if (task) {
+            task.status = newStatus;
+            if (newStatus === 'done') { updateTutorSpeech('done', task.title); showToast(`⭕ [${task.title}] 완료(O) 표시되었습니다!`, 'success'); }
+            else if (newStatus === 'partial') { updateTutorSpeech('partial', task.title); showToast(`🔺 [${task.title}] 하다 말았음(△) 표시! 50% 부분 성취 반영!`, 'warning'); }
+            else showToast(`[${task.title}] 표시가 초기화(빈칸)되었습니다.`);
+            renderAll();
+          }
+          return;
+        }
+
+        const delBtn = e.target.closest('[data-delete-id]');
+        if (delBtn) {
+          state.tasks = state.tasks.filter(t => t.id !== delBtn.getAttribute('data-delete-id'));
+          renderAll();
+          showToast('선택한 일정이 삭제되었습니다.');
         }
       });
 
-      if (tabName === 'analytics') {
-        renderAnalyticsView();
+      document.getElementById('aiRescheduleIncompleteBtn').addEventListener('click', () => {
+        const incompleteToday = state.tasks.filter(t => t.date === state.selectedDate && (t.status === 'partial' || t.status === 'none') && t.category !== '학원');
+        if (incompleteToday.length === 0) {
+          showToast('오늘 미완료된 자습/교재 항목이 없습니다! 이미 완벽해요 🎉', 'success');
+          return;
+        }
+        const nextDate = shiftDate(state.selectedDate, 1);
+        let movedCount = 0;
+        incompleteToday.forEach(task => {
+          if (task.status === 'partial') {
+            const followUpTitle = task.title.includes('[이어서 완주]') ? task.title : `[이어서 완주] ${task.title}`;
+            if (!state.tasks.some(t => t.date === nextDate && t.title === followUpTitle)) {
+              state.tasks.push({
+                id: 'res_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                date: nextDate, category: task.category, subject: task.subject,
+                title: followUpTitle, timeSlot: task.timeSlot, status: 'none',
+                source: 'AI 작심삼일 방지 리스케줄'
+              });
+              movedCount++;
+            }
+          } else {
+            task.date = nextDate;
+            task.source = 'AI 작심삼일 방지 리스케줄';
+            movedCount++;
+          }
+        });
+        updateTutorSpeech('reschedule');
+        renderAll();
+        showToast(`🪄 못 끝낸 ${movedCount}개 항목을 내일(${nextDate}) 플래너로 재분배했습니다!`, 'success');
+      });
+
+      document.getElementById('cheerMeUpBtn').addEventListener('click', () => updateTutorSpeech('random'));
+
+      document.getElementById('bookTocImageInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          lastUploadedTocDataUrl = ev.target.result;
+          document.getElementById('tocUploadPlaceholder').classList.add('hidden');
+          document.getElementById('tocUploadPreviewBox').classList.remove('hidden');
+          document.getElementById('tocUploadedImg').src = lastUploadedTocDataUrl;
+          const baseName = file.name.replace(/\.[^/.]+$/, '');
+          document.getElementById('bookTitleInput').value = baseName || '업로드한 문제집';
+          processUploadedTocImage(lastUploadedTocDataUrl, baseName);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('reRunGeminiOcrBtn').addEventListener('click', () => {
+        if (!lastUploadedTocDataUrl) {
+          showToast('먼저 위 박스를 눌러 책 목차 이미지를 업로드해 주세요!', 'warning');
+          return;
+        }
+        processUploadedTocImage(lastUploadedTocDataUrl, document.getElementById('bookTitleInput').value.trim());
+      });
+
+      document.querySelectorAll('.toc-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const preset = BOOK_TOC_PRESETS[btn.getAttribute('data-preset')];
+          if (!preset) return;
+          document.getElementById('bookTitleInput').value = preset.title;
+          document.getElementById('bookSubjectSelect').value = preset.subject;
+          document.getElementById('bookStudyTimeSlot').value = preset.slot;
+          document.getElementById('bookTocTextarea').value = preset.lines.join('\n');
+          generateAiSchedulePreview();
+          showToast(`📘 [${preset.title}] 목차를 불러와 AI 분배 미리보기를 생성했습니다.`);
+        });
+      });
+
+      document.querySelectorAll('.study-day-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.classList.toggle('active');
+          btn.className = btn.classList.contains('active')
+            ? 'study-day-btn active px-3 py-1 rounded-xl text-xs font-bold bg-indigo-600 text-white'
+            : 'study-day-btn px-3 py-1 rounded-xl text-xs font-bold bg-white text-slate-600 border border-slate-200';
+          generateAiSchedulePreview();
+        });
+      });
+
+      document.getElementById('bookTocTextarea').addEventListener('input', generateAiSchedulePreview);
+      document.getElementById('distributeStartDate').addEventListener('change', generateAiSchedulePreview);
+      document.getElementById('distributePaceSelect').addEventListener('change', generateAiSchedulePreview);
+      document.getElementById('previewAiScheduleBtn').addEventListener('click', () => { generateAiSchedulePreview(); showToast('AI 단원 분배 미리보기가 업데이트되었습니다.'); });
+
+      document.getElementById('applyAiScheduleToPlannerBtn').addEventListener('click', () => {
+        generateAiSchedulePreview();
+        if (currentGeneratedPreviewPlan.length === 0) {
+          showToast('분배할 목차 내용을 한 줄 이상 입력해 주세요.', 'warning');
+          return;
+        }
+        currentGeneratedPreviewPlan.forEach(item => {
+          state.tasks.push({
+            id: 'ai_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            date: item.date, category: 'AI교재', subject: item.subject,
+            title: item.title, timeSlot: item.timeSlot, status: 'none',
+            source: 'AI 목차 자동 분배'
+          });
+        });
+        state.selectedDate = currentGeneratedPreviewPlan[0].date;
+        updateTutorSpeech('book_distributed');
+        renderAll();
+        switchMainTab('planner');
+        showToast(`✨ 총 ${currentGeneratedPreviewPlan.length}일치 교재 학습 계획이 내 플래너에 자동 배치되었습니다!`, 'success');
+      });
+
+      document.getElementById('customRoutineForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const category = document.getElementById('routineCategorySelect').value;
+        const subject = document.getElementById('routineSubjectSelect').value;
+        const title = document.getElementById('routineTitleInput').value.trim();
+        const timeSlot = document.getElementById('routineTimeSlotSelect').value;
+        const repeatMode = document.querySelector('input[name="routineRepeatMode"]:checked').value;
+        if (!title) return;
+
+        const targetDates = [];
+        if (repeatMode === 'single') {
+          targetDates.push(state.selectedDate);
+        } else {
+          const [y, m, d] = state.selectedDate.split('-').map(Number);
+          const curr = new Date(y, m - 1, d);
+          const mondayOffset = curr.getDay() === 0 ? -6 : 1 - curr.getDay();
+          for (let i = 0; i < 7; i++) {
+            const dt = new Date(y, m - 1, d + mondayOffset + i);
+            const dow = dt.getDay();
+            const dStr = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+            if (repeatMode === 'weekly' && dow >= 1 && dow <= 5) targetDates.push(dStr);
+            if (repeatMode === 'mwf' && (dow === 1 || dow === 3 || dow === 5)) targetDates.push(dStr);
+            if (repeatMode === 'tt' && (dow === 2 || dow === 4)) targetDates.push(dStr);
+          }
+        }
+
+        targetDates.forEach(dStr => {
+          state.tasks.push({
+            id: 'rt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+            date: dStr, category, subject, title, timeSlot, status: 'none',
+            source: repeatMode === 'single' ? '직접 입력 일정' : '반복 루틴 스케줄'
+          });
+        });
+
+        document.getElementById('routineTitleInput').value = '';
+        renderAll();
+        switchMainTab('planner');
+        showToast(`🏫 [${title}] 일정이 ${targetDates.length}개 날짜에 추가되었습니다!`, 'success');
+      });
+
+      document.querySelectorAll('.quick-routine-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const [title, category, subject, timeSlot] = chip.getAttribute('data-quick-routine').split('|');
+          state.tasks.push({
+            id: 'qr_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+            date: state.selectedDate, category, subject, title, timeSlot, status: 'none',
+            source: '추천 루틴 템플릿'
+          });
+          renderAll();
+          showToast(`✨ [${title}] 루틴이 오늘 플래너에 추가되었습니다!`, 'success');
+        });
+      });
+
+      const tutorModal = document.getElementById('tutorCustomModal');
+      document.getElementById('openTutorModalBtn').addEventListener('click', () => {
+        document.getElementById('modalTutorNameInput').value = state.tutor.name;
+        document.getElementById('modalTutorPersonaSelect').value = state.tutor.persona;
+        tutorModal.classList.remove('hidden');
+        tutorModal.classList.add('flex');
+      });
+      document.getElementById('closeTutorModalBtn').addEventListener('click', () => {
+        tutorModal.classList.add('hidden');
+        tutorModal.classList.remove('flex');
+      });
+
+      const presetGrid = document.getElementById('presetAvatarGrid');
+      PRESET_AVATARS.forEach(av => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'p-2 rounded-2xl border border-slate-200 hover:border-indigo-400 bg-slate-50 hover:bg-indigo-50/40 text-center transition';
+        btn.innerHTML = `<img src="${av.svg}" alt="${av.label}" class="w-12 h-12 mx-auto rounded-xl object-cover max-w-full" /><div class="text-[11px] font-bold text-slate-700 mt-1">${av.label}</div>`;
+        btn.addEventListener('click', () => {
+          state.tutor.avatarUrl = av.svg;
+          state.tutor.persona = av.role;
+          document.getElementById('modalTutorPersonaSelect').value = av.role;
+          setModerationUI(true, `[${av.label}] 공식 안심 캐릭터가 선택되었습니다.`);
+          renderTutorWidget();
+        });
+        presetGrid.appendChild(btn);
+      });
+
+      document.getElementById('tutorPhotoUploadInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            analyzeImageYouthSafety(file, img, (result) => {
+              if (result.safe) {
+                state.tutor.avatarUrl = ev.target.result;
+                state.tutor.isCustomPhoto = true;
+                setModerationUI(true, result.reason);
+                renderTutorWidget();
+                showToast('📸 청소년 안심 필터를 통과하여 최애 튜터 사진으로 등록되었습니다!', 'success');
+              } else {
+                state.tutor.avatarUrl = PRESET_AVATARS[0].svg;
+                setModerationUI(false, result.reason);
+                renderTutorWidget();
+                showToast('🚨 청소년 유해 의심 이미지가 감지되어 자동 차단되었습니다.', 'danger');
+              }
+            });
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('simulateHarmfulImageBtn').addEventListener('click', () => {
+        setModerationUI(false, '🚨 [청소년 보호법 안전 필터 작동] 업로드 시도된 이미지에서 과도한 신체 노출(피부톤 픽셀 76.4%) 및 부적절한 콘텐츠 패턴이 감지되어 즉시 업로드를 차단하고 기본 안심 프로필로 보호했습니다.');
+        state.tutor.avatarUrl = PRESET_AVATARS[0].svg;
+        renderTutorWidget();
+        showToast('🚨 청소년 유해 이미지 자동 검열 및 차단 테스트가 실행되었습니다!', 'danger');
+      });
+
+      document.getElementById('saveTutorConfigBtn').addEventListener('click', () => {
+        const newName = document.getElementById('modalTutorNameInput').value.trim();
+        if (newName) state.tutor.name = newName;
+        state.tutor.persona = document.getElementById('modalTutorPersonaSelect').value;
+        renderAll();
+        updateTutorSpeech('random');
+        tutorModal.classList.add('hidden');
+        tutorModal.classList.remove('flex');
+        showToast(`✨ [${state.tutor.name}] 설정이 저장되었습니다!`, 'success');
+      });
+
+      const goalModal = document.getElementById('goalDdayModal');
+      function openGoalModal() {
+        document.getElementById('goalMottoInput').value = state.goalMotto;
+        renderModalDdayList();
+        goalModal.classList.remove('hidden');
+        goalModal.classList.add('flex');
       }
+      document.getElementById('openGoalModalBtn').addEventListener('click', openGoalModal);
+      document.getElementById('addDdayQuickBtn').addEventListener('click', openGoalModal);
+      document.getElementById('closeGoalModalBtn').addEventListener('click', () => { goalModal.classList.add('hidden'); goalModal.classList.remove('flex'); });
+
+      document.getElementById('addNewDdayBtn').addEventListener('click', () => {
+        const title = document.getElementById('newDdayTitleInput').value.trim();
+        const targetDate = document.getElementById('newDdayDateInput').value;
+        if (!title || !targetDate) { showToast('D-Day 제목과 날짜를 모두 입력해 주세요.', 'warning'); return; }
+        state.ddays.push({ id: 'dd_' + Date.now(), title, targetDate, primary: state.ddays.length === 0 });
+        document.getElementById('newDdayTitleInput').value = '';
+        renderModalDdayList();
+        renderHeaderAndDdays();
+        showToast(`🎯 [${title}] D-Day가 추가되었습니다!`, 'success');
+      });
+
+      document.getElementById('saveGoalModalBtn').addEventListener('click', () => {
+        const motto = document.getElementById('goalMottoInput').value.trim();
+        if (motto) state.goalMotto = motto;
+        renderAll();
+        goalModal.classList.add('hidden');
+        goalModal.classList.remove('flex');
+        showToast('나의 목표 및 D-Day 설정이 저장되었습니다!', 'success');
+      });
+
+      document.getElementById('openApiKeyModalBtn').addEventListener('click', openApiKeyModal);
+      document.getElementById('openApiKeyModalMobileBtn').addEventListener('click', openApiKeyModal);
+      document.getElementById('openApiKeyFromBookBtn').addEventListener('click', openApiKeyModal);
+      document.getElementById('closeApiKeyModalBtn').addEventListener('click', closeApiKeyModal);
+
+      document.getElementById('toggleApiKeyVisibilityBtn').addEventListener('click', () => {
+        const inp = document.getElementById('geminiApiKeyInput');
+        const btn = document.getElementById('toggleApiKeyVisibilityBtn');
+        if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '숨김'; }
+        else { inp.type = 'password'; btn.textContent = '표시'; }
+      });
+
+      document.getElementById('saveGeminiKeyBtn').addEventListener('click', () => {
+        const keyVal = document.getElementById('geminiApiKeyInput').value.trim();
+        const modelVal = document.getElementById('geminiModelSelect').value;
+        if (!keyVal) { showToast('API 키를 입력해 주세요.', 'warning'); return; }
+        cachedAvailableModels = [];
+        saveGeminiVault(keyVal, modelVal);
+        renderApiKeyStatusBadge();
+        closeApiKeyModal();
+        showToast('🔒 Gemini API 키가 브라우저 보안 금고에 암호화 저장되었습니다!', 'success');
+        if (lastUploadedTocDataUrl) {
+          processUploadedTocImage(lastUploadedTocDataUrl, document.getElementById('bookTitleInput').value.trim());
+        }
+      });
+
+      document.getElementById('clearGeminiKeyBtn').addEventListener('click', () => {
+        clearGeminiVault();
+        document.getElementById('geminiApiKeyInput').value = '';
+        renderApiKeyStatusBadge();
+        document.getElementById('apiKeyVaultFeedbackBox').textContent = '저장된 API 키가 브라우저에서 완전히 삭제되었습니다.';
+        showToast('저장된 API 키가 삭제되었습니다.');
+      });
+
+      document.getElementById('testGeminiKeyBtn').addEventListener('click', async () => {
+        const keyVal = document.getElementById('geminiApiKeyInput').value.trim();
+        const modelVal = document.getElementById('geminiModelSelect').value;
+        const fb = document.getElementById('apiKeyVaultFeedbackBox');
+        if (!keyVal) {
+          fb.textContent = '⚠️ 먼저 테스트할 Gemini API 키를 입력창에 붙여넣어 주세요.';
+          fb.className = 'rounded-2xl p-3 bg-amber-50 border border-amber-200 text-xs text-amber-800 font-bold';
+          return;
+        }
+        fb.textContent = '⏳ Google 서버에서 내 API 키로 사용 가능한 모델 목록(ListModels)을 조회 중입니다...';
+        fb.className = 'rounded-2xl p-3 bg-indigo-50 border border-indigo-200 text-xs text-indigo-800 font-bold';
+        try {
+          cachedAvailableModels = [];
+          const models = await discoverSupportedModels(keyVal);
+          const targetModel = (modelVal !== 'auto' && models.includes(modelVal)) ? modelVal : models[0];
+          const resp = await fetch(getGeminiEndpoint(targetModel, keyVal), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: 'OK' }] }] })
+          });
+          if (!resp.ok) {
+            const errData = await resp.json().catch(() => ({}));
+            throw new Error((errData.error && errData.error.message) || `HTTP ${resp.status}`);
+          }
+          saveGeminiVault(keyVal, modelVal);
+          renderApiKeyStatusBadge();
+          fb.textContent = `✅ 연결 성공! 자동 선택된 최적 모델: [${targetModel}] (사용 가능 모델 ${models.length}개 확인됨)`;
+          fb.className = 'rounded-2xl p-3 bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 font-bold';
+          showToast(`⚡ [${targetModel}] 모델 연결 성공!`, 'success');
+        } catch (err) {
+          fb.textContent = `❌ 연결 실패: ${err.message}`;
+          fb.className = 'rounded-2xl p-3 bg-rose-50 border border-rose-200 text-xs text-rose-800 font-bold';
+        }
+      });
+
+      generateAiSchedulePreview();
+      renderAll();
     }
 
     window.addEventListener('DOMContentLoaded', initApp);
